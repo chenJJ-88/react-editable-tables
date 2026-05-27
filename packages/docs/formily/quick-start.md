@@ -1,5 +1,10 @@
 # 快速开始
 
+<script setup>
+import QuickStartDemo from '../demos/formily/QuickStartDemo.tsx'
+import QuickStartDemoSource from '../demos/formily/QuickStartDemo.tsx?raw'
+</script>
+
 `@react-editable-tables/formily` 是基于 Formily 2.x + antd 5.x 的高性能可编辑表格组件，通过 CellBridge 架构解决大数据量场景下的性能问题。
 
 ## 安装
@@ -14,14 +19,20 @@ npm install @react-editable-tables/formily
 npm install react react-dom antd @formily/core @formily/react
 ```
 
-## 最小示例
+## 交互式示例
+
+<ClientOnly>
+  <ReactDemo :component="QuickStartDemo" :source="QuickStartDemoSource" title="最小示例" description="Input + Select + 删除行" />
+</ClientOnly>
+
+## 核心概念
 
 ```tsx
 import { createForm } from '@formily/core';
 import { FormProvider } from '@formily/react';
 import { Input, Select, Button } from 'antd';
 import { FastTable } from '@react-editable-tables/formily';
-import '@react-editable-tables/formily/src/style.css';
+import '@react-editable-tables/formily/style.css';
 
 const form = createForm();
 

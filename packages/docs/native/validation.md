@@ -1,6 +1,17 @@
 # 表单校验
 
+<script setup>
+import ValidationDemo from '../demos/native/ValidationDemo.tsx'
+import ValidationDemoSource from '../demos/native/ValidationDemo.tsx?raw'
+</script>
+
 通过列定义中的 `rules` 配置校验规则，支持必填校验和自定义校验函数。
+
+## 交互式示例
+
+<ClientOnly>
+  <ReactDemo :component="ValidationDemo" :source="ValidationDemoSource" title="表单校验" description="实时校验：必填、数字范围、邮箱格式" />
+</ClientOnly>
 
 ## 基本用法
 

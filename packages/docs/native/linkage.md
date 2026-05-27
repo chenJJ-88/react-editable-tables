@@ -1,6 +1,17 @@
 # 数据联动
 
+<script setup>
+import LinkageDemo from '../demos/native/LinkageDemo.tsx'
+import LinkageDemoSource from '../demos/native/LinkageDemo.tsx?raw'
+</script>
+
 支持两种联动方式：`onFieldChange` 同步联动和 `editRender + useEffect` 异步联动。
+
+## 交互式示例
+
+<ClientOnly>
+  <ReactDemo :component="LinkageDemo" :source="LinkageDemoSource" title="省市区联动" description="选择国家后城市异步加载（模拟 800ms 接口延迟）" />
+</ClientOnly>
 
 ## onFieldChange — 同步联动
 

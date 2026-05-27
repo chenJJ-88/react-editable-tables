@@ -1,10 +1,15 @@
 import { defineConfig } from 'vitepress'
+import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   title: 'React Editable Tables',
   description: 'React 可编辑表格方案集 — 原生轻量版 & Formily 高性能版',
   lang: 'zh-CN',
   lastUpdated: true,
+
+  vite: {
+    plugins: [react()],
+  },
 
   head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]],
 
@@ -42,6 +47,7 @@ export default defineConfig({
             { text: '自定义编辑器', link: '/native/custom-editor' },
             { text: '行操作', link: '/native/row-ops' },
             { text: '主题定制', link: '/native/theme' },
+            { text: '大数据量性能', link: '/native/performance' },
           ],
         },
         {
@@ -54,8 +60,8 @@ export default defineConfig({
           text: '使用指南',
           items: [
             { text: '快速开始', link: '/formily/quick-start' },
-            { text: '从 Form.Table 迁移', link: '/formily/migration' },
             { text: 'Effects 兼容', link: '/formily/effects' },
+            { text: '大数据量性能', link: '/formily/large-data' },
           ],
         },
         {

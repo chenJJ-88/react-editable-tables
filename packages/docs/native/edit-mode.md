@@ -1,6 +1,17 @@
 # 编辑模式
 
+<script setup>
+import EditModeDemo from '../demos/native/EditModeDemo.tsx'
+import EditModeDemoSource from '../demos/native/EditModeDemo.tsx?raw'
+</script>
+
 EditableTable 支持两种编辑模式，通过 `editableMode` 属性切换：
+
+## 交互式示例
+
+<ClientOnly>
+  <ReactDemo :component="EditModeDemo" :source="EditModeDemoSource" title="编辑模式切换" description="点击按钮切换全量编辑和行编辑模式" />
+</ClientOnly>
 
 ## 全量编辑（all）
 

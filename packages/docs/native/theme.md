@@ -1,6 +1,17 @@
 # 主题定制
 
+<script setup>
+import ThemeDemo from '../demos/native/ThemeDemo.tsx'
+import ThemeDemoSource from '../demos/native/ThemeDemo.tsx?raw'
+</script>
+
 EditableTable 使用 CSS 变量控制主题，可通过覆盖变量实现自定义主题，包括暗色模式。
+
+## 交互式示例
+
+<ClientOnly>
+  <ReactDemo :component="ThemeDemo" :source="ThemeDemoSource" title="暗色主题" description="点击按钮切换亮色/暗色主题" />
+</ClientOnly>
 
 ## CSS 变量列表
 

@@ -1,6 +1,17 @@
 # 自定义编辑器
 
+<script setup>
+import CustomEditorDemo from '../demos/native/CustomEditorDemo.tsx'
+import CustomEditorDemoSource from '../demos/native/CustomEditorDemo.tsx?raw'
+</script>
+
 通过 `editRender` 可以自定义编辑态渲染，直接返回任意 React 组件即可。
+
+## 交互式示例
+
+<ClientOnly>
+  <ReactDemo :component="CustomEditorDemo" :source="CustomEditorDemoSource" title="自定义编辑器" description="下拉选择、日期选择等自定义编辑器" />
+</ClientOnly>
 
 ## 基本用法
 

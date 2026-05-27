@@ -5,12 +5,8 @@
   "description": "React 可编辑表格方案集 — 原生轻量版 & Formily 高性能版",
   "type": "module",
   "scripts": {
-    "dev:native": "pnpm --filter @react-editable-tables/native dev",
     "dev:docs": "pnpm --filter @react-editable-tables/docs dev",
-    "build:native": "pnpm --filter @react-editable-tables/native build",
     "build:docs": "pnpm --filter @react-editable-tables/docs build",
-    "build": "pnpm -r build",
-    "test:native": "pnpm --filter @react-editable-tables/native test",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
     "check": "pnpm -r check",

@@ -85,7 +85,7 @@ FastTable.Field 会自动检测 antd 的 `Switch` 和 `Checkbox` 组件，注入
 引入样式文件：
 
 ```tsx
-import '@react-editable-tables/formily/src/style.css';
+import '@react-editable-tables/formily/style.css';
 ```
 
 样式使用 `fet-` 前缀，不会与项目现有样式冲突：

@@ -92,7 +92,7 @@ import { createForm } from '@formily/core';
 import { FormProvider } from '@formily/react';
 import { Input, Button } from 'antd';
 import { FastTable } from '@react-editable-tables/formily';
-import '@react-editable-tables/formily/src/style.css';
+import '@react-editable-tables/formily/style.css';
 
 const form = createForm();
 

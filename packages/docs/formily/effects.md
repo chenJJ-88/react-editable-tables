@@ -1,6 +1,17 @@
 # Effects 兼容
 
+<script setup>
+import EffectsDemo from '../demos/formily/EffectsDemo.tsx'
+import EffectsDemoSource from '../demos/formily/EffectsDemo.tsx?raw'
+</script>
+
 虽然 FastTable 使用 CellBridge 架构减少了 Formily Field 订阅，但仍然完全兼容 Formily 的 effects 机制。
+
+## 交互式示例
+
+<ClientOnly>
+  <ReactDemo :component="EffectsDemo" :source="EffectsDemoSource" title="字段联动" description="选择国家后动态改变城市下拉选项" />
+</ClientOnly>
 
 ## 工作原理
 

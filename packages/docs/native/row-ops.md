@@ -1,6 +1,17 @@
 # 行操作
 
+<script setup>
+import RowOpsDemo from '../demos/native/RowOpsDemo.tsx'
+import RowOpsDemoSource from '../demos/native/RowOpsDemo.tsx?raw'
+</script>
+
 通过 `ref` 获取表格实例，调用 `addRow`、`removeRow`、`moveUp`、`moveDown` 等方法。
+
+## 交互式示例
+
+<ClientOnly>
+  <ReactDemo :component="RowOpsDemo" :source="RowOpsDemoSource" title="行操作" description="新增行、上移、下移、删除行" />
+</ClientOnly>
 
 ## 基本用法
 

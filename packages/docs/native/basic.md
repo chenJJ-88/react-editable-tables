@@ -1,5 +1,10 @@
 # 基础用法
 
+<script setup>
+import BasicDemo from '../demos/native/BasicDemo.tsx'
+import BasicDemoSource from '../demos/native/BasicDemo.tsx?raw'
+</script>
+
 `@react-editable-tables/native` 是一个零 UI 库依赖的可编辑表格组件，通过 `editRender` 自定义每个单元格的编辑态渲染。
 
 ## 安装
@@ -8,7 +13,11 @@
 npm install @react-editable-tables/native
 ```
 
-## 最小示例
+## 交互式示例
+
+<ClientOnly>
+  <ReactDemo :component="BasicDemo" :source="BasicDemoSource" title="基础用法" description="最简单的可编辑表格，支持文本、数字、下拉选择" />
+</ClientOnly>
 
 只需传入 4 个属性即可运行：
 

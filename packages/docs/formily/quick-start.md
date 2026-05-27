@@ -5,7 +5,7 @@ import QuickStartDemo from '../demos/formily/QuickStartDemo.tsx'
 import QuickStartDemoSource from '../demos/formily/QuickStartDemo.tsx?raw'
 </script>
 
-`@react-editable-tables/formily` 是基于 Formily 2.x + antd 5.x 的可编辑表格组件，开箱即用，无需单独安装 Formily。
+`@react-editable-tables/formily` 是基于 [Formily](https://formilyjs.org/zh-CN) 2.x + antd 5.x 的可编辑表格组件，开箱即用，无需单独安装 [Formily](https://formilyjs.org/zh-CN)。
 
 ## 安装
 
@@ -77,7 +77,7 @@ function App() {
 
 ### FastTable — 表格容器
 
-`FastTable` 会自动创建一个 Formily `ArrayField`，你只需要指定 `name` 属性：
+`FastTable` 会自动创建一个 [Formily](https://formilyjs.org/zh-CN) `ArrayField`，你只需要指定 `name` 属性：
 
 ```tsx
 <FastTable name="items" columns={columns} />
@@ -204,7 +204,7 @@ FastTable 内置了添加和删除功能：
 
 ## 获取和提交数据
 
-FastTable 的数据存储在 Formily 表单中，通过 `form` 实例操作：
+FastTable 的数据存储在 [Formily](https://formilyjs.org/zh-CN) 表单中，通过 `form` 实例操作：
 
 ### 提交数据
 

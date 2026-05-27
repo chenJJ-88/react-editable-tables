@@ -21,8 +21,8 @@ features:
     title: Native 零依赖
     details: 纯 React + TypeScript 实现，不依赖任何 UI 库，包体积极小，虚拟滚动支持万级数据渲染
   - icon: ⚡
-    title: Formily 高性能
-    details: CellBridge 架构将 Formily Field 订阅数从 N×M 降为 N，解决 20+ 列 × 100+ 行场景下的卡顿问题
+    title: [Formily](https://formilyjs.org/zh-CN) 高性能
+    details: 行级响应式更新，配合 antd Table 分页，500+ 行数据流畅运行
   - icon: 📝
     title: 双模式编辑
     details: 支持全量编辑和行编辑两种模式，满足不同业务场景需求

@@ -31,7 +31,7 @@
 | 参数 | 类型 | 说明 |
 |------|------|------|
 | `index` | `number` | 当前行索引 |
-| `field` | `ArrayField` | 当前行对应的 Formily ArrayField 实例 |
+| `field` | `ArrayField` | 当前行对应的 [Formily](https://formilyjs.org/zh-CN) ArrayField 实例 |
 
 `field` 常用方法：
 
@@ -48,7 +48,7 @@
 |------|------|-------------|
 | `name` | `string` | 字段名（**必填**） |
 | `required` | `boolean` | 必填校验 |
-| `rules` | `any` | 自定义校验规则（Formily 规则格式） |
+| `rules` | `any` | 自定义校验规则（[Formily](https://formilyjs.org/zh-CN) 规则格式） |
 | `editable` | `boolean` | `false` 时显示只读文本 |
 | `format` | `(v: any) => any` | 转化表单值给控件的 value |
 | `parse` | `(v: any) => any` | 转化控件的 onChange 值给表单 |
@@ -82,11 +82,7 @@ FastTable.Field 会自动检测 antd 的 `Switch` 和 `Checkbox` 组件，注入
 
 ## 样式
 
-引入样式文件：
-
-```tsx
-import '@react-editable-tables/formily/style.css';
-```
+样式已内联到 JS 中，导入 `@react-editable-tables/formily` 时自动注入，无需手动引入 CSS 文件。
 
 样式使用 `fet-` 前缀，不会与项目现有样式冲突：
 

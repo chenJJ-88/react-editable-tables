@@ -6,6 +6,7 @@ export default defineConfig({
   description: 'React 可编辑表格方案集 — 原生轻量版 & Formily 高性能版',
   lang: 'zh-CN',
   lastUpdated: true,
+  appearance: false,
 
   vite: {
     plugins: [react()],
@@ -112,8 +113,5 @@ export default defineConfig({
 
     returnToTopLabel: '回到顶部',
     sidebarMenuLabel: '菜单',
-    darkModeSwitchLabel: '主题',
-    lightModeSwitchTitle: '切换到浅色模式',
-    darkModeSwitchTitle: '切换到深色模式',
   },
 })

@@ -5,7 +5,7 @@ import QuickStartDemo from '../demos/formily/QuickStartDemo.tsx'
 import QuickStartDemoSource from '../demos/formily/QuickStartDemo.tsx?raw'
 </script>
 
-`@react-editable-tables/formily` 是基于 [Formily](https://formilyjs.org/zh-CN) 2.x + antd 5.x 的可编辑表格组件，开箱即用，无需单独安装 [Formily](https://formilyjs.org/zh-CN)。
+`@react-editable-tables/formily` 是基于 Formily 2.x + antd 5.x 的可编辑表格组件，开箱即用，无需单独安装 [Formily](https://formilyjs.org/zh-CN)。
 
 ## 安装
 

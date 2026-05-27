@@ -21,7 +21,7 @@ features:
     title: Native 零依赖
     details: 纯 React + TypeScript 实现，不依赖任何 UI 库，包体积极小，虚拟滚动支持万级数据渲染
   - icon: ⚡
-    title: [Formily](https://formilyjs.org/zh-CN) 高性能
+    title: Formily 高性能
     details: 行级响应式更新，配合 antd Table 分页，500+ 行数据流畅运行
   - icon: 📝
     title: 双模式编辑

@@ -12,10 +12,15 @@ export default defineConfig({
     plugins: [react()],
   },
 
-  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]],
+  head: [
+    ['link', { rel: 'icon', type: 'image/png', href: '/logo.png' }],
+    ['meta', { property: 'og:image', content: '/logo.png' }],
+    ['meta', { property: 'og:title', content: 'React Editable Tables' }],
+    ['meta', { property: 'og:description', content: 'React 可编辑表格方案集 — 原生轻量版 & Formily 高性能版' }],
+  ],
 
   themeConfig: {
-    logo: '/logo.svg',
+    logo: '/logo.png',
 
     nav: [
       { text: '指南', link: '/guide/getting-started' },

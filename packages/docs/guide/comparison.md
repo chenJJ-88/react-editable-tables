@@ -11,7 +11,7 @@
 
 | 维度 | Native | Formily |
 |------|--------|---------|
-| **核心依赖** | React + @tanstack/react-virtual | React + antd + @formily/core + @formily/react |
+| **核心依赖** | React + @tanstack/react-virtual | React + antd |
 | **包体积** | 极小（无 UI 库） | 较大（antd + Formily） |
 | **虚拟滚动** | 支持（1000+ 行流畅） | 不支持（依赖 antd Table） |
 | **编辑模式** | 全量编辑 / 行编辑 | 全量编辑 |
@@ -30,7 +30,6 @@
 ├── 是 → 使用 Formily 方案
 │   - 与现有技术栈无缝集成
 │   - 复用 Formily 的 effects、校验、联动
-│   - CellBridge 架构解决性能问题
 │
 └── 否 → 需要虚拟滚动（1000+ 行）吗？
     ├── 是 → 使用 Native 方案

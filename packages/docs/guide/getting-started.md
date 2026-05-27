@@ -7,7 +7,7 @@
 | 包名 | 适用场景 | 核心依赖 |
 |------|---------|---------|
 | **@react-editable-tables/native** | 轻量应用、自定义 UI、无 antd/Formily | React, @tanstack/react-virtual |
-| **@react-editable-tables/formily** | 企业级应用、antd 生态、复杂表单逻辑 | React, antd, @formily/core, @formily/react |
+| **@react-editable-tables/formily** | 企业级应用、antd 生态、复杂表单逻辑 | React, antd |
 
 不确定选哪个？👉 [方案选型](./comparison)
 
@@ -27,10 +27,10 @@ pnpm add @react-editable-tables/native
 npm install @react-editable-tables/formily
 ```
 
-同时确保已安装 peer dependencies：
+确保已安装 peer dependencies：
 
 ```bash
-npm install react react-dom antd @formily/core @formily/react
+npm install react react-dom antd
 ```
 
 ## 最简示例
@@ -88,11 +88,8 @@ function App() {
 ### Formily
 
 ```tsx
-import { createForm } from '@formily/core';
-import { FormProvider } from '@formily/react';
+import { createForm, FormProvider, FastTable } from '@react-editable-tables/formily';
 import { Input, Button } from 'antd';
-import { FastTable } from '@react-editable-tables/formily';
-import '@react-editable-tables/formily/style.css';
 
 const form = createForm();
 
@@ -140,9 +137,6 @@ pnpm install
 
 # 启动文档站
 pnpm dev:docs
-
-# 启动 Native 包交互式 Demo
-pnpm dev:native
 ```
 
 ## 下一步

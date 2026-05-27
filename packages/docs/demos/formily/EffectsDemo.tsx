@@ -41,7 +41,7 @@ const form = createForm({
   effects() {
     // 字段初始化时：为已有 type 值的行设置子类型选项
     onFieldInit('items.*.type', (field) => {
-      const subTypes = subTypeMap[field.value] || [];
+      const subTypes = subTypeMap[(field as any).value] || [];
       const rowPath = field.address.toString().replace(/\.type$/, '');
       form.setFieldState(`${rowPath}.subType`, (state) => {
         state.data = { ...state.data, options: subTypes };
@@ -50,7 +50,7 @@ const form = createForm({
 
     // 类型变化 → 子类型选项联动 + 值清空（仅当前行）
     onFieldValueChange('items.*.type', (field) => {
-      const subTypes = subTypeMap[field.value] || [];
+      const subTypes = subTypeMap[(field as any).value] || [];
       const rowPath = field.address.toString().replace(/\.type$/, '');
       form.setFieldState(`${rowPath}.subType`, (state) => {
         state.data = { ...state.data, options: subTypes };
@@ -62,7 +62,7 @@ const form = createForm({
     onFieldValueChange('items.*.disabled', (field) => {
       const rowPath = field.address.toString().replace(/\.disabled$/, '');
       form.setFieldState(`${rowPath}.note`, (state) => {
-        state.editable = !field.value;
+        state.editable = !(field as any).value;
       });
     });
   },

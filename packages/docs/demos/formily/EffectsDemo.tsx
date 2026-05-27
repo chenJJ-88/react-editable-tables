@@ -1,8 +1,11 @@
-import { createForm, onFieldValueChange, onFieldInit } from '@formily/core';
-import { FormProvider } from '@formily/react';
+import { 
+  createForm, 
+  onFieldValueChange, 
+  onFieldInit, 
+  FormProvider, 
+  FastTable 
+} from '@react-editable-tables/formily';
 import { Input, Select, Switch, Button, App as AntApp } from 'antd';
-import { FastTable } from '@react-editable-tables/formily';
-import '@react-editable-tables/formily/style.css';
 
 const typeOptions = [
   { label: '电子产品', value: 'electronic' },

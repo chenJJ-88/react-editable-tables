@@ -273,7 +273,7 @@ function EditableTable<T extends object = Record<string, unknown>>(
 
   // ===== 虚拟滚动 =====
   const enableVirtual = scrollY != null;
-  const parentRef = useRef<HTMLDivElement>(null);
+  const parentRef = useRef<HTMLDivElement | null>(null);
   const rowVirtualizer = useVirtualizer({
     count: data.length,
     getScrollElement: () => parentRef.current,
@@ -338,7 +338,7 @@ function EditableTable<T extends object = Record<string, unknown>>(
   }, [columns, opsWidth]);
 
   const headerScrollRef = useRef<HTMLDivElement>(null);
-  const bodyScrollRef = useRef<HTMLDivElement>(null);
+  const bodyScrollRef = useRef<HTMLDivElement | null>(null);
   const syncScroll = useCallback((source: 'header' | 'body') => {
     if (
       source === 'header' &&

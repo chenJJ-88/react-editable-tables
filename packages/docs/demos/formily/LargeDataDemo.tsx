@@ -1,8 +1,5 @@
-import { createForm } from '@formily/core';
-import { FormProvider } from '@formily/react';
+import { createForm, FormProvider, FastTable } from '@react-editable-tables/formily';
 import { Input, Select, Button, App as AntApp } from 'antd';
-import { FastTable } from '@react-editable-tables/formily';
-import '@react-editable-tables/formily/style.css';
 
 const departments = ['技术部', '产品部', '设计部', '市场部', '运营部', '财务部', '人事部'];
 const deptOptions = departments.map((d) => ({ label: d, value: d }));

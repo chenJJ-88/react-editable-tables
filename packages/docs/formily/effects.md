@@ -89,7 +89,7 @@ FastTable 完全兼容 Formily 2.x 的 effects API。以下是与表格场景最
 ## 监听单元格值变化
 
 ```tsx
-import { createForm, onFieldValueChange } from '@formily/core';
+import { createForm, onFieldValueChange } from '@react-editable-tables/formily';
 
 const form = createForm({
   effects() {

@@ -9,7 +9,7 @@
 | 包 | 方案 | 依赖 | 适用场景 |
 |---|------|------|---------|
 | **@react-editable-tables/native** | 纯 React + TypeScript | 零 UI 库依赖 | 轻量应用、自定义设计、无 antd/Formily |
-| **@react-editable-tables/formily** | Formily 2.x + antd 5.x | antd, Formily | 企业级应用、复杂表单逻辑、antd 生态 |
+| **@react-editable-tables/formily** | Formily 2.x + antd 5.x | antd | 企业级应用、复杂表单逻辑、antd 生态 |
 
 ### @react-editable-tables/native
 
@@ -23,18 +23,16 @@
 - 自定义编辑器 via `editRender`
 - 行操作 via `ref`（addRow, removeRow, moveUp, moveDown）
 - CSS 变量主题 + 暗色模式
-- 内置交互式文档站 + 7 个 Demo
 
 ### @react-editable-tables/formily
 
-基于 Formily 2.x + antd 5.x 的高性能可编辑表格，使用 CellBridge 架构将 Formily Field 订阅数从 N×M 降为 N。
+基于 Formily 2.x + antd 5.x 的可编辑表格，开箱即用，无需单独安装 Formily。
 
-- CellBridge 架构：仅行级别 Formily 订阅
-- React.memo 优化的 CellRenderer
-- columns 稳定化（ref-based valueLen）
+- 开箱即用：安装一个包即可，Formily API 已内置 re-export
 - 完整 Formily effects 兼容（onFieldValueChange, form.setFieldState）
 - 内置分页、新增/删除行、min/max 约束
-- antd Table/Select/Input 集成
+- antd Table/Select/Input/Switch 集成
+- columns 稳定化（ref-based valueLen）
 
 ## Quick Start
 
@@ -66,18 +64,15 @@ function App() {
 }
 ```
 
-### Formily（antd + Formily）
+### Formily（antd + Formily，开箱即用）
 
 ```bash
 npm install @react-editable-tables/formily
 ```
 
 ```tsx
-import { createForm } from '@formily/core';
-import { FormProvider } from '@formily/react';
+import { createForm, FormProvider, FastTable } from '@react-editable-tables/formily';
 import { Input, Button } from 'antd';
-import { FastTable } from '@react-editable-tables/formily';
-import '@react-editable-tables/formily/src/style.css';
 
 const form = createForm();
 
@@ -89,7 +84,7 @@ function App() {
         columns={[
           {
             title: '名称',
-            render: () => <FastTable.Field name="name" required><Input /></FastTable.Field>,
+            render: () => <FastTable.Field name="name" required parse={(e: any) => e?.target?.value ?? e}><Input /></FastTable.Field>,
           },
           {
             title: '操作',
@@ -107,6 +102,8 @@ function App() {
 }
 ```
 
+无需单独安装 `@formily/core` 或 `@formily/react`，也无需手动导入 CSS。
+
 ## Development
 
 ```bash
@@ -120,24 +117,13 @@ pnpm install
 # 启动文档站（VitePress，涵盖两个包的完整文档）
 pnpm dev:docs
 
-# 启动 Native 包交互式 Demo
-pnpm dev:native
-
-# 构建所有包
-pnpm build
-
 # 运行测试
 pnpm test
-
-# 代码检查 + 格式化
-pnpm check
 ```
 
 ## Documentation
 
-- **在线文档**：运行 `pnpm dev:docs` 启动 VitePress 文档站，涵盖两个包的完整文档
-- **@react-editable-tables/native**：运行 `pnpm dev:native` 启动内置交互式文档站，包含 7 个实时 Demo
-- **@react-editable-tables/formily**：查看 [packages/fast-editable-table/README.md](packages/fast-editable-table/README.md) 获取 API 参考和使用示例
+运行 `pnpm dev:docs` 启动 VitePress 文档站，涵盖两个包的完整文档和交互式 Demo。
 
 ## Architecture
 
@@ -149,15 +135,14 @@ react-editable-tables/
 │   │       ├── components/
 │   │       │   └── EditableTable/   # 核心表格组件
 │   │       ├── types/               # TypeScript 类型定义
-│   │       ├── utils/               # 校验工具
-│   │       └── docs/                # 内置文档站 (Vite)
+│   │       └── utils/               # 校验工具
 │   └── fast-editable-table/         # @react-editable-tables/formily
 │       └── src/
 │           ├── FastTable.tsx        # 主表格组件
-│           ├── FastTableField.tsx   # CellBridge (单元格桥接)
-│           ├── CellRenderer.tsx     # React.memo 优化的渲染器
+│           ├── FastTableField.tsx   # 单元格字段组件
+│           ├── style.ts             # 自动注入的样式
 │           ├── types.ts             # TypeScript 类型定义
-│           └── style.css            # 组件样式
+│           └── index.ts             # 入口（re-export Formily API）
 ├── package.json                     # 根 workspace 清单
 └── pnpm-workspace.yaml              # workspace 定义
 ```
@@ -166,7 +151,7 @@ react-editable-tables/
 
 | 维度 | Native | Formily |
 |------|--------|---------|
-| 已使用 antd + Formily？ | 否 | 是 |
+| 已使用 antd？ | 否 | 是 |
 | 需要虚拟滚动（1000+ 行）？ | 是 | 否（antd Table 适中的数据量） |
 | 需要自定义 UI（无 antd）？ | 是 | 否 |
 | 需要 Formily effects/联动？ | 否 | 是 |

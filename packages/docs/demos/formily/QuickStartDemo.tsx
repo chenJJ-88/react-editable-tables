@@ -1,8 +1,5 @@
-import { createForm } from '@formily/core';
-import { FormProvider } from '@formily/react';
+import { createForm, FormProvider, FastTable } from '@react-editable-tables/formily';
 import { Input, Select, Button, App as AntApp } from 'antd';
-import { FastTable } from '@react-editable-tables/formily';
-import '@react-editable-tables/formily/style.css';
 
 const form = createForm({
   initialValues: {
@@ -62,6 +59,7 @@ export default function QuickStartDemo() {
           addText="添加"
           itemDefaultValue={{ name: '', type: undefined }}
           min={1}
+          max={5}
           pagination={false}
         />
         <Button type="primary" onClick={handleSubmit} style={{ marginTop: 16 }}>

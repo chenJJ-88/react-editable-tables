@@ -72,7 +72,7 @@ export default function BasicDemo() {
           render: (value) => genderMap[value as string] ?? value,
         },
       ]}
-      onSubmit={(d) => alert(`提交成功！共${d.length}条`)}
+      onSubmit={(d) => { console.log('提交数据：', d); alert(`提交成功！共${d.length}条`); }}
     />
   );
 }

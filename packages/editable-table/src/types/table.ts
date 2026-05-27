@@ -101,4 +101,6 @@ export interface EditableTableProps<T> {
   className?: string;
   /** 容器样式 */
   style?: React.CSSProperties;
+  /** 是否显示单元格边框，默认 false */
+  bordered?: boolean;
 }

@@ -24,7 +24,7 @@ export default function QuickStartDemo() {
             {
               title: '名称',
               render: () => (
-                <FastTable.Field name="name" required>
+                <FastTable.Field name="name" required parse={(e: any) => e?.target?.value ?? e}>
                   <Input />
                 </FastTable.Field>
               ),

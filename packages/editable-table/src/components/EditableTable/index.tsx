@@ -28,6 +28,7 @@ function EditableTable<T extends object = Record<string, unknown>>(
     emptyText = '暂无数据',
     className,
     style,
+    bordered = false,
   }: EditableTableProps<T>,
   ref: React.Ref<EditableTableInstance<T>>,
 ) {
@@ -366,7 +367,7 @@ function EditableTable<T extends object = Record<string, unknown>>(
         </div>
       )}
 
-      <div className="et-table">
+      <div className={`et-table${bordered ? ' et-bordered' : ''}`}>
         <div
           ref={headerScrollRef}
           className="et-scroll-x"

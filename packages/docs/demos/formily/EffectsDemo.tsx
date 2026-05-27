@@ -68,7 +68,7 @@ export default function EffectsDemo() {
             {
               title: '备注',
               render: () => (
-                <FastTable.Field name="note">
+                <FastTable.Field name="note" parse={(e: any) => e?.target?.value ?? e}>
                   <Input />
                 </FastTable.Field>
               ),

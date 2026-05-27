@@ -318,3 +318,14 @@
 .et-fixed-right {
   border-left: 1px solid var(--et-border-color);
 }
+
+/* ===== Bordered 模式 ===== */
+.et-bordered .et-header-cell,
+.et-bordered .et-cell {
+  border-right: 1px solid var(--et-border-color);
+}
+
+.et-bordered .et-header-cell:last-child,
+.et-bordered .et-cell:last-child {
+  border-right: none;
+}

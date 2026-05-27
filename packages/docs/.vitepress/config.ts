@@ -46,7 +46,6 @@ export default defineConfig({
             { text: '数据联动', link: '/native/linkage' },
             { text: '自定义编辑器', link: '/native/custom-editor' },
             { text: '行操作', link: '/native/row-ops' },
-            { text: '主题定制', link: '/native/theme' },
             { text: '大数据量性能', link: '/native/performance' },
           ],
         },

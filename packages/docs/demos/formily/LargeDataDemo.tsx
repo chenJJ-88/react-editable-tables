@@ -32,7 +32,7 @@ export default function LargeDataDemo() {
             {
               title: '姓名',
               render: () => (
-                <FastTable.Field name="name" required>
+                <FastTable.Field name="name" required parse={(e: any) => e?.target?.value ?? e}>
                   <Input />
                 </FastTable.Field>
               ),
@@ -40,7 +40,7 @@ export default function LargeDataDemo() {
             {
               title: '年龄',
               render: () => (
-                <FastTable.Field name="age">
+                <FastTable.Field name="age" parse={(e: any) => e?.target?.value ?? e}>
                   <Input type="number" />
                 </FastTable.Field>
               ),

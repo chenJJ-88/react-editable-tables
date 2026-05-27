@@ -45,7 +45,7 @@ function App() {
           {
             title: '名称',
             render: () => (
-              <FastTable.Field name="name" required>
+              <FastTable.Field name="name" required parse={(e: any) => e?.target?.value ?? e}>
                 <Input />
               </FastTable.Field>
             ),
@@ -111,7 +111,29 @@ function App() {
 
 - `name`：字段名，对应 `itemDefaultValue` 中的 key
 - `required`：必填校验
+- `parse`：转化控件的 `onChange` 参数为表单值（antd Input 必须配置）
 - `children`：antd 表单控件（Input, Select, Switch 等）
+
+### antd Input 需要 parse
+
+antd 的 `Input.onChange` 传入的是 `SyntheticEvent` 而非值本身，必须使用 `parse` 提取值：
+
+```tsx
+<FastTable.Field name="name" parse={(e) => e?.target?.value ?? e}>
+  <Input />
+</FastTable.Field>
+```
+
+各组件 parse 规则：
+
+| antd 组件 | onChange 参数 | 是否需要 parse | parse 函数 |
+|-----------|-------------|--------------|-----------|
+| Input | `e` (Event) | 是 | `(e) => e?.target?.value ?? e` |
+| Input.TextArea | `e` (Event) | 是 | `(e) => e?.target?.value ?? e` |
+| InputNumber | `v` (值) | 否 | — |
+| Select | `v` (值) | 否 | — |
+| Switch | `v` (boolean) | 否 | — |
+| DatePicker | `v` (dayjs) | 否 | — |
 
 ### itemDefaultValue — 行默认值
 
@@ -182,3 +204,81 @@ FastTable 内置了添加和删除功能：
 ```tsx
 <FastTable validateBeforeAdd={false} ... />
 ```
+
+## 获取和提交数据
+
+FastTable 的数据存储在 Formily 表单中，通过 `form` 实例操作：
+
+### 提交数据
+
+```tsx
+const form = createForm();
+
+function App() {
+  const handleSubmit = async () => {
+    try {
+      // 方式一：form.submit() 自动校验并返回 values
+      const values = await form.submit();
+      console.log('提交数据：', values.items);
+    } catch (errors) {
+      console.log('校验失败');
+    }
+  };
+
+  // 方式二：手动获取 + 校验
+  const handleSubmit2 = async () => {
+    try {
+      await form.validate();
+      console.log('提交数据：', form.values.items);
+    } catch {}
+  };
+
+  return (
+    <div>
+      <FormProvider form={form}>
+        <FastTable name="items" ... />
+      </FormProvider>
+      <Button onClick={handleSubmit}>提交</Button>
+    </div>
+  );
+}
+```
+
+### 获取当前数据
+
+```tsx
+// 随时获取当前表单值
+const items = form.values.items;
+
+// 监听数据变化
+const form = createForm({
+  effects() {
+    onFormValuesChange((form) => {
+      console.log('数据变化：', form.values.items);
+    });
+  },
+});
+```
+
+### 重置表单
+
+```tsx
+form.reset('*', {
+  forceClear: true,    // 清空所有值
+  validate: false,     // 不触发校验
+});
+```
+
+### 常用 form 实例方法
+
+| 方法 | 说明 |
+|------|------|
+| `form.submit()` | 提交表单（校验 + 返回 values） |
+| `form.validate(pattern?)` | 校验指定字段，不传则校验全部 |
+| `form.reset(pattern?, options?)` | 重置表单 |
+| `form.values` | 获取当前表单值 |
+| `form.setValues(values)` | 设置表单值 |
+| `form.setFieldState(pattern, setter)` | 设置字段状态 |
+| `form.getFieldState(pattern)` | 获取字段状态 |
+| `form.clearErrors(pattern?)` | 清除错误 |
+| `form.query(pattern)` | 查询字段实例 |

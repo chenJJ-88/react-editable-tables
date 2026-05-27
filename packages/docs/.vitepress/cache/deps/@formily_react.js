@@ -1,16 +1,12 @@
 import {
   Path,
-  Tracker,
-  autorun,
   each,
   globalThisPolyfill,
-  hasCollected,
   instOf,
   isArr,
   isBool,
   isFn,
   isObjectField,
-  isObservable,
   isPlainObj,
   isStr,
   isValid,
@@ -18,7 +14,6 @@ import {
   lazyMerge,
   lowerCase,
   map,
-  observable,
   onFieldInit,
   onFieldInitialValueChange,
   onFieldInputValueChange,
@@ -31,10 +26,23 @@ import {
   onFieldValueChange,
   reduce,
   toArr,
+  uid
+} from "./chunk-5KXK6744.js";
+import {
+  Observer,
+  observer,
+  require_hoist_non_react_statics_cjs,
+  unstable_useCompatEffect,
+  unstable_useCompatFactory
+} from "./chunk-SBR2TICO.js";
+import {
+  autorun,
+  hasCollected,
+  isObservable,
+  observable,
   toJS,
-  uid,
   untracked
-} from "./chunk-4GUGNLM2.js";
+} from "./chunk-NWLGNSX4.js";
 import {
   require_react_dom
 } from "./chunk-BLE4GOYO.js";
@@ -42,266 +50,10 @@ import {
   require_react
 } from "./chunk-2YX7DZXR.js";
 import {
-  __commonJS,
   __toESM
 } from "./chunk-5WRI5ZAA.js";
 
-// ../../node_modules/.pnpm/react-is@16.13.1/node_modules/react-is/cjs/react-is.development.js
-var require_react_is_development = __commonJS({
-  "../../node_modules/.pnpm/react-is@16.13.1/node_modules/react-is/cjs/react-is.development.js"(exports) {
-    "use strict";
-    if (true) {
-      (function() {
-        "use strict";
-        var hasSymbol = typeof Symbol === "function" && Symbol.for;
-        var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for("react.element") : 60103;
-        var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for("react.portal") : 60106;
-        var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for("react.fragment") : 60107;
-        var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for("react.strict_mode") : 60108;
-        var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for("react.profiler") : 60114;
-        var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for("react.provider") : 60109;
-        var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for("react.context") : 60110;
-        var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for("react.async_mode") : 60111;
-        var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for("react.concurrent_mode") : 60111;
-        var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for("react.forward_ref") : 60112;
-        var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for("react.suspense") : 60113;
-        var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for("react.suspense_list") : 60120;
-        var REACT_MEMO_TYPE = hasSymbol ? Symbol.for("react.memo") : 60115;
-        var REACT_LAZY_TYPE = hasSymbol ? Symbol.for("react.lazy") : 60116;
-        var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for("react.block") : 60121;
-        var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for("react.fundamental") : 60117;
-        var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for("react.responder") : 60118;
-        var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for("react.scope") : 60119;
-        function isValidElementType(type) {
-          return typeof type === "string" || typeof type === "function" || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
-          type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === "object" && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
-        }
-        function typeOf(object) {
-          if (typeof object === "object" && object !== null) {
-            var $$typeof = object.$$typeof;
-            switch ($$typeof) {
-              case REACT_ELEMENT_TYPE:
-                var type = object.type;
-                switch (type) {
-                  case REACT_ASYNC_MODE_TYPE:
-                  case REACT_CONCURRENT_MODE_TYPE:
-                  case REACT_FRAGMENT_TYPE:
-                  case REACT_PROFILER_TYPE:
-                  case REACT_STRICT_MODE_TYPE:
-                  case REACT_SUSPENSE_TYPE:
-                    return type;
-                  default:
-                    var $$typeofType = type && type.$$typeof;
-                    switch ($$typeofType) {
-                      case REACT_CONTEXT_TYPE:
-                      case REACT_FORWARD_REF_TYPE:
-                      case REACT_LAZY_TYPE:
-                      case REACT_MEMO_TYPE:
-                      case REACT_PROVIDER_TYPE:
-                        return $$typeofType;
-                      default:
-                        return $$typeof;
-                    }
-                }
-              case REACT_PORTAL_TYPE:
-                return $$typeof;
-            }
-          }
-          return void 0;
-        }
-        var AsyncMode = REACT_ASYNC_MODE_TYPE;
-        var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
-        var ContextConsumer = REACT_CONTEXT_TYPE;
-        var ContextProvider = REACT_PROVIDER_TYPE;
-        var Element = REACT_ELEMENT_TYPE;
-        var ForwardRef = REACT_FORWARD_REF_TYPE;
-        var Fragment6 = REACT_FRAGMENT_TYPE;
-        var Lazy = REACT_LAZY_TYPE;
-        var Memo = REACT_MEMO_TYPE;
-        var Portal = REACT_PORTAL_TYPE;
-        var Profiler = REACT_PROFILER_TYPE;
-        var StrictMode = REACT_STRICT_MODE_TYPE;
-        var Suspense = REACT_SUSPENSE_TYPE;
-        var hasWarnedAboutDeprecatedIsAsyncMode = false;
-        function isAsyncMode(object) {
-          {
-            if (!hasWarnedAboutDeprecatedIsAsyncMode) {
-              hasWarnedAboutDeprecatedIsAsyncMode = true;
-              console["warn"]("The ReactIs.isAsyncMode() alias has been deprecated, and will be removed in React 17+. Update your code to use ReactIs.isConcurrentMode() instead. It has the exact same API.");
-            }
-          }
-          return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
-        }
-        function isConcurrentMode(object) {
-          return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
-        }
-        function isContextConsumer(object) {
-          return typeOf(object) === REACT_CONTEXT_TYPE;
-        }
-        function isContextProvider(object) {
-          return typeOf(object) === REACT_PROVIDER_TYPE;
-        }
-        function isElement(object) {
-          return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
-        }
-        function isForwardRef(object) {
-          return typeOf(object) === REACT_FORWARD_REF_TYPE;
-        }
-        function isFragment(object) {
-          return typeOf(object) === REACT_FRAGMENT_TYPE;
-        }
-        function isLazy(object) {
-          return typeOf(object) === REACT_LAZY_TYPE;
-        }
-        function isMemo(object) {
-          return typeOf(object) === REACT_MEMO_TYPE;
-        }
-        function isPortal(object) {
-          return typeOf(object) === REACT_PORTAL_TYPE;
-        }
-        function isProfiler(object) {
-          return typeOf(object) === REACT_PROFILER_TYPE;
-        }
-        function isStrictMode(object) {
-          return typeOf(object) === REACT_STRICT_MODE_TYPE;
-        }
-        function isSuspense(object) {
-          return typeOf(object) === REACT_SUSPENSE_TYPE;
-        }
-        exports.AsyncMode = AsyncMode;
-        exports.ConcurrentMode = ConcurrentMode;
-        exports.ContextConsumer = ContextConsumer;
-        exports.ContextProvider = ContextProvider;
-        exports.Element = Element;
-        exports.ForwardRef = ForwardRef;
-        exports.Fragment = Fragment6;
-        exports.Lazy = Lazy;
-        exports.Memo = Memo;
-        exports.Portal = Portal;
-        exports.Profiler = Profiler;
-        exports.StrictMode = StrictMode;
-        exports.Suspense = Suspense;
-        exports.isAsyncMode = isAsyncMode;
-        exports.isConcurrentMode = isConcurrentMode;
-        exports.isContextConsumer = isContextConsumer;
-        exports.isContextProvider = isContextProvider;
-        exports.isElement = isElement;
-        exports.isForwardRef = isForwardRef;
-        exports.isFragment = isFragment;
-        exports.isLazy = isLazy;
-        exports.isMemo = isMemo;
-        exports.isPortal = isPortal;
-        exports.isProfiler = isProfiler;
-        exports.isStrictMode = isStrictMode;
-        exports.isSuspense = isSuspense;
-        exports.isValidElementType = isValidElementType;
-        exports.typeOf = typeOf;
-      })();
-    }
-  }
-});
-
-// ../../node_modules/.pnpm/react-is@16.13.1/node_modules/react-is/index.js
-var require_react_is = __commonJS({
-  "../../node_modules/.pnpm/react-is@16.13.1/node_modules/react-is/index.js"(exports, module) {
-    "use strict";
-    if (false) {
-      module.exports = null;
-    } else {
-      module.exports = require_react_is_development();
-    }
-  }
-});
-
-// ../../node_modules/.pnpm/hoist-non-react-statics@3.3.2/node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js
-var require_hoist_non_react_statics_cjs = __commonJS({
-  "../../node_modules/.pnpm/hoist-non-react-statics@3.3.2/node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js"(exports, module) {
-    "use strict";
-    var reactIs = require_react_is();
-    var REACT_STATICS = {
-      childContextTypes: true,
-      contextType: true,
-      contextTypes: true,
-      defaultProps: true,
-      displayName: true,
-      getDefaultProps: true,
-      getDerivedStateFromError: true,
-      getDerivedStateFromProps: true,
-      mixins: true,
-      propTypes: true,
-      type: true
-    };
-    var KNOWN_STATICS = {
-      name: true,
-      length: true,
-      prototype: true,
-      caller: true,
-      callee: true,
-      arguments: true,
-      arity: true
-    };
-    var FORWARD_REF_STATICS = {
-      "$$typeof": true,
-      render: true,
-      defaultProps: true,
-      displayName: true,
-      propTypes: true
-    };
-    var MEMO_STATICS = {
-      "$$typeof": true,
-      compare: true,
-      defaultProps: true,
-      displayName: true,
-      propTypes: true,
-      type: true
-    };
-    var TYPE_STATICS = {};
-    TYPE_STATICS[reactIs.ForwardRef] = FORWARD_REF_STATICS;
-    TYPE_STATICS[reactIs.Memo] = MEMO_STATICS;
-    function getStatics(component) {
-      if (reactIs.isMemo(component)) {
-        return MEMO_STATICS;
-      }
-      return TYPE_STATICS[component["$$typeof"]] || REACT_STATICS;
-    }
-    var defineProperty = Object.defineProperty;
-    var getOwnPropertyNames = Object.getOwnPropertyNames;
-    var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-    var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-    var getPrototypeOf = Object.getPrototypeOf;
-    var objectPrototype = Object.prototype;
-    function hoistNonReactStatics3(targetComponent, sourceComponent, blacklist) {
-      if (typeof sourceComponent !== "string") {
-        if (objectPrototype) {
-          var inheritedComponent = getPrototypeOf(sourceComponent);
-          if (inheritedComponent && inheritedComponent !== objectPrototype) {
-            hoistNonReactStatics3(targetComponent, inheritedComponent, blacklist);
-          }
-        }
-        var keys = getOwnPropertyNames(sourceComponent);
-        if (getOwnPropertySymbols) {
-          keys = keys.concat(getOwnPropertySymbols(sourceComponent));
-        }
-        var targetStatics = getStatics(targetComponent);
-        var sourceStatics = getStatics(sourceComponent);
-        for (var i = 0; i < keys.length; ++i) {
-          var key = keys[i];
-          if (!KNOWN_STATICS[key] && !(blacklist && blacklist[key]) && !(sourceStatics && sourceStatics[key]) && !(targetStatics && targetStatics[key])) {
-            var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
-            try {
-              defineProperty(targetComponent, key, descriptor);
-            } catch (e) {
-            }
-          }
-        }
-      }
-      return targetComponent;
-    }
-    module.exports = hoistNonReactStatics3;
-  }
-});
-
-// ../../node_modules/.pnpm/@formily+json-schema@2.3.7_typescript@6.0.3/node_modules/@formily/json-schema/esm/shared.js
+// ../../node_modules/.pnpm/@formily+json-schema@2.3.7/node_modules/@formily/json-schema/esm/shared.js
 var REVA_ACTIONS_KEY = Symbol.for("__REVA_ACTIONS");
 var SchemaNestedMap = {
   parent: true,
@@ -489,7 +241,7 @@ var patchStateFormSchema = function(targetState, pattern, compiled) {
   });
 };
 
-// ../../node_modules/.pnpm/@formily+json-schema@2.3.7_typescript@6.0.3/node_modules/@formily/json-schema/esm/compiler.js
+// ../../node_modules/.pnpm/@formily+json-schema@2.3.7/node_modules/@formily/json-schema/esm/compiler.js
 var ExpRE = /^\s*\{\{([\s\S]*)\}\}\s*$/;
 var Registry = {
   silent: false,
@@ -593,7 +345,7 @@ var patchSchemaCompile = function(targetState, sourceSchema, scope, demand) {
   });
 };
 
-// ../../node_modules/.pnpm/@formily+json-schema@2.3.7_typescript@6.0.3/node_modules/@formily/json-schema/esm/transformer.js
+// ../../node_modules/.pnpm/@formily+json-schema@2.3.7/node_modules/@formily/json-schema/esm/transformer.js
 var __read = function(o, n) {
   var m = typeof Symbol === "function" && o[Symbol.iterator];
   if (!m) return o;
@@ -814,7 +566,7 @@ var transformFieldProps = function(schema, options) {
   };
 };
 
-// ../../node_modules/.pnpm/@formily+json-schema@2.3.7_typescript@6.0.3/node_modules/@formily/json-schema/esm/patches.js
+// ../../node_modules/.pnpm/@formily+json-schema@2.3.7/node_modules/@formily/json-schema/esm/patches.js
 var __assign = function() {
   __assign = Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -862,7 +614,7 @@ var enablePolyfills = function(versions) {
   }
 };
 
-// ../../node_modules/.pnpm/@formily+json-schema@2.3.7_typescript@6.0.3/node_modules/@formily/json-schema/esm/polyfills/SPECIFICATION_1_0.js
+// ../../node_modules/.pnpm/@formily+json-schema@2.3.7/node_modules/@formily/json-schema/esm/polyfills/SPECIFICATION_1_0.js
 var __assign2 = function() {
   __assign2 = Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -1012,7 +764,7 @@ var registerTypeDefaultComponents = function(maps) {
   Object.assign(TYPE_DEFAULT_COMPONENTS, maps);
 };
 
-// ../../node_modules/.pnpm/@formily+json-schema@2.3.7_typescript@6.0.3/node_modules/@formily/json-schema/esm/schema.js
+// ../../node_modules/.pnpm/@formily+json-schema@2.3.7/node_modules/@formily/json-schema/esm/schema.js
 var Schema = (
   /** @class */
   function() {
@@ -1248,330 +1000,10 @@ var Schema = (
   }()
 );
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/FormProvider.js
-var import_react13 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/FormProvider.js
+var import_react7 = __toESM(require_react());
 
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/observer.js
-var import_react6 = __toESM(require_react());
-var import_hoist_non_react_statics = __toESM(require_hoist_non_react_statics_cjs());
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/hooks/useForceUpdate.js
-var import_react3 = __toESM(require_react());
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/hooks/useLayoutEffect.js
-var import_react = __toESM(require_react());
-var useLayoutEffect = typeof document !== "undefined" ? import_react.useLayoutEffect : import_react.useEffect;
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/hooks/useDidUpdate.js
-var import_react2 = __toESM(require_react());
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/shared/global.js
-function globalSelf() {
-  try {
-    if (typeof self !== "undefined") {
-      return self;
-    }
-  } catch (e) {
-  }
-  try {
-    if (typeof window !== "undefined") {
-      return window;
-    }
-  } catch (e) {
-  }
-  try {
-    if (typeof global !== "undefined") {
-      return global;
-    }
-  } catch (e) {
-  }
-  return Function("return this")();
-}
-var globalThisPolyfill2 = globalSelf();
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/shared/gc.js
-var registry = globalThisPolyfill2["FinalizationRegistry"] && new globalThisPolyfill2["FinalizationRegistry"](function(token) {
-  var _a2;
-  return (_a2 = token === null || token === void 0 ? void 0 : token.clean) === null || _a2 === void 0 ? void 0 : _a2.call(token);
-});
-var GarbageCollector = (
-  /** @class */
-  function() {
-    function GarbageCollector2(clean, expireTime) {
-      if (expireTime === void 0) {
-        expireTime = 1e4;
-      }
-      this.token = {
-        clean
-      };
-      this.expireTime = expireTime;
-    }
-    GarbageCollector2.prototype.open = function(target) {
-      var _this = this;
-      if (registry) {
-        registry.register(target, this.token, this.token);
-      } else {
-        this.request = setTimeout(function() {
-          var _a2, _b2;
-          (_b2 = (_a2 = _this.token) === null || _a2 === void 0 ? void 0 : _a2.clean) === null || _b2 === void 0 ? void 0 : _b2.call(_a2);
-        }, this.expireTime);
-      }
-    };
-    GarbageCollector2.prototype.close = function() {
-      if (registry) {
-        registry.unregister(this.token);
-      } else {
-        clearTimeout(this.request);
-      }
-    };
-    return GarbageCollector2;
-  }()
-);
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/shared/immediate.js
-var immediate = function(callback) {
-  var disposed = false;
-  Promise.resolve(0).then(function() {
-    if (disposed) {
-      disposed = false;
-      return;
-    }
-    callback();
-  });
-  return function() {
-    disposed = true;
-  };
-};
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/hooks/useDidUpdate.js
-var useDidUpdate = function(callback) {
-  var request = (0, import_react2.useRef)(null);
-  request.current = immediate(callback);
-  useLayoutEffect(function() {
-    request.current();
-    callback();
-  });
-};
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/hooks/useForceUpdate.js
-var __read3 = function(o, n) {
-  var m = typeof Symbol === "function" && o[Symbol.iterator];
-  if (!m) return o;
-  var i = m.call(o), r, ar = [], e;
-  try {
-    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-  } catch (error) {
-    e = { error };
-  } finally {
-    try {
-      if (r && !r.done && (m = i["return"])) m.call(i);
-    } finally {
-      if (e) throw e.error;
-    }
-  }
-  return ar;
-};
-var EMPTY_ARRAY = [];
-var RENDER_COUNT = { value: 0 };
-var RENDER_QUEUE = /* @__PURE__ */ new Set();
-function useForceUpdate() {
-  var _a2 = __read3((0, import_react3.useState)([]), 2), setState = _a2[1];
-  var firstRenderedRef = (0, import_react3.useRef)(false);
-  var needUpdateRef = (0, import_react3.useRef)(false);
-  useLayoutEffect(function() {
-    firstRenderedRef.current = true;
-    if (needUpdateRef.current) {
-      setState([]);
-      needUpdateRef.current = false;
-    }
-    return function() {
-      firstRenderedRef.current = false;
-    };
-  }, EMPTY_ARRAY);
-  var update = (0, import_react3.useCallback)(function() {
-    setState([]);
-  }, EMPTY_ARRAY);
-  var scheduler = (0, import_react3.useCallback)(function() {
-    if (!firstRenderedRef.current) {
-      needUpdateRef.current = true;
-      return;
-    }
-    if (RENDER_COUNT.value === 0) {
-      update();
-    } else {
-      RENDER_QUEUE.add(update);
-    }
-  }, EMPTY_ARRAY);
-  RENDER_COUNT.value++;
-  useDidUpdate(function() {
-    if (RENDER_COUNT.value > 0) {
-      RENDER_COUNT.value--;
-    }
-    if (RENDER_COUNT.value === 0) {
-      RENDER_QUEUE.forEach(function(update2) {
-        RENDER_QUEUE.delete(update2);
-        update2();
-      });
-    }
-  });
-  return scheduler;
-}
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/hooks/useCompatFactory.js
-var import_react5 = __toESM(require_react());
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/hooks/useCompatEffect.js
-var import_react4 = __toESM(require_react());
-var isArr2 = Array.isArray;
-var isEqualDeps = function(target, source) {
-  var arrA = isArr2(target);
-  var arrB = isArr2(source);
-  if (arrA !== arrB)
-    return false;
-  if (arrA) {
-    if (target.length !== source.length)
-      return false;
-    return target.every(function(val, index) {
-      return val === source[index];
-    });
-  }
-  return target === source;
-};
-var useCompatEffect = function(effect, deps) {
-  var depsRef = (0, import_react4.useRef)(null);
-  var mountedRef = (0, import_react4.useRef)(false);
-  (0, import_react4.useEffect)(function() {
-    mountedRef.current = true;
-    var dispose = effect();
-    return function() {
-      mountedRef.current = false;
-      if (!isEqualDeps(depsRef.current, deps)) {
-        if (dispose)
-          dispose();
-        return;
-      }
-      immediate(function() {
-        if (mountedRef.current)
-          return;
-        if (dispose)
-          dispose();
-      });
-    };
-  }, deps);
-  depsRef.current = deps;
-};
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/hooks/useCompatFactory.js
-var __read4 = function(o, n) {
-  var m = typeof Symbol === "function" && o[Symbol.iterator];
-  if (!m) return o;
-  var i = m.call(o), r, ar = [], e;
-  try {
-    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-  } catch (error) {
-    e = { error };
-  } finally {
-    try {
-      if (r && !r.done && (m = i["return"])) m.call(i);
-    } finally {
-      if (e) throw e.error;
-    }
-  }
-  return ar;
-};
-var ObjectToBeRetainedByReact = (
-  /** @class */
-  /* @__PURE__ */ function() {
-    function ObjectToBeRetainedByReact2() {
-    }
-    return ObjectToBeRetainedByReact2;
-  }()
-);
-function objectToBeRetainedByReactFactory() {
-  return new ObjectToBeRetainedByReact();
-}
-var useCompatFactory = function(factory) {
-  var instRef = import_react5.default.useRef(null);
-  var gcRef = import_react5.default.useRef();
-  var _a2 = __read4(import_react5.default.useState(objectToBeRetainedByReactFactory), 1), objectRetainedByReact = _a2[0];
-  if (!instRef.current) {
-    instRef.current = factory();
-  }
-  if (!gcRef.current) {
-    gcRef.current = new GarbageCollector(function() {
-      if (instRef.current) {
-        instRef.current.dispose();
-      }
-    });
-    gcRef.current.open(objectRetainedByReact);
-  }
-  useCompatEffect(function() {
-    gcRef.current.close();
-    return function() {
-      if (instRef.current) {
-        instRef.current.dispose();
-        instRef.current = null;
-      }
-    };
-  }, []);
-  return instRef.current;
-};
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/hooks/useObserver.js
-var useObserver = function(view, options) {
-  var forceUpdate = useForceUpdate();
-  var tracker = useCompatFactory(function() {
-    return new Tracker(function() {
-      if (typeof (options === null || options === void 0 ? void 0 : options.scheduler) === "function") {
-        options.scheduler(forceUpdate);
-      } else {
-        forceUpdate();
-      }
-    }, options === null || options === void 0 ? void 0 : options.displayName);
-  });
-  return tracker.track(view);
-};
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/observer.js
-var __assign3 = function() {
-  __assign3 = Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-      s = arguments[i];
-      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-        t[p] = s[p];
-    }
-    return t;
-  };
-  return __assign3.apply(this, arguments);
-};
-function observer(component, options) {
-  var realOptions = __assign3({ forwardRef: false }, options);
-  var wrappedComponent = realOptions.forwardRef ? (0, import_react6.forwardRef)(function(props, ref) {
-    return useObserver(function() {
-      return component(__assign3(__assign3({}, props), { ref }));
-    }, realOptions);
-  }) : function(props) {
-    return useObserver(function() {
-      return component(props);
-    }, realOptions);
-  };
-  var memoComponent = (0, import_react6.memo)(wrappedComponent);
-  (0, import_hoist_non_react_statics.default)(memoComponent, component);
-  if (realOptions.displayName) {
-    memoComponent.displayName = realOptions.displayName;
-  }
-  return memoComponent;
-}
-var Observer = observer(function(props) {
-  var children = typeof props.children === "function" ? props.children() : props.children;
-  return import_react6.default.createElement(import_react6.Fragment, {}, children);
-});
-
-// ../../node_modules/.pnpm/@formily+reactive-react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+reac_9564ae01609ccbcff8a474cabb2d4513/node_modules/@formily/reactive-react/esm/hooks/index.js
-var unstable_useCompatEffect = useCompatEffect;
-var unstable_useCompatFactory = useCompatFactory;
-
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/hooks/useAttach.js
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/hooks/useAttach.js
 var useAttach = function(target) {
   unstable_useCompatEffect(function() {
     target.onMount();
@@ -1582,8 +1014,8 @@ var useAttach = function(target) {
   return target;
 };
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/shared/context.js
-var import_react7 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/shared/context.js
+var import_react = __toESM(require_react());
 var createContextCleaner = function() {
   var contexts = [];
   for (var _i = 0; _i < arguments.length; _i++) {
@@ -1592,35 +1024,35 @@ var createContextCleaner = function() {
   return function(_a2) {
     var children = _a2.children;
     return contexts.reduce(function(buf, ctx) {
-      return import_react7.default.createElement(ctx.Provider, { value: void 0 }, buf);
+      return import_react.default.createElement(ctx.Provider, { value: void 0 }, buf);
     }, children);
   };
 };
-var FormContext = (0, import_react7.createContext)(null);
-var FieldContext = (0, import_react7.createContext)(null);
-var SchemaMarkupContext = (0, import_react7.createContext)(null);
-var SchemaContext = (0, import_react7.createContext)(null);
-var SchemaExpressionScopeContext = (0, import_react7.createContext)(null);
-var SchemaComponentsContext = (0, import_react7.createContext)(null);
-var SchemaOptionsContext = (0, import_react7.createContext)(null);
+var FormContext = (0, import_react.createContext)(null);
+var FieldContext = (0, import_react.createContext)(null);
+var SchemaMarkupContext = (0, import_react.createContext)(null);
+var SchemaContext = (0, import_react.createContext)(null);
+var SchemaExpressionScopeContext = (0, import_react.createContext)(null);
+var SchemaComponentsContext = (0, import_react.createContext)(null);
+var SchemaOptionsContext = (0, import_react.createContext)(null);
 var ContextCleaner = createContextCleaner(FieldContext, SchemaMarkupContext, SchemaContext, SchemaExpressionScopeContext, SchemaComponentsContext, SchemaOptionsContext);
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/shared/connect.js
-var import_react12 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/shared/connect.js
+var import_react6 = __toESM(require_react());
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/hooks/useForm.js
-var import_react8 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/hooks/useForm.js
+var import_react2 = __toESM(require_react());
 var useForm = function() {
-  return (0, import_react8.useContext)(FormContext);
+  return (0, import_react2.useContext)(FormContext);
 };
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/hooks/useField.js
-var import_react9 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/hooks/useField.js
+var import_react3 = __toESM(require_react());
 var useField = function() {
-  return (0, import_react9.useContext)(FieldContext);
+  return (0, import_react3.useContext)(FieldContext);
 };
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/hooks/useParentForm.js
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/hooks/useParentForm.js
 var useParentForm = function() {
   var field = useField();
   var form = useForm();
@@ -1634,13 +1066,13 @@ var useParentForm = function() {
   return findObjectParent(field);
 };
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/hooks/useFieldSchema.js
-var import_react10 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/hooks/useFieldSchema.js
+var import_react4 = __toESM(require_react());
 var useFieldSchema = function() {
-  return (0, import_react10.useContext)(SchemaContext);
+  return (0, import_react4.useContext)(SchemaContext);
 };
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/hooks/useFormEffects.js
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/hooks/useFormEffects.js
 var useFormEffects = function(effects) {
   var form = useForm();
   unstable_useCompatFactory(function() {
@@ -1654,16 +1086,16 @@ var useFormEffects = function(effects) {
   });
 };
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/hooks/useExpressionScope.js
-var import_react11 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/hooks/useExpressionScope.js
+var import_react5 = __toESM(require_react());
 var useExpressionScope = function() {
-  return (0, import_react11.useContext)(SchemaExpressionScopeContext);
+  return (0, import_react5.useContext)(SchemaExpressionScopeContext);
 };
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/shared/connect.js
-var import_hoist_non_react_statics2 = __toESM(require_hoist_non_react_statics_cjs());
-var __assign4 = function() {
-  __assign4 = Object.assign || function(t) {
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/shared/connect.js
+var import_hoist_non_react_statics = __toESM(require_hoist_non_react_statics_cjs());
+var __assign3 = function() {
+  __assign3 = Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
       s = arguments[i];
       for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
@@ -1671,7 +1103,7 @@ var __assign4 = function() {
     }
     return t;
   };
-  return __assign4.apply(this, arguments);
+  return __assign3.apply(this, arguments);
 };
 function mapProps() {
   var args = [];
@@ -1700,8 +1132,8 @@ function mapProps() {
           });
         }
         return props2;
-      }, __assign4({}, props));
-      return import_react12.default.createElement(target, results);
+      }, __assign3({}, props));
+      return import_react6.default.createElement(target, results);
     }, {
       forwardRef: true
     });
@@ -1712,9 +1144,9 @@ function mapReadPretty(component, readPrettyProps) {
     return observer(function(props) {
       var field = useField();
       if (!isVoidField(field) && (field === null || field === void 0 ? void 0 : field.pattern) === "readPretty") {
-        return import_react12.default.createElement(component, __assign4(__assign4({}, readPrettyProps), props));
+        return import_react6.default.createElement(component, __assign3(__assign3({}, readPrettyProps), props));
       }
-      return import_react12.default.createElement(target, props);
+      return import_react6.default.createElement(target, props);
     }, {
       forwardRef: true
     });
@@ -1728,40 +1160,40 @@ function connect(target) {
   var Target = args.reduce(function(target2, mapper) {
     return mapper(target2);
   }, target);
-  var Destination = import_react12.default.forwardRef(function(props, ref) {
-    return import_react12.default.createElement(Target, __assign4(__assign4({}, props), { ref }));
+  var Destination = import_react6.default.forwardRef(function(props, ref) {
+    return import_react6.default.createElement(Target, __assign3(__assign3({}, props), { ref }));
   });
   if (target)
-    (0, import_hoist_non_react_statics2.default)(Destination, target);
+    (0, import_hoist_non_react_statics.default)(Destination, target);
   return Destination;
 }
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/FormProvider.js
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/FormProvider.js
 var FormProvider = function(props) {
   var form = useAttach(props.form);
-  return import_react13.default.createElement(
+  return import_react7.default.createElement(
     ContextCleaner,
     null,
-    import_react13.default.createElement(FormContext.Provider, { value: form }, props.children)
+    import_react7.default.createElement(FormContext.Provider, { value: form }, props.children)
   );
 };
 FormProvider.displayName = "FormProvider";
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/FormConsumer.js
-var import_react14 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/FormConsumer.js
+var import_react8 = __toESM(require_react());
 var FormConsumer = observer(function(props) {
   var children = isFn(props.children) ? props.children(useForm()) : null;
-  return import_react14.default.createElement(import_react14.Fragment, null, children);
+  return import_react8.default.createElement(import_react8.Fragment, null, children);
 });
 FormConsumer.displayName = "FormConsumer";
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/ArrayField.js
-var import_react16 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/ArrayField.js
+var import_react10 = __toESM(require_react());
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/ReactiveField.js
-var import_react15 = __toESM(require_react());
-var __assign5 = function() {
-  __assign5 = Object.assign || function(t) {
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/ReactiveField.js
+var import_react9 = __toESM(require_react());
+var __assign4 = function() {
+  __assign4 = Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
       s = arguments[i];
       for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
@@ -1769,9 +1201,9 @@ var __assign5 = function() {
     }
     return t;
   };
-  return __assign5.apply(this, arguments);
+  return __assign4.apply(this, arguments);
 };
-var __read5 = function(o, n) {
+var __read3 = function(o, n) {
   var m = typeof Symbol === "function" && o[Symbol.iterator];
   if (!m) return o;
   var i = m.call(o), r, ar = [], e;
@@ -1802,8 +1234,8 @@ var mergeChildren = function(children, content) {
     return;
   if (isFn(children))
     return;
-  return import_react15.default.createElement(
-    import_react15.Fragment,
+  return import_react9.default.createElement(
+    import_react9.Fragment,
     null,
     children,
     content
@@ -1817,9 +1249,9 @@ var renderChildren = function(children, field, form) {
 };
 var ReactiveInternal = function(props) {
   var _a2;
-  var components = (0, import_react15.useContext)(SchemaComponentsContext);
+  var components = (0, import_react9.useContext)(SchemaComponentsContext);
   if (!props.field) {
-    return import_react15.default.createElement(import_react15.Fragment, null, renderChildren(props.children));
+    return import_react9.default.createElement(import_react9.Fragment, null, renderChildren(props.children));
   }
   var field = props.field;
   var content = mergeChildren(renderChildren(props.children, field, field.form), (_a2 = field.content) !== null && _a2 !== void 0 ? _a2 : field.componentProps.children);
@@ -1831,9 +1263,9 @@ var ReactiveInternal = function(props) {
   };
   var renderDecorator = function(children) {
     if (!field.decoratorType) {
-      return import_react15.default.createElement(import_react15.Fragment, null, children);
+      return import_react9.default.createElement(import_react9.Fragment, null, children);
     }
-    return import_react15.default.createElement(getComponent(field.decoratorType), toJS(field.decoratorProps), children);
+    return import_react9.default.createElement(getComponent(field.decoratorType), toJS(field.decoratorProps), children);
   };
   var renderComponent = function() {
     var _a3, _b2, _c2;
@@ -1846,8 +1278,8 @@ var ReactiveInternal = function(props) {
       for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
       }
-      field.onInput.apply(field, __spreadArray2([], __read5(args), false));
-      (_b3 = (_a4 = field.componentProps) === null || _a4 === void 0 ? void 0 : _a4.onChange) === null || _b3 === void 0 ? void 0 : _b3.call.apply(_b3, __spreadArray2([_a4], __read5(args), false));
+      field.onInput.apply(field, __spreadArray2([], __read3(args), false));
+      (_b3 = (_a4 = field.componentProps) === null || _a4 === void 0 ? void 0 : _a4.onChange) === null || _b3 === void 0 ? void 0 : _b3.call.apply(_b3, __spreadArray2([_a4], __read3(args), false));
     } : (_a3 = field.componentProps) === null || _a3 === void 0 ? void 0 : _a3.onChange;
     var onFocus = !isVoidField(field) ? function() {
       var _a4, _b3;
@@ -1855,8 +1287,8 @@ var ReactiveInternal = function(props) {
       for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
       }
-      field.onFocus.apply(field, __spreadArray2([], __read5(args), false));
-      (_b3 = (_a4 = field.componentProps) === null || _a4 === void 0 ? void 0 : _a4.onFocus) === null || _b3 === void 0 ? void 0 : _b3.call.apply(_b3, __spreadArray2([_a4], __read5(args), false));
+      field.onFocus.apply(field, __spreadArray2([], __read3(args), false));
+      (_b3 = (_a4 = field.componentProps) === null || _a4 === void 0 ? void 0 : _a4.onFocus) === null || _b3 === void 0 ? void 0 : _b3.call.apply(_b3, __spreadArray2([_a4], __read3(args), false));
     } : (_b2 = field.componentProps) === null || _b2 === void 0 ? void 0 : _b2.onFocus;
     var onBlur = !isVoidField(field) ? function() {
       var _a4, _b3;
@@ -1864,12 +1296,12 @@ var ReactiveInternal = function(props) {
       for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
       }
-      field.onBlur.apply(field, __spreadArray2([], __read5(args), false));
-      (_b3 = (_a4 = field.componentProps) === null || _a4 === void 0 ? void 0 : _a4.onBlur) === null || _b3 === void 0 ? void 0 : _b3.call.apply(_b3, __spreadArray2([_a4], __read5(args), false));
+      field.onBlur.apply(field, __spreadArray2([], __read3(args), false));
+      (_b3 = (_a4 = field.componentProps) === null || _a4 === void 0 ? void 0 : _a4.onBlur) === null || _b3 === void 0 ? void 0 : _b3.call.apply(_b3, __spreadArray2([_a4], __read3(args), false));
     } : (_c2 = field.componentProps) === null || _c2 === void 0 ? void 0 : _c2.onBlur;
     var disabled = !isVoidField(field) ? field.pattern === "disabled" || field.pattern === "readPretty" : void 0;
     var readOnly = !isVoidField(field) ? field.pattern === "readOnly" : void 0;
-    return import_react15.default.createElement(getComponent(field.componentType), __assign5(__assign5({ disabled, readOnly }, toJS(field.componentProps)), { value, onChange, onFocus, onBlur }), content);
+    return import_react9.default.createElement(getComponent(field.componentType), __assign4(__assign4({ disabled, readOnly }, toJS(field.componentProps)), { value, onChange, onFocus, onBlur }), content);
   };
   return renderDecorator(renderComponent());
 };
@@ -1878,7 +1310,32 @@ var ReactiveField = observer(ReactiveInternal, {
   forwardRef: true
 });
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/ArrayField.js
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/ArrayField.js
+var __assign5 = function() {
+  __assign5 = Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+        t[p] = s[p];
+    }
+    return t;
+  };
+  return __assign5.apply(this, arguments);
+};
+var ArrayField = function(props) {
+  var form = useForm();
+  var parent = useField();
+  var field = useAttach(form.createArrayField(__assign5({ basePath: parent === null || parent === void 0 ? void 0 : parent.address }, props)));
+  return import_react10.default.createElement(
+    FieldContext.Provider,
+    { value: field },
+    import_react10.default.createElement(ReactiveField, { field }, props.children)
+  );
+};
+ArrayField.displayName = "ArrayField";
+
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/ObjectField.js
+var import_react11 = __toESM(require_react());
 var __assign6 = function() {
   __assign6 = Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -1890,20 +1347,20 @@ var __assign6 = function() {
   };
   return __assign6.apply(this, arguments);
 };
-var ArrayField = function(props) {
+var ObjectField = function(props) {
   var form = useForm();
   var parent = useField();
-  var field = useAttach(form.createArrayField(__assign6({ basePath: parent === null || parent === void 0 ? void 0 : parent.address }, props)));
-  return import_react16.default.createElement(
+  var field = useAttach(form.createObjectField(__assign6({ basePath: parent === null || parent === void 0 ? void 0 : parent.address }, props)));
+  return import_react11.default.createElement(
     FieldContext.Provider,
     { value: field },
-    import_react16.default.createElement(ReactiveField, { field }, props.children)
+    import_react11.default.createElement(ReactiveField, { field }, props.children)
   );
 };
-ArrayField.displayName = "ArrayField";
+ObjectField.displayName = "ObjectField";
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/ObjectField.js
-var import_react17 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/VoidField.js
+var import_react12 = __toESM(require_react());
 var __assign7 = function() {
   __assign7 = Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -1915,20 +1372,23 @@ var __assign7 = function() {
   };
   return __assign7.apply(this, arguments);
 };
-var ObjectField = function(props) {
+var VoidField = function(props) {
   var form = useForm();
   var parent = useField();
-  var field = useAttach(form.createObjectField(__assign7({ basePath: parent === null || parent === void 0 ? void 0 : parent.address }, props)));
-  return import_react17.default.createElement(
+  var field = useAttach(form.createVoidField(__assign7({ basePath: parent === null || parent === void 0 ? void 0 : parent.address }, props)));
+  return import_react12.default.createElement(
     FieldContext.Provider,
     { value: field },
-    import_react17.default.createElement(ReactiveField, { field }, props.children)
+    import_react12.default.createElement(ReactiveField, { field }, props.children)
   );
 };
-ObjectField.displayName = "ObjectField";
+VoidField.displayName = "VoidField";
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/VoidField.js
-var import_react18 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/RecursionField.js
+var import_react15 = __toESM(require_react());
+
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/Field.js
+var import_react13 = __toESM(require_react());
 var __assign8 = function() {
   __assign8 = Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -1940,23 +1400,32 @@ var __assign8 = function() {
   };
   return __assign8.apply(this, arguments);
 };
-var VoidField = function(props) {
+var Field = function(props) {
   var form = useForm();
   var parent = useField();
-  var field = useAttach(form.createVoidField(__assign8({ basePath: parent === null || parent === void 0 ? void 0 : parent.address }, props)));
-  return import_react18.default.createElement(
+  var field = form.createField(__assign8({ basePath: parent === null || parent === void 0 ? void 0 : parent.address }, props));
+  (0, import_react13.useEffect)(function() {
+    field === null || field === void 0 ? void 0 : field.onMount();
+    return function() {
+      field === null || field === void 0 ? void 0 : field.onUnmount();
+    };
+  }, [field]);
+  return import_react13.default.createElement(
     FieldContext.Provider,
     { value: field },
-    import_react18.default.createElement(ReactiveField, { field }, props.children)
+    import_react13.default.createElement(ReactiveField, { field }, props.children)
   );
 };
-VoidField.displayName = "VoidField";
+Field.displayName = "Field";
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/RecursionField.js
-var import_react21 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/ExpressionScope.js
+var import_react14 = __toESM(require_react());
+var ExpressionScope = function(props) {
+  var scope = (0, import_react14.useContext)(SchemaExpressionScopeContext);
+  return import_react14.default.createElement(SchemaExpressionScopeContext.Provider, { value: lazyMerge(scope, props.value) }, props.children);
+};
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/Field.js
-var import_react19 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/RecursionField.js
 var __assign9 = function() {
   __assign9 = Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -1967,43 +1436,6 @@ var __assign9 = function() {
     return t;
   };
   return __assign9.apply(this, arguments);
-};
-var Field = function(props) {
-  var form = useForm();
-  var parent = useField();
-  var field = form.createField(__assign9({ basePath: parent === null || parent === void 0 ? void 0 : parent.address }, props));
-  (0, import_react19.useEffect)(function() {
-    field === null || field === void 0 ? void 0 : field.onMount();
-    return function() {
-      field === null || field === void 0 ? void 0 : field.onUnmount();
-    };
-  }, [field]);
-  return import_react19.default.createElement(
-    FieldContext.Provider,
-    { value: field },
-    import_react19.default.createElement(ReactiveField, { field }, props.children)
-  );
-};
-Field.displayName = "Field";
-
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/ExpressionScope.js
-var import_react20 = __toESM(require_react());
-var ExpressionScope = function(props) {
-  var scope = (0, import_react20.useContext)(SchemaExpressionScopeContext);
-  return import_react20.default.createElement(SchemaExpressionScopeContext.Provider, { value: lazyMerge(scope, props.value) }, props.children);
-};
-
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/RecursionField.js
-var __assign10 = function() {
-  __assign10 = Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-      s = arguments[i];
-      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-        t[p] = s[p];
-    }
-    return t;
-  };
-  return __assign10.apply(this, arguments);
 };
 var useFieldProps = function(schema) {
   var scope = useExpressionScope();
@@ -2020,7 +1452,7 @@ var useBasePath = function(props) {
 };
 var RecursionField = function(props) {
   var basePath = useBasePath(props);
-  var fieldSchema = (0, import_react21.useMemo)(function() {
+  var fieldSchema = (0, import_react15.useMemo)(function() {
     return new Schema(props.schema);
   }, [props.schema]);
   var fieldProps = useFieldProps(fieldSchema);
@@ -2035,14 +1467,14 @@ var RecursionField = function(props) {
           _args[_i] = arguments[_i];
         }
         args_1.$slotArgs = _args;
-        return import_react21.default.createElement(
+        return import_react15.default.createElement(
           ExpressionScope,
           { value: args_1 },
-          import_react21.default.createElement(RecursionField, { schema: innerSchema, name: key })
+          import_react15.default.createElement(RecursionField, { schema: innerSchema, name: key })
         );
       });
     } else {
-      Path.setIn(fieldSchema.properties, target, import_react21.default.createElement(RecursionField, { schema: innerSchema, name: key }));
+      Path.setIn(fieldSchema.properties, target, import_react15.default.createElement(RecursionField, { schema: innerSchema, name: key }));
     }
   };
   var renderProperties = function(field) {
@@ -2051,7 +1483,7 @@ var RecursionField = function(props) {
     var properties = Schema.getOrderProperties(fieldSchema);
     if (!properties.length)
       return;
-    return import_react21.default.createElement(import_react21.Fragment, null, properties.map(function(_a2, index) {
+    return import_react15.default.createElement(import_react15.Fragment, null, properties.map(function(_a2, index) {
       var item = _a2.schema, name = _a2.key;
       var base = (field === null || field === void 0 ? void 0 : field.address) || basePath;
       var schema = item;
@@ -2071,9 +1503,9 @@ var RecursionField = function(props) {
         }
       }
       if (isBool(props.propsRecursion) && props.propsRecursion) {
-        return import_react21.default.createElement(RecursionField, { propsRecursion: true, filterProperties: props.filterProperties, mapProperties: props.mapProperties, schema, key: "".concat(index, "-").concat(name), name, basePath: base });
+        return import_react15.default.createElement(RecursionField, { propsRecursion: true, filterProperties: props.filterProperties, mapProperties: props.mapProperties, schema, key: "".concat(index, "-").concat(name), name, basePath: base });
       }
-      return import_react21.default.createElement(RecursionField, { schema, key: "".concat(index, "-").concat(name), name, basePath: base });
+      return import_react15.default.createElement(RecursionField, { schema, key: "".concat(index, "-").concat(name), name, basePath: base });
     }));
   };
   var render2 = function() {
@@ -2082,25 +1514,25 @@ var RecursionField = function(props) {
     if (fieldSchema.type === "object") {
       if (props.onlyRenderProperties)
         return renderProperties();
-      return import_react21.default.createElement(ObjectField, __assign10({}, fieldProps, { name: props.name, basePath }), renderProperties);
+      return import_react15.default.createElement(ObjectField, __assign9({}, fieldProps, { name: props.name, basePath }), renderProperties);
     } else if (fieldSchema.type === "array") {
-      return import_react21.default.createElement(ArrayField, __assign10({}, fieldProps, { name: props.name, basePath }));
+      return import_react15.default.createElement(ArrayField, __assign9({}, fieldProps, { name: props.name, basePath }));
     } else if (fieldSchema.type === "void") {
       if (props.onlyRenderProperties)
         return renderProperties();
-      return import_react21.default.createElement(VoidField, __assign10({}, fieldProps, { name: props.name, basePath }), renderProperties);
+      return import_react15.default.createElement(VoidField, __assign9({}, fieldProps, { name: props.name, basePath }), renderProperties);
     }
-    return import_react21.default.createElement(Field, __assign10({}, fieldProps, { name: props.name, basePath }));
+    return import_react15.default.createElement(Field, __assign9({}, fieldProps, { name: props.name, basePath }));
   };
   if (!fieldSchema)
-    return import_react21.default.createElement(import_react21.Fragment, null);
-  return import_react21.default.createElement(SchemaContext.Provider, { value: fieldSchema }, render2());
+    return import_react15.default.createElement(import_react15.Fragment, null);
+  return import_react15.default.createElement(SchemaContext.Provider, { value: fieldSchema }, render2());
 };
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/RecordsScope.js
-var import_react22 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/RecordsScope.js
+var import_react16 = __toESM(require_react());
 var RecordsScope = function(props) {
-  return import_react22.default.createElement(ExpressionScope, { value: {
+  return import_react16.default.createElement(ExpressionScope, { value: {
     get $records() {
       var _a2, _b2;
       return (_b2 = (_a2 = props.getRecords) === null || _a2 === void 0 ? void 0 : _a2.call(props)) !== null && _b2 !== void 0 ? _b2 : [];
@@ -2108,11 +1540,11 @@ var RecordsScope = function(props) {
   } }, props.children);
 };
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/RecordScope.js
-var import_react23 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/RecordScope.js
+var import_react17 = __toESM(require_react());
 var RecordScope = function(props) {
   var scope = useExpressionScope();
-  return import_react23.default.createElement(ExpressionScope, { value: {
+  return import_react17.default.createElement(ExpressionScope, { value: {
     get $lookup() {
       return scope === null || scope === void 0 ? void 0 : scope.$record;
     },
@@ -2139,11 +1571,11 @@ var RecordScope = function(props) {
   } }, props.children);
 };
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/SchemaField.js
-var import_react25 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/SchemaField.js
+var import_react19 = __toESM(require_react());
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/shared/render.js
-var import_react24 = __toESM(require_react());
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/shared/render.js
+var import_react18 = __toESM(require_react());
 var _a;
 var _b;
 var _c;
@@ -2176,14 +1608,14 @@ var render = function(element) {
   if (env.portalDOM && env.createPortal) {
     return env.createPortal(element, env.portalDOM);
   } else {
-    return import_react24.default.createElement("template", {}, element);
+    return import_react18.default.createElement("template", {}, element);
   }
 };
 loadCreatePortal();
 
-// ../../node_modules/.pnpm/@formily+react@2.3.7_@types+react-dom@18.3.7_@types+react@18.3.29__@types+react@18.3.29_1e3f4fced1b266ebbfe3569a5241c16e/node_modules/@formily/react/esm/components/SchemaField.js
-var __assign11 = function() {
-  __assign11 = Object.assign || function(t) {
+// ../../node_modules/.pnpm/@formily+react@2.3.7_fmqnd34xo2h2ici5ffxzbquo6m/node_modules/@formily/react/esm/components/SchemaField.js
+var __assign10 = function() {
+  __assign10 = Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
       s = arguments[i];
       for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
@@ -2191,7 +1623,7 @@ var __assign11 = function() {
     }
     return t;
   };
-  return __assign11.apply(this, arguments);
+  return __assign10.apply(this, arguments);
 };
 var env2 = {
   nonameId: 0
@@ -2204,23 +1636,23 @@ function createSchemaField(options) {
     options = {};
   }
   function SchemaField(props) {
-    var schema = Schema.isSchemaInstance(props.schema) ? props.schema : new Schema(__assign11({ type: "object" }, props.schema));
+    var schema = Schema.isSchemaInstance(props.schema) ? props.schema : new Schema(__assign10({ type: "object" }, props.schema));
     var renderMarkup = function() {
       env2.nonameId = 0;
       if (props.schema)
         return null;
-      return render(import_react25.default.createElement(SchemaMarkupContext.Provider, { value: schema }, props.children));
+      return render(import_react19.default.createElement(SchemaMarkupContext.Provider, { value: schema }, props.children));
     };
     var renderChildren2 = function() {
-      return import_react25.default.createElement(RecursionField, __assign11({}, props, { schema }));
+      return import_react19.default.createElement(RecursionField, __assign10({}, props, { schema }));
     };
-    return import_react25.default.createElement(
+    return import_react19.default.createElement(
       SchemaOptionsContext.Provider,
       { value: options },
-      import_react25.default.createElement(
+      import_react19.default.createElement(
         SchemaComponentsContext.Provider,
         { value: lazyMerge(options.components, props.components) },
-        import_react25.default.createElement(
+        import_react19.default.createElement(
           ExpressionScope,
           { value: lazyMerge(options.scope, props.scope) },
           renderMarkup(),
@@ -2231,11 +1663,11 @@ function createSchemaField(options) {
   }
   SchemaField.displayName = "SchemaField";
   function MarkupRender(props) {
-    var parent = (0, import_react25.useContext)(SchemaMarkupContext);
+    var parent = (0, import_react19.useContext)(SchemaMarkupContext);
     if (!parent)
-      return import_react25.default.createElement(import_react25.Fragment, null);
+      return import_react19.default.createElement(import_react19.Fragment, null);
     var renderChildren2 = function() {
-      return import_react25.default.createElement(import_react25.default.Fragment, null, props.children);
+      return import_react19.default.createElement(import_react19.default.Fragment, null, props.children);
     };
     var appendArraySchema = function(schema2) {
       var items = parent.items;
@@ -2247,48 +1679,48 @@ function createSchemaField(options) {
     };
     if (parent.type === "object" || parent.type === "void") {
       var schema = parent.addProperty(props.name, props);
-      return import_react25.default.createElement(SchemaMarkupContext.Provider, { value: schema }, renderChildren2());
+      return import_react19.default.createElement(SchemaMarkupContext.Provider, { value: schema }, renderChildren2());
     } else if (parent.type === "array") {
       var schema = appendArraySchema(props);
-      return import_react25.default.createElement(SchemaMarkupContext.Provider, { value: Array.isArray(schema) ? schema[0] : schema }, props.children);
+      return import_react19.default.createElement(SchemaMarkupContext.Provider, { value: Array.isArray(schema) ? schema[0] : schema }, props.children);
     } else {
       return renderChildren2();
     }
   }
   function MarkupField(props) {
-    return import_react25.default.createElement(MarkupRender, __assign11({}, props, { name: props.name || getRandomName() }));
+    return import_react19.default.createElement(MarkupRender, __assign10({}, props, { name: props.name || getRandomName() }));
   }
   MarkupField.displayName = "MarkupField";
   function StringField(props) {
-    return import_react25.default.createElement(MarkupField, __assign11({}, props, { type: "string" }));
+    return import_react19.default.createElement(MarkupField, __assign10({}, props, { type: "string" }));
   }
   StringField.displayName = "StringField";
   function ObjectField2(props) {
-    return import_react25.default.createElement(MarkupField, __assign11({}, props, { type: "object" }));
+    return import_react19.default.createElement(MarkupField, __assign10({}, props, { type: "object" }));
   }
   ObjectField2.displayName = "ObjectField";
   function ArrayField2(props) {
-    return import_react25.default.createElement(MarkupField, __assign11({}, props, { type: "array" }));
+    return import_react19.default.createElement(MarkupField, __assign10({}, props, { type: "array" }));
   }
   ArrayField2.displayName = "ArrayField";
   function BooleanField(props) {
-    return import_react25.default.createElement(MarkupField, __assign11({}, props, { type: "boolean" }));
+    return import_react19.default.createElement(MarkupField, __assign10({}, props, { type: "boolean" }));
   }
   BooleanField.displayName = "BooleanField";
   function NumberField(props) {
-    return import_react25.default.createElement(MarkupField, __assign11({}, props, { type: "number" }));
+    return import_react19.default.createElement(MarkupField, __assign10({}, props, { type: "number" }));
   }
   NumberField.displayName = "NumberField";
   function DateField(props) {
-    return import_react25.default.createElement(MarkupField, __assign11({}, props, { type: "date" }));
+    return import_react19.default.createElement(MarkupField, __assign10({}, props, { type: "date" }));
   }
   DateField.displayName = "DateField";
   function DateTimeField(props) {
-    return import_react25.default.createElement(MarkupField, __assign11({}, props, { type: "datetime" }));
+    return import_react19.default.createElement(MarkupField, __assign10({}, props, { type: "datetime" }));
   }
   DateTimeField.displayName = "DateTimeField";
   function VoidField2(props) {
-    return import_react25.default.createElement(MarkupField, __assign11({}, props, { type: "void" }));
+    return import_react19.default.createElement(MarkupField, __assign10({}, props, { type: "void" }));
   }
   VoidField2.displayName = "VoidField";
   SchemaField.Markup = MarkupField;
@@ -2335,16 +1767,4 @@ export {
   useFormEffects,
   useParentForm
 };
-/*! Bundled license information:
-
-react-is/cjs/react-is.development.js:
-  (** @license React v16.13.1
-   * react-is.development.js
-   *
-   * Copyright (c) Facebook, Inc. and its affiliates.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE file in the root directory of this source tree.
-   *)
-*/
 //# sourceMappingURL=@formily_react.js.map

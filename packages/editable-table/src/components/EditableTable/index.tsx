@@ -24,7 +24,7 @@ function EditableTable<T extends object = Record<string, unknown>>(
     onSubmit,
     onChange,
     validateTrigger = 'submit',
-    scrollY = 500,
+    scrollY,
     emptyText = '暂无数据',
     className,
     style,
@@ -272,12 +272,14 @@ function EditableTable<T extends object = Record<string, unknown>>(
   );
 
   // ===== 虚拟滚动 =====
+  const enableVirtual = scrollY != null;
   const parentRef = useRef<HTMLDivElement>(null);
   const rowVirtualizer = useVirtualizer({
     count: data.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 48,
     overscan: 5,
+    enabled: enableVirtual,
   });
 
   // ===== 列宽 + 横向滚动 =====
@@ -416,12 +418,12 @@ function EditableTable<T extends object = Record<string, unknown>>(
             bodyScrollRef.current = el;
           }}
           className="et-body"
-          style={{ height: scrollY, overflowY: 'auto', overflowX: 'auto' }}
+          style={scrollY ? { height: scrollY, overflowY: 'auto', overflowX: 'auto' } : undefined}
           onScroll={() => syncScroll('body')}
         >
           {data.length === 0 ? (
             <div className="et-empty">{emptyText}</div>
-          ) : (
+          ) : enableVirtual ? (
             <div style={{ minWidth: `${tableMinWidth}px` }}>
               <div
                 style={{
@@ -531,6 +533,102 @@ function EditableTable<T extends object = Record<string, unknown>>(
                   );
                 })}
               </div>
+            </div>
+          ) : (
+            <div style={{ minWidth: `${tableMinWidth}px` }}>
+              {data.map((row, rowIndex) => {
+                const id = String(row[rowKey]);
+                const isEditing = editingRows.has(id);
+
+                return (
+                  <div
+                    key={id}
+                    className="et-row"
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: gridTemplate,
+                    }}
+                  >
+                    {columns.map((col, colIndex) => {
+                      const dataIndex = String(col.dataIndex);
+                      const value = row[col.dataIndex as keyof T];
+                      const editable =
+                        editableMode === 'all'
+                          ? col.editable !== false
+                          : isEditing && col.editable !== false;
+                      const errorKey = `${rowIndex}-${dataIndex}`;
+                      const offset = fixedOffsets[colIndex];
+                      const isFixed =
+                        col.fixed === 'left' || col.fixed === 'right';
+
+                      return (
+                        <div
+                          key={dataIndex}
+                          className={`et-cell${isFixed ? ` et-fixed et-fixed-${col.fixed}` : ''}`}
+                          style={{
+                            ...(isFixed
+                              ? {
+                                  position: 'sticky',
+                                  ...(offset.left !== undefined
+                                    ? { left: offset.left }
+                                    : {}),
+                                  ...(offset.right !== undefined
+                                    ? { right: offset.right }
+                                    : {}),
+                                }
+                              : {}),
+                          }}
+                        >
+                          <TableCell
+                            value={value}
+                            editable={editable}
+                            column={col}
+                            error={errors[errorKey]}
+                            rowIndex={rowIndex}
+                            row={row}
+                            onChange={(v) =>
+                              updateCell(rowIndex, dataIndex, v)
+                            }
+                          />
+                        </div>
+                      );
+                    })}
+
+                    {editableMode === 'row' && (
+                      <div className="et-cell">
+                        <div className="et-ops-cell">
+                          {isEditing ? (
+                            <>
+                              <button
+                                type="button"
+                                className="et-btn et-btn-primary"
+                                onClick={() => handleSaveRow(id)}
+                              >
+                                保存
+                              </button>
+                              <button
+                                type="button"
+                                className="et-btn et-btn-default"
+                                onClick={() => handleCancelEdit(id)}
+                              >
+                                取消
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              type="button"
+                              className="et-btn et-btn-link"
+                              onClick={() => handleEdit(id)}
+                            >
+                              编辑
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {useField, useForm} from '@formily/react';
 import {onFieldChange} from '@formily/core';
+import {observer} from '@formily/reactive-react';
 import type {Field as FormilyField} from '@formily/core';
 import type {IFastTableFieldProps} from './types';
 import {CellRenderer} from './CellRenderer';
@@ -12,7 +13,7 @@ import {CellRenderer} from './CellRenderer';
  * 而是从行级 FieldContext 读取值、通过行级 Field 写入值。
  * 仅在 useEffect 中通过 form.createField 注册单元格路径以保证校验和 effects 兼容。
  */
-export const FastTableField: React.FC<IFastTableFieldProps> = props => {
+export const FastTableField: React.FC<IFastTableFieldProps> = observer(props => {
     const {name, required, rules, editable, format, parse, children} = props;
 
     const rowField = useField() as FormilyField;
@@ -32,7 +33,7 @@ export const FastTableField: React.FC<IFastTableFieldProps> = props => {
 
         // 注册单元格路径到 Formily，使校验和 effects 能找到它
         const cellField = form.createField({
-            name,
+            name: cellPath,
             required,
         });
 
@@ -116,4 +117,4 @@ export const FastTableField: React.FC<IFastTableFieldProps> = props => {
             {children}
         </CellRenderer>
     );
-};
+});

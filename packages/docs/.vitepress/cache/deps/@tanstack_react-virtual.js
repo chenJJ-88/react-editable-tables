@@ -8,7 +8,7 @@ import {
   __toESM
 } from "./chunk-5WRI5ZAA.js";
 
-// ../../node_modules/.pnpm/@tanstack+react-virtual@3.13.26_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@tanstack/react-virtual/dist/esm/index.js
+// ../../node_modules/.pnpm/@tanstack+react-virtual@3.13.26_pfr57kyqc4oh437l43gzqxysla/node_modules/@tanstack/react-virtual/dist/esm/index.js
 var React = __toESM(require_react());
 var import_react_dom = __toESM(require_react_dom());
 
@@ -1292,7 +1292,7 @@ function calculateRange({
   return { startIndex, endIndex };
 }
 
-// ../../node_modules/.pnpm/@tanstack+react-virtual@3.13.26_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@tanstack/react-virtual/dist/esm/index.js
+// ../../node_modules/.pnpm/@tanstack+react-virtual@3.13.26_pfr57kyqc4oh437l43gzqxysla/node_modules/@tanstack/react-virtual/dist/esm/index.js
 var useIsomorphicLayoutEffect = typeof document !== "undefined" ? React.useLayoutEffect : React.useEffect;
 function useVirtualizerBase({
   useFlushSync = true,

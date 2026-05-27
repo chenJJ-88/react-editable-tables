@@ -1,8 +1,12 @@
 import * as React from 'react';
-import {Field, useField, useForm} from '@formily/react';
+import {Field, ArrayField, useField, useForm} from '@formily/react';
+import {observer} from '@formily/reactive-react';
 import {Table, Button, App} from 'antd';
 import type {IFastTableProps, IColumnRenderOpt, IArrayField} from './types';
 import {FastTableField} from './FastTableField';
+
+const ROW_KEY = Symbol.for('__fast_table_row_key__');
+let rowIdCounter = 0;
 
 // ========================= 默认操作列 =========================
 
@@ -38,10 +42,14 @@ const RowFieldWrapper: React.FC<{index: number; children: React.ReactNode}> = ({
 // ========================= 深拷贝 =========================
 
 function cloneDeep<T>(obj: T): T {
-    if (typeof structuredClone === 'function') {
-        return structuredClone(obj);
+    const cloned = typeof structuredClone === 'function'
+        ? structuredClone(obj)
+        : JSON.parse(JSON.stringify(obj));
+    // 为新行分配唯一 key
+    if (cloned && typeof cloned === 'object') {
+        (cloned as any)[ROW_KEY] = ++rowIdCounter;
     }
-    return JSON.parse(JSON.stringify(obj));
+    return cloned;
 }
 
 // ========================= FastTableInner =========================
@@ -50,7 +58,7 @@ function cloneDeep<T>(obj: T): T {
  * 表格内部实现，在 <Field name={name}> 上下文内渲染。
  * 通过 useField() 自动获取 ArrayField 实例。
  */
-const FastTableInner: React.FC<Omit<IFastTableProps, 'name'> & {field: IArrayField}> = props => {
+const FastTableInner = observer<Omit<IFastTableProps, 'name'> & {field: IArrayField}>(props => {
     const {
         field,
         columns: columnsIn,
@@ -143,7 +151,8 @@ const FastTableInner: React.FC<Omit<IFastTableProps, 'name'> & {field: IArrayFie
     const add = React.useCallback(async () => {
         if (validateBeforeAdd && form) {
             try {
-                await form.validate();
+                const arrayPath = field.address.toString();
+                await form.validate(`${arrayPath}.*`);
             } catch {
                 return;
             }
@@ -169,16 +178,22 @@ const FastTableInner: React.FC<Omit<IFastTableProps, 'name'> & {field: IArrayFie
 
     // dataSource
     const dataSource = React.useMemo(() => {
-        return (field.value || []).map((item: any, index: number) => ({
-            ...item,
-            key: index,
-        }));
+        return (field.value || []).map((item: any, index: number) => {
+            if (!item[ROW_KEY]) {
+                item[ROW_KEY] = ++rowIdCounter;
+            }
+            return {
+                ...item,
+                key: item[ROW_KEY],
+            };
+        });
     }, [field.value]);
 
     return (
         <div className={`fet-table${className ? ` ${className}` : ''}`} style={style}>
             {addButtonPosition === 'top' && addButton}
             <Table
+                rowKey={(record: any) => record[ROW_KEY] ?? record.key}
                 {...tableProps}
                 columns={columns}
                 dataSource={dataSource}
@@ -187,7 +202,7 @@ const FastTableInner: React.FC<Omit<IFastTableProps, 'name'> & {field: IArrayFie
             {addButtonPosition === 'bottom' && addButton}
         </div>
     );
-};
+});
 
 // ========================= FastTable 主组件 =========================
 
@@ -204,9 +219,9 @@ export const FastTable: React.FC<IFastTableProps> & { Field: typeof FastTableFie
     const {name, ...rest} = props;
 
     return (
-        <Field name={name}>
+        <ArrayField name={name}>
             <FastTableInnerWithField {...rest} />
-        </Field>
+        </ArrayField>
     );
 };
 

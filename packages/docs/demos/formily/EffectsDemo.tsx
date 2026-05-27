@@ -1,42 +1,54 @@
 import { createForm, onFieldValueChange } from '@formily/core';
 import { FormProvider } from '@formily/react';
-import { Input, Select, Button, App as AntApp } from 'antd';
+import { Input, Select, Switch, Button, App as AntApp } from 'antd';
 import { FastTable } from '@react-editable-tables/formily';
 import '@react-editable-tables/formily/style.css';
 
-const countryOptions = [
-  { label: '中国', value: 'china' },
-  { label: '美国', value: 'usa' },
-  { label: '日本', value: 'japan' },
+const typeOptions = [
+  { label: '电子产品', value: 'electronic' },
+  { label: '服装', value: 'clothing' },
+  { label: '食品', value: 'food' },
 ];
 
-const cityMap: Record<string, { label: string; value: string }[]> = {
-  china: [
-    { label: '北京', value: 'beijing' },
-    { label: '上海', value: 'shanghai' },
+const subTypeMap: Record<string, { label: string; value: string }[]> = {
+  electronic: [
+    { label: '手机', value: 'phone' },
+    { label: '电脑', value: 'computer' },
+    { label: '耳机', value: 'earphone' },
   ],
-  usa: [
-    { label: '纽约', value: 'newyork' },
-    { label: '洛杉矶', value: 'losangeles' },
+  clothing: [
+    { label: '上衣', value: 'top' },
+    { label: '裤子', value: 'pants' },
+    { label: '鞋子', value: 'shoes' },
   ],
-  japan: [
-    { label: '东京', value: 'tokyo' },
-    { label: '大阪', value: 'osaka' },
+  food: [
+    { label: '水果', value: 'fruit' },
+    { label: '蔬菜', value: 'vegetable' },
+    { label: '饮料', value: 'drink' },
   ],
 };
 
 const form = createForm({
   initialValues: {
     items: [
-      { country: 'china', city: 'beijing', note: '首都' },
-      { country: undefined, city: undefined, note: '' },
+      { type: 'electronic', subType: 'phone', note: '新款', disabled: false },
+      { type: undefined, subType: undefined, note: '', disabled: false },
     ],
   },
   effects() {
-    onFieldValueChange('items.*.country', (field) => {
-      form.setFieldState('items.*.city', (state) => {
-        const cities = cityMap[field.value] || [];
-        state.component = [Select, { options: cities }];
+    // 类型变化 → 子类型选项联动 + 值清空
+    onFieldValueChange('items.*.type', (field) => {
+      const subTypes = subTypeMap[field.value] || [];
+      form.setFieldState('items.*.subType', (state) => {
+        state.component = [Select, { options: subTypes }];
+        state.value = undefined;
+      });
+    });
+
+    // 不可用开关 → 备注字段禁用联动
+    onFieldValueChange('items.*.disabled', (field) => {
+      form.setFieldState('items.*.note', (state) => {
+        state.editable = !field.value;
       });
     });
   },
@@ -50,18 +62,20 @@ export default function EffectsDemo() {
           name="items"
           columns={[
             {
-              title: '国家',
+              title: '类型',
+              width: 150,
               render: () => (
-                <FastTable.Field name="country">
-                  <Select options={countryOptions} placeholder="请选择国家" />
+                <FastTable.Field name="type">
+                  <Select options={typeOptions} placeholder="请选择类型" />
                 </FastTable.Field>
               ),
             },
             {
-              title: '城市',
+              title: '子类型',
+              width: 150,
               render: () => (
-                <FastTable.Field name="city">
-                  <Select options={[]} placeholder="请先选择国家" />
+                <FastTable.Field name="subType">
+                  <Select options={[]} placeholder="请先选择类型" />
                 </FastTable.Field>
               ),
             },
@@ -69,12 +83,22 @@ export default function EffectsDemo() {
               title: '备注',
               render: () => (
                 <FastTable.Field name="note" parse={(e: any) => e?.target?.value ?? e}>
-                  <Input />
+                  <Input placeholder="请输入备注" />
+                </FastTable.Field>
+              ),
+            },
+            {
+              title: '不可用',
+              width: 80,
+              render: () => (
+                <FastTable.Field name="disabled">
+                  <Switch size="small" />
                 </FastTable.Field>
               ),
             },
             {
               title: '操作',
+              width: 80,
               render: ({ index, field }) => (
                 <Button type="link" onClick={() => field.remove(index)}>
                   删除
@@ -83,7 +107,7 @@ export default function EffectsDemo() {
             },
           ]}
           addText="添加"
-          itemDefaultValue={{ country: undefined, city: undefined, note: '' }}
+          itemDefaultValue={{ type: undefined, subType: undefined, note: '', disabled: false }}
           min={1}
           pagination={false}
         />

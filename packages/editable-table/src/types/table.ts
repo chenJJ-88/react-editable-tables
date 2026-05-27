@@ -93,7 +93,7 @@ export interface EditableTableProps<T> {
   onChange?: (data: T[]) => void;
   /** 校验触发时机，默认 'submit' */
   validateTrigger?: ValidateTrigger;
-  /** 虚拟滚动容器高度（px），默认 500 */
+  /** 虚拟滚动容器高度（px），传入时启用虚拟滚动 */
   scrollY?: number;
   /** 空数据提示文案，默认 '暂无数据' */
   emptyText?: string;

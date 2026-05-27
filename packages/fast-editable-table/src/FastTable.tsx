@@ -1,12 +1,9 @@
 import * as React from 'react';
-import {Field, ArrayField, useField, useForm} from '@formily/react';
-import {observer} from '@formily/reactive-react';
+import {ArrayField, useField, useForm, Field} from '@formily/react';
+import {reaction} from '@formily/reactive';
 import {Table, Button, App} from 'antd';
 import type {IFastTableProps, IColumnRenderOpt, IArrayField} from './types';
 import {FastTableField} from './FastTableField';
-
-const ROW_KEY = Symbol.for('__fast_table_row_key__');
-let rowIdCounter = 0;
 
 // ========================= 默认操作列 =========================
 
@@ -28,39 +25,19 @@ const DefaultOperator: React.FC<{index: number; field: IArrayField; disabled: bo
     );
 };
 
-// ========================= RowFieldWrapper =========================
-
-/** 为每行创建 <Field name={index}>，让 FastTable.Field 能通过 useField 读取行数据 */
-const RowFieldWrapper: React.FC<{index: number; children: React.ReactNode}> = ({index, children}) => {
-    return (
-        <Field name={index}>
-            {children}
-        </Field>
-    );
-};
-
 // ========================= 深拷贝 =========================
 
 function cloneDeep<T>(obj: T): T {
-    const cloned = typeof structuredClone === 'function'
-        ? structuredClone(obj)
-        : JSON.parse(JSON.stringify(obj));
-    // 为新行分配唯一 key
-    if (cloned && typeof cloned === 'object') {
-        (cloned as any)[ROW_KEY] = ++rowIdCounter;
+    if (typeof structuredClone === 'function') {
+        return structuredClone(obj);
     }
-    return cloned;
+    return JSON.parse(JSON.stringify(obj));
 }
 
 // ========================= FastTableInner =========================
 
-/**
- * 表格内部实现，在 <Field name={name}> 上下文内渲染。
- * 通过 useField() 自动获取 ArrayField 实例。
- */
-const FastTableInner = observer<Omit<IFastTableProps, 'name'> & {field: IArrayField}>(props => {
+const FastTableInner: React.FC<Omit<IFastTableProps, 'name'>> = (props) => {
     const {
-        field,
         columns: columnsIn,
         addText = '添加',
         itemDefaultValue = {},
@@ -69,19 +46,34 @@ const FastTableInner = observer<Omit<IFastTableProps, 'name'> & {field: IArrayFi
         min = 0,
         pagination: paginationIn,
         addButtonPosition = 'bottom',
-        validateBeforeAdd = true,
+        validateBeforeAdd = false,
         addButtonProps,
         className,
         style,
         tableProps,
     } = props;
 
+    const field = useField() as IArrayField;
     const form = useForm();
 
-    const valueLen = field.value?.length ?? 0;
+    // 借鉴 icloud-ui 手动订阅模式：reaction() 直接追踪 Formily 响应式属性
+    // 版本计数器仅在 reaction 触发时递增，强制 React 重渲染
+    const [version, setVersion] = React.useState(0);
+    React.useEffect(() => {
+        if (!field) return;
+        const dispose = reaction(
+            () => field.value?.length ?? 0,
+            () => setVersion(v => v + 1),
+        );
+        return () => dispose();
+    }, [field]);
+
+    const tableValue = field.value || [];
+    const valueLen = tableValue.length;
     const disableRemove = valueLen <= min;
     const disableAdd = max != null && valueLen >= max;
 
+    // 用 ref 读取 valueLen，避免行增删导致 columns useMemo 重建
     const valueLenRef = React.useRef(valueLen);
     valueLenRef.current = valueLen;
 
@@ -102,12 +94,12 @@ const FastTableInner = observer<Omit<IFastTableProps, 'name'> & {field: IArrayFi
 
     React.useEffect(() => {
         const baseIndex = (current - 1) * pageSize;
-        if (baseIndex >= valueLenRef.current) {
+        if (baseIndex >= valueLen) {
             setTableState(s => ({...s, current: Math.max(s.current - 1, 1)}));
         }
     }, [valueLen, current, pageSize]);
 
-    // 稳定的 columns（valueLen 不作为依赖！）
+    // 列定义
     const columns = React.useMemo(() => {
         return columnsIn.map((col, colIndex) => ({
             ...col,
@@ -116,21 +108,12 @@ const FastTableInner = observer<Omit<IFastTableProps, 'name'> & {field: IArrayFi
                 const fieldIndex = (current - 1) * pageSize + index;
                 if (fieldIndex >= valueLenRef.current) return null;
 
-                const render = col.render;
-                if (render) {
-                    const renderOpt: IColumnRenderOpt = {index: fieldIndex, field};
-                    return (
-                        <RowFieldWrapper index={fieldIndex}>
-                            {render(renderOpt)}
-                        </RowFieldWrapper>
-                    );
-                }
+                const content = col.render
+                    ? col.render({index: fieldIndex, field} as IColumnRenderOpt)
+                    : <DefaultOperator index={fieldIndex} field={field} disabled={disableRemove} />;
 
-                return (
-                    <RowFieldWrapper index={fieldIndex}>
-                        <DefaultOperator index={fieldIndex} field={field} disabled={disableRemove} />
-                    </RowFieldWrapper>
-                );
+                // 行级 Field 上下文：使 <FastTableField name="type"> 解析为 items.{fieldIndex}.type
+                return <Field name={String(fieldIndex)}>{content}</Field>;
             },
         }));
     }, [columnsIn, current, pageSize, field, disableRemove]);
@@ -178,22 +161,16 @@ const FastTableInner = observer<Omit<IFastTableProps, 'name'> & {field: IArrayFi
 
     // dataSource
     const dataSource = React.useMemo(() => {
-        return (field.value || []).map((item: any, index: number) => {
-            if (!item[ROW_KEY]) {
-                item[ROW_KEY] = ++rowIdCounter;
-            }
-            return {
-                ...item,
-                key: item[ROW_KEY],
-            };
-        });
-    }, [field.value]);
+        const rows = field.value || [];
+        return rows.map((item: any, index: number) => ({...item, key: index}));
+    // version 变化时重新计算
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [version]);
 
     return (
         <div className={`fet-table${className ? ` ${className}` : ''}`} style={style}>
             {addButtonPosition === 'top' && addButton}
             <Table
-                rowKey={(record: any) => record[ROW_KEY] ?? record.key}
                 {...tableProps}
                 columns={columns}
                 dataSource={dataSource}
@@ -202,35 +179,18 @@ const FastTableInner = observer<Omit<IFastTableProps, 'name'> & {field: IArrayFi
             {addButtonPosition === 'bottom' && addButton}
         </div>
     );
-});
+};
 
 // ========================= FastTable 主组件 =========================
 
-/**
- * 高性能可编辑表格。
- *
- * 用法与 Form.Table 一致，只需传 name 即可，内部自动创建 ArrayField：
- *
- * <FormProvider form={form}>
- *   <FastTable name="items" columns={columns} />
- * </FormProvider>
- */
 export const FastTable: React.FC<IFastTableProps> & { Field: typeof FastTableField } = props => {
     const {name, ...rest} = props;
 
     return (
         <ArrayField name={name}>
-            <FastTableInnerWithField {...rest} />
+            <FastTableInner {...rest} />
         </ArrayField>
     );
-};
-
-/**
- * 在 <Field name={name}> 上下文内，通过 useField 获取 ArrayField 后渲染表格。
- */
-const FastTableInnerWithField: React.FC<Omit<IFastTableProps, 'name'>> = props => {
-    const field = useField() as IArrayField;
-    return <FastTableInner field={field} {...props} />;
 };
 
 FastTable.Field = FastTableField;

@@ -16,7 +16,7 @@
     "antd": ">=5",
     "@formily/core": ">=2",
     "@formily/react": ">=2",
-    "@formily/reactive-react": ">=2"
+    "@formily/reactive": ">=2"
   },
   "devDependencies": {
     "react": "^18.3.1",
@@ -24,7 +24,7 @@
     "antd": "^5.22.0",
     "@formily/core": "^2.3.1",
     "@formily/react": "^2.3.1",
-    "@formily/reactive-react": "^2.3.1",
+    "@formily/reactive": "^2.3.1",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "typescript": "^5.6.0"

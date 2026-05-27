@@ -1,4 +1,4 @@
-import { createForm, onFieldValueChange } from '@formily/core';
+import { createForm, onFieldValueChange, onFieldInit } from '@formily/core';
 import { FormProvider } from '@formily/react';
 import { Input, Select, Switch, Button, App as AntApp } from 'antd';
 import { FastTable } from '@react-editable-tables/formily';
@@ -36,18 +36,29 @@ const form = createForm({
     ],
   },
   effects() {
-    // 类型变化 → 子类型选项联动 + 值清空
+    // 字段初始化时：为已有 type 值的行设置子类型选项
+    onFieldInit('items.*.type', (field) => {
+      const subTypes = subTypeMap[field.value] || [];
+      const rowPath = field.address.toString().replace(/\.type$/, '');
+      form.setFieldState(`${rowPath}.subType`, (state) => {
+        state.data = { ...state.data, options: subTypes };
+      });
+    });
+
+    // 类型变化 → 子类型选项联动 + 值清空（仅当前行）
     onFieldValueChange('items.*.type', (field) => {
       const subTypes = subTypeMap[field.value] || [];
-      form.setFieldState('items.*.subType', (state) => {
-        state.component = [Select, { options: subTypes }];
+      const rowPath = field.address.toString().replace(/\.type$/, '');
+      form.setFieldState(`${rowPath}.subType`, (state) => {
+        state.data = { ...state.data, options: subTypes };
         state.value = undefined;
       });
     });
 
-    // 不可用开关 → 备注字段禁用联动
+    // 不可用开关 → 备注字段禁用联动（仅当前行）
     onFieldValueChange('items.*.disabled', (field) => {
-      form.setFieldState('items.*.note', (state) => {
+      const rowPath = field.address.toString().replace(/\.disabled$/, '');
+      form.setFieldState(`${rowPath}.note`, (state) => {
         state.editable = !field.value;
       });
     });
@@ -55,6 +66,13 @@ const form = createForm({
 });
 
 export default function EffectsDemo() {
+  const handleSubmit = async () => {
+    try {
+      await form.validate();
+      console.log('提交数据：', JSON.stringify(form.values, null, 2));
+    } catch {}
+  };
+
   return (
     <AntApp>
       <FormProvider form={form}>
@@ -66,7 +84,7 @@ export default function EffectsDemo() {
               width: 150,
               render: () => (
                 <FastTable.Field name="type">
-                  <Select options={typeOptions} placeholder="请选择类型" />
+                  <Select options={typeOptions} placeholder="请选择类型" style={{ width: '100%' }} />
                 </FastTable.Field>
               ),
             },
@@ -75,7 +93,7 @@ export default function EffectsDemo() {
               width: 150,
               render: () => (
                 <FastTable.Field name="subType">
-                  <Select options={[]} placeholder="请先选择类型" />
+                  <Select   placeholder="请先选择类型" style={{ width: '100%' }} />
                 </FastTable.Field>
               ),
             },
@@ -111,6 +129,9 @@ export default function EffectsDemo() {
           min={1}
           pagination={false}
         />
+        <Button type="primary" onClick={handleSubmit} style={{ marginTop: 16 }}>
+          提交
+        </Button>
       </FormProvider>
     </AntApp>
   );

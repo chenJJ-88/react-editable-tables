@@ -12,5 +12,8 @@
     "check": "pnpm -r check",
     "type-check": "pnpm -r type-check"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "react-is": "^19.2.6"
+  }
 }

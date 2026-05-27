@@ -1,6 +1,7 @@
 node_modules/
 dist/
 dist-ssr/
+icloud-ui/
 *.local
 .DS_Store
 *.log
@@ -14,3 +15,9 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# VitePress cache
+packages/docs/.vitepress/cache/
+
+# Sub-package lock files (monorepo uses root pnpm-lock.yaml only)
+packages/*/pnpm-lock.yaml

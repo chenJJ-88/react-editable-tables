@@ -64,12 +64,6 @@ export default defineConfig({
           ],
         },
         {
-          text: '原理',
-          items: [
-            { text: '性能优化原理', link: '/formily/performance' },
-          ],
-        },
-        {
           text: 'API',
           items: [{ text: 'API 参考', link: '/formily/api' }],
         },

@@ -15,6 +15,13 @@ const form = createForm({
 });
 
 export default function QuickStartDemo() {
+  const handleSubmit = async () => {
+    try {
+      await form.validate();
+      console.log('提交数据：', JSON.stringify(form.values, null, 2));
+    } catch {}
+  };
+
   return (
     <AntApp>
       <FormProvider form={form}>
@@ -57,6 +64,9 @@ export default function QuickStartDemo() {
           min={1}
           pagination={false}
         />
+        <Button type="primary" onClick={handleSubmit} style={{ marginTop: 16 }}>
+          提交
+        </Button>
       </FormProvider>
     </AntApp>
   );

@@ -1,0 +1,320 @@
+/* ===== 主题变量 ===== */
+:root {
+  --et-border-color: #e8e8e8;
+  --et-header-bg: #fafafa;
+  --et-header-color: #333;
+  --et-row-hover-bg: #f5f5f5;
+  --et-row-stripe-bg: #fafafa;
+  --et-cell-padding: 8px 12px;
+  --et-error-color: #ff4d4f;
+  --et-row-height: 48px;
+  --et-font-size: 14px;
+  --et-radius: 4px;
+  --et-btn-primary-bg: #1677ff;
+  --et-btn-primary-color: #fff;
+  --et-btn-default-bg: #fff;
+  --et-btn-default-color: #333;
+  --et-btn-default-border: #d9d9d9;
+}
+
+/* ===== 容器 ===== */
+.et-wrapper {
+  font-size: var(--et-font-size);
+  color: #333;
+  line-height: 1.5;
+}
+
+.et-toolbar {
+  padding: 12px 0;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* ===== 表格布局 ===== */
+.et-table {
+  border: 1px solid var(--et-border-color);
+  border-radius: var(--et-radius);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ===== 横向滚动容器：表头和表体共享横向滚动 ===== */
+.et-scroll-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.et-scroll-x::-webkit-scrollbar {
+  height: 6px;
+}
+
+.et-scroll-x::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+/* ===== 表格内容区：设置最小宽度使列不被压缩 ===== */
+.et-inner {
+  min-width: 100%;
+}
+
+/* ===== 表头 ===== */
+.et-header {
+  display: grid;
+  background: var(--et-header-bg);
+  border-bottom: 2px solid var(--et-border-color);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.et-header-cell {
+  padding: var(--et-cell-padding);
+  font-weight: 600;
+  color: var(--et-header-color);
+  display: flex;
+  align-items: center;
+  min-height: var(--et-row-height);
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== 表体滚动区 ===== */
+.et-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.et-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.et-body::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.et-row {
+  display: grid;
+  border-bottom: 1px solid var(--et-border-color);
+  transition: background 0.15s;
+}
+
+.et-row:last-child {
+  border-bottom: none;
+}
+
+.et-row:hover {
+  background: var(--et-row-hover-bg);
+}
+
+.et-row:nth-child(even) {
+  background: var(--et-row-stripe-bg);
+}
+
+.et-row:nth-child(even):hover {
+  background: var(--et-row-hover-bg);
+}
+
+.et-cell {
+  padding: var(--et-cell-padding);
+  display: flex;
+  align-items: center;
+  min-height: var(--et-row-height);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ===== 只读态 ===== */
+.et-cell-text {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== 编辑态 ===== */
+.et-cell-editable {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.et-cell-editable .et-editor-input,
+.et-cell-editable .et-editor-number,
+.et-cell-editable .et-editor-select {
+  width: 100%;
+  min-width: 60px;
+  padding: 4px 8px;
+  border: 1px solid var(--et-border-color);
+  border-radius: var(--et-radius);
+  font-size: var(--et-font-size);
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.et-cell-editable .et-editor-input:focus,
+.et-cell-editable .et-editor-number:focus,
+.et-cell-editable .et-editor-select:focus {
+  border-color: var(--et-btn-primary-bg);
+  box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.15);
+}
+
+/* ===== 错误态 ===== */
+.et-cell-error .et-editor-input,
+.et-cell-error .et-editor-number,
+.et-cell-error .et-editor-select {
+  border-color: var(--et-error-color);
+}
+
+.et-cell-error .et-editor-input:focus,
+.et-cell-error .et-editor-number:focus,
+.et-cell-error .et-editor-select:focus {
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.15);
+}
+
+.et-cell-error-msg {
+  font-size: 12px;
+  color: var(--et-error-color);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* ===== 操作列 ===== */
+.et-ops-cell {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.et-ops-separator {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: var(--et-border-color);
+  margin: 0 2px;
+}
+
+.et-ops-move {
+  padding: 2px 4px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.et-ops-move:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.et-ops-delete {
+  padding: 2px 6px;
+  font-size: 14px;
+  color: var(--et-error-color);
+}
+
+.et-ops-delete:hover {
+  opacity: 0.7;
+}
+
+/* ===== 按钮 ===== */
+.et-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  font-size: 13px;
+  border-radius: var(--et-radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.et-btn-primary {
+  background: var(--et-btn-primary-bg);
+  color: var(--et-btn-primary-color);
+  border-color: var(--et-btn-primary-bg);
+}
+
+.et-btn-primary:hover {
+  opacity: 0.85;
+}
+
+.et-btn-default {
+  background: var(--et-btn-default-bg);
+  color: var(--et-btn-default-color);
+  border-color: var(--et-btn-default-border);
+}
+
+.et-btn-default:hover {
+  border-color: var(--et-btn-primary-bg);
+  color: var(--et-btn-primary-bg);
+}
+
+.et-btn-link {
+  background: none;
+  border: none;
+  color: var(--et-btn-primary-bg);
+  padding: 4px 4px;
+}
+
+.et-btn-link:hover {
+  opacity: 0.75;
+}
+
+.et-btn-link + .et-btn-link {
+  margin-left: 4px;
+}
+
+/* ===== 空状态 ===== */
+.et-empty {
+  padding: 40px 0;
+  text-align: center;
+  color: #999;
+}
+
+/* ===== 操作列固定宽度 ===== */
+.et-ops-column {
+  min-width: 100px;
+}
+
+/* ===== 列固定 ===== */
+.et-fixed {
+  z-index: 1;
+}
+
+.et-header-cell.et-fixed {
+  z-index: 3;
+  background: var(--et-header-bg);
+}
+
+.et-cell.et-fixed {
+  background: #fff;
+}
+
+.et-row:nth-child(even) .et-cell.et-fixed {
+  background: var(--et-row-stripe-bg);
+}
+
+.et-row:hover .et-cell.et-fixed {
+  background: var(--et-row-hover-bg);
+}
+
+/* 固定列右侧/左侧阴影 */
+.et-fixed-left {
+  border-right: 1px solid var(--et-border-color);
+}
+
+.et-fixed-right {
+  border-left: 1px solid var(--et-border-color);
+}

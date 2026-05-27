@@ -1,0 +1,120 @@
+import { defineConfig } from 'vitepress'
+
+export default defineConfig({
+  title: 'React Editable Tables',
+  description: 'React 可编辑表格方案集 — 原生轻量版 & Formily 高性能版',
+  lang: 'zh-CN',
+  lastUpdated: true,
+
+  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]],
+
+  themeConfig: {
+    logo: '/logo.svg',
+
+    nav: [
+      { text: '指南', link: '/guide/getting-started' },
+      { text: 'Native', link: '/native/basic' },
+      { text: 'Formily', link: '/formily/quick-start' },
+      {
+        text: '更新日志',
+        link: 'https://github.com/chenJJ-88/react-editable-tables',
+      },
+    ],
+
+    sidebar: {
+      '/guide/': [
+        {
+          text: '开始',
+          items: [
+            { text: '快速上手', link: '/guide/getting-started' },
+            { text: '方案选型', link: '/guide/comparison' },
+          ],
+        },
+      ],
+      '/native/': [
+        {
+          text: '使用指南',
+          items: [
+            { text: '基础用法', link: '/native/basic' },
+            { text: '编辑模式', link: '/native/edit-mode' },
+            { text: '表单校验', link: '/native/validation' },
+            { text: '数据联动', link: '/native/linkage' },
+            { text: '自定义编辑器', link: '/native/custom-editor' },
+            { text: '行操作', link: '/native/row-ops' },
+            { text: '主题定制', link: '/native/theme' },
+          ],
+        },
+        {
+          text: 'API',
+          items: [{ text: 'API 参考', link: '/native/api' }],
+        },
+      ],
+      '/formily/': [
+        {
+          text: '使用指南',
+          items: [
+            { text: '快速开始', link: '/formily/quick-start' },
+            { text: '从 Form.Table 迁移', link: '/formily/migration' },
+            { text: 'Effects 兼容', link: '/formily/effects' },
+          ],
+        },
+        {
+          text: '原理',
+          items: [
+            { text: '性能优化原理', link: '/formily/performance' },
+          ],
+        },
+        {
+          text: 'API',
+          items: [{ text: 'API 参考', link: '/formily/api' }],
+        },
+      ],
+    },
+
+    search: {
+      provider: 'local',
+      options: {
+        locales: {
+          root: {
+            translations: {
+              button: { buttonText: '搜索文档', buttonAriaLabel: '搜索文档' },
+              modal: {
+                noResultsText: '无法找到相关结果',
+                resetButtonTitle: '清除查询条件',
+                footer: { selectText: '选择', navigateText: '切换', closeText: '关闭' },
+              },
+            },
+          },
+        },
+      },
+    },
+
+    editLink: {
+      pattern: 'https://github.com/chenJJ-88/react-editable-tables/edit/main/packages/docs/:path',
+      text: '在 GitHub 上编辑此页',
+    },
+
+    footer: {
+      message: '基于 MIT 许可发布',
+    },
+
+    docFooter: {
+      prev: '上一页',
+      next: '下一页',
+    },
+
+    outline: {
+      label: '页面导航',
+    },
+
+    lastUpdated: {
+      text: '最后更新于',
+    },
+
+    returnToTopLabel: '回到顶部',
+    sidebarMenuLabel: '菜单',
+    darkModeSwitchLabel: '主题',
+    lightModeSwitchTitle: '切换到浅色模式',
+    darkModeSwitchTitle: '切换到深色模式',
+  },
+})

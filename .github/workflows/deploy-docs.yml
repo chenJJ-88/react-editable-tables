@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths: ['packages/docs/**', 'packages/editable-table/src/**', 'packages/fast-editable-table/src/**']
+  workflow_dispatch:
 
 permissions:
   contents: read

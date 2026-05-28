@@ -1,7 +1,7 @@
 {
     "name": "react-editable-tables",
     "private": true,
-    "version": "0.0.0",
+    "version": "1.0.0",
     "description": "React 可编辑表格方案集 — 原生轻量版 & Formily 高性能版",
     "type": "module",
     "scripts": {
@@ -14,7 +14,13 @@
         "check": "biome check --write .",
         "type-check": "pnpm -r type-check"
     },
-    "keywords": ["react", "editable-table", "formily", "antd", "virtual-scroll"],
+    "keywords": [
+        "react",
+        "editable-table",
+        "formily",
+        "antd",
+        "virtual-scroll"
+    ],
     "author": "chenJJ-88",
     "license": "MIT",
     "repository": {
@@ -31,5 +37,6 @@
     },
     "dependencies": {
         "react-is": "^19.2.6"
-    }
+    },
+    "packageManager": "pnpm@7.2.1"
 }

@@ -38,5 +38,5 @@
     "dependencies": {
         "react-is": "^19.2.6"
     },
-    "packageManager": "pnpm@7.2.1"
+    "packageManager": "pnpm@9.15.4"
 }

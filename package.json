@@ -1,19 +1,23 @@
 {
-  "name": "react-editable-tables",
-  "private": true,
-  "version": "0.0.0",
-  "description": "React 可编辑表格方案集 — 原生轻量版 & Formily 高性能版",
-  "type": "module",
-  "scripts": {
-    "dev:docs": "pnpm --filter @react-editable-tables/docs dev",
-    "build:docs": "pnpm --filter @react-editable-tables/docs build",
-    "test": "pnpm -r test",
-    "lint": "pnpm -r lint",
-    "check": "pnpm -r check",
-    "type-check": "pnpm -r type-check"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "react-is": "^19.2.6"
-  }
+    "name": "react-editable-tables",
+    "private": true,
+    "version": "0.0.0",
+    "description": "React 可编辑表格方案集 — 原生轻量版 & Formily 高性能版",
+    "type": "module",
+    "scripts": {
+        "dev:docs": "pnpm --filter @react-editable-tables/docs dev",
+        "build:docs": "pnpm --filter @react-editable-tables/docs build",
+        "test": "pnpm -r test",
+        "format": "biome format --write .",
+        "lint": "biome lint .",
+        "check": "biome check --write .",
+        "type-check": "pnpm -r type-check"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "@biomejs/biome": "^2.4.15"
+    },
+    "dependencies": {
+        "react-is": "^19.2.6"
+    }
 }

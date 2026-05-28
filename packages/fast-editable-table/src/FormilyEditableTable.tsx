@@ -1,15 +1,17 @@
+import { ArrayField, Field, useField, useForm } from '@formily/react';
+import { reaction } from '@formily/reactive';
+import { Button, Table } from 'antd';
 import * as React from 'react';
-import {ArrayField, useField, useForm, Field} from '@formily/react';
-import {reaction} from '@formily/reactive';
-import {Table, Button} from 'antd';
-import type {IFormilyEditableTableProps, IColumnRenderOpt, IArrayField} from './types';
-import {FormilyEditableTableField} from './FormilyEditableTableField';
+import { FormilyEditableTableField } from './FormilyEditableTableField';
+import type { IArrayField, IColumnRenderOpt, IFormilyEditableTableProps } from './types';
 
 // ========================= 默认操作列 =========================
 
-const DefaultOperator: React.FC<{index: number; field: IArrayField; disabled: boolean}> = (
-    {index, field, disabled},
-) => {
+const DefaultOperator: React.FC<{ index: number; field: IArrayField; disabled: boolean }> = ({
+    index,
+    field,
+    disabled,
+}) => {
     const remove = () => {
         field.remove(index);
     };
@@ -61,7 +63,7 @@ const FormilyEditableTableInner: React.FC<Omit<IFormilyEditableTableProps, 'name
         if (!field) return;
         const dispose = reaction(
             () => field.value?.length ?? 0,
-            () => setVersion(v => v + 1),
+            () => setVersion((v) => v + 1),
         );
         return () => dispose();
     }, [field]);
@@ -78,22 +80,22 @@ const FormilyEditableTableInner: React.FC<Omit<IFormilyEditableTableProps, 'name
     // 分页状态
     const defaultPagination = React.useMemo(() => {
         if (paginationIn === false) {
-            return {current: 1, pageSize: 10};
+            return { current: 1, pageSize: 10 };
         }
         return {
             current: paginationIn?.current ?? 1,
             pageSize: paginationIn?.pageSize ?? 10,
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const [tableState, setTableState] = React.useState(defaultPagination);
-    const {current, pageSize} = tableState;
+    const { current, pageSize } = tableState;
 
     React.useEffect(() => {
         const baseIndex = (current - 1) * pageSize;
         if (baseIndex >= valueLen) {
-            setTableState(s => ({...s, current: Math.max(s.current - 1, 1)}));
+            setTableState((s) => ({ ...s, current: Math.max(s.current - 1, 1) }));
         }
     }, [valueLen, current, pageSize]);
 
@@ -106,9 +108,11 @@ const FormilyEditableTableInner: React.FC<Omit<IFormilyEditableTableProps, 'name
                 const fieldIndex = (current - 1) * pageSize + index;
                 if (fieldIndex >= valueLenRef.current) return null;
 
-                const content = col.render
-                    ? col.render({index: fieldIndex, field} as IColumnRenderOpt)
-                    : <DefaultOperator index={fieldIndex} field={field} disabled={disableRemove} />;
+                const content = col.render ? (
+                    col.render({ index: fieldIndex, field } as IColumnRenderOpt)
+                ) : (
+                    <DefaultOperator index={fieldIndex} field={field} disabled={disableRemove} />
+                );
 
                 // 行级 Field 上下文：使 <FormilyEditableTableField name="type"> 解析为 items.{fieldIndex}.type
                 return <Field name={String(fieldIndex)}>{content}</Field>;
@@ -123,7 +127,7 @@ const FormilyEditableTableInner: React.FC<Omit<IFormilyEditableTableProps, 'name
             ...paginationIn,
             ...tableState,
             onChange: (page: number, size: number) => {
-                setTableState({current: page, pageSize: size});
+                setTableState({ current: page, pageSize: size });
             },
         } as any;
     }, [paginationIn, tableState]);
@@ -160,20 +164,15 @@ const FormilyEditableTableInner: React.FC<Omit<IFormilyEditableTableProps, 'name
     // dataSource
     const dataSource = React.useMemo(() => {
         const rows = field.value || [];
-        return rows.map((item: any, index: number) => ({...item, key: index}));
-    // version 变化时重新计算
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        return rows.map((item: any, index: number) => ({ ...item, key: index }));
+        // version 变化时重新计算
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [version]);
 
     return (
         <div className={`fet-table${className ? ` ${className}` : ''}`} style={style}>
             {addButtonPosition === 'top' && addButton}
-            <Table
-                {...tableProps}
-                columns={columns}
-                dataSource={dataSource}
-                pagination={pagination}
-            />
+            <Table {...tableProps} columns={columns} dataSource={dataSource} pagination={pagination} />
             {addButtonPosition === 'bottom' && addButton}
         </div>
     );
@@ -181,14 +180,15 @@ const FormilyEditableTableInner: React.FC<Omit<IFormilyEditableTableProps, 'name
 
 // ========================= FormilyEditableTable 主组件 =========================
 
-export const FormilyEditableTable: React.FC<IFormilyEditableTableProps> & { Field: typeof FormilyEditableTableField } = props => {
-    const {name, ...rest} = props;
+export const FormilyEditableTable: React.FC<IFormilyEditableTableProps> & { Field: typeof FormilyEditableTableField } =
+    (props) => {
+        const { name, ...rest } = props;
 
-    return (
-        <ArrayField name={name}>
-            <FormilyEditableTableInner {...rest} />
-        </ArrayField>
-    );
-};
+        return (
+            <ArrayField name={name}>
+                <FormilyEditableTableInner {...rest} />
+            </ArrayField>
+        );
+    };
 
 FormilyEditableTable.Field = FormilyEditableTableField;

@@ -1,72 +1,71 @@
-import { useState } from 'react';
 import EditableTable, { type EditableColumn } from '@react-editable-tables/native';
+import { useState } from 'react';
 
 interface User {
-  id: string;
-  name: string;
-  status: string;
-  date: string;
+    id: string;
+    name: string;
+    status: string;
+    date: string;
 }
 
 const data: User[] = [
-  { id: '1', name: '张三', status: 'active', date: '2025-01-01' },
-  { id: '2', name: '李四', status: 'inactive', date: '' },
+    { id: '1', name: '张三', status: 'active', date: '2025-01-01' },
+    { id: '2', name: '李四', status: 'inactive', date: '' },
 ];
 
 const columns: EditableColumn<User>[] = [
-  {
-    title: '姓名',
-    dataIndex: 'name',
-    width: 140,
-    editRender: ({ value, onChange }) => (
-      <input
-        className="et-editor-input"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    ),
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-    width: 140,
-    editRender: ({ value, onChange }) => (
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        style={{ width: '100%', padding: '4px 8px' }}
-      >
-        <option value="active">启用</option>
-        <option value="inactive">禁用</option>
-      </select>
-    ),
-    render: (value) => (value === 'active' ? '启用' : '禁用'),
-  },
-  {
-    title: '日期',
-    dataIndex: 'date',
-    width: 160,
-    editRender: ({ value, onChange }) => (
-      <input
-        type="date"
-        value={value ?? ''}
-        onChange={(e) => onChange(e.target.value)}
-        style={{ width: '100%', padding: '4px 8px' }}
-      />
-    ),
-  },
+    {
+        title: '姓名',
+        dataIndex: 'name',
+        width: 140,
+        editRender: ({ value, onChange }) => (
+            <input className="et-editor-input" value={value} onChange={(e) => onChange(e.target.value)} />
+        ),
+    },
+    {
+        title: '状态',
+        dataIndex: 'status',
+        width: 140,
+        editRender: ({ value, onChange }) => (
+            <select
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                style={{ width: '100%', padding: '4px 8px' }}
+            >
+                <option value="active">启用</option>
+                <option value="inactive">禁用</option>
+            </select>
+        ),
+        render: (value) => (value === 'active' ? '启用' : '禁用'),
+    },
+    {
+        title: '日期',
+        dataIndex: 'date',
+        width: 160,
+        editRender: ({ value, onChange }) => (
+            <input
+                type="date"
+                value={value ?? ''}
+                onChange={(e) => onChange(e.target.value)}
+                style={{ width: '100%', padding: '4px 8px' }}
+            />
+        ),
+    },
 ];
 
 export default function CustomEditorDemo() {
-  const [dataSource, setDataSource] = useState(data);
+    const [dataSource, setDataSource] = useState(data);
 
-  return (
-    <EditableTable<User>
-      rowKey="id"
-      dataSource={dataSource}
-      onChange={setDataSource}
-      columns={columns}
-      onSubmit={(d) => { console.log('提交数据：', d); alert(`提交成功！共${d.length}条`); }}
-    />
-  );
+    return (
+        <EditableTable<User>
+            rowKey="id"
+            dataSource={dataSource}
+            onChange={setDataSource}
+            columns={columns}
+            onSubmit={(d) => {
+                console.log('提交数据：', d);
+                alert(`提交成功！共${d.length}条`);
+            }}
+        />
+    );
 }

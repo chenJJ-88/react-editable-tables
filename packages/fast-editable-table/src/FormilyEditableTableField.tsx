@@ -1,6 +1,6 @@
+import { Field } from '@formily/react';
 import * as React from 'react';
-import {Field} from '@formily/react';
-import type {IFormilyEditableTableFieldProps} from './types';
+import type { IFormilyEditableTableFieldProps } from './types';
 
 function isCheckedType(v: any): boolean {
     if (v == null || typeof v !== 'object') return false;

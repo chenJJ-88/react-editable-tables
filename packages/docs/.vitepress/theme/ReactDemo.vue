@@ -1,56 +1,61 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 const props = defineProps<{
-  component: any
-  source?: string
-  title?: string
-  description?: string
-}>()
+    component: any;
+    source?: string;
+    title?: string;
+    description?: string;
+}>();
 
-const containerRef = ref<HTMLDivElement>()
-const showCode = ref(false)
-const copied = ref(false)
-let root: any = null
+const containerRef = ref<HTMLDivElement>();
+const showCode = ref(false);
+const copied = ref(false);
+let root: any = null;
 
 function mountReact() {
-  if (!containerRef.value || !props.component) return
-  import('react-dom/client').then(({ createRoot }) => {
-    import('react').then((React) => {
-      if (!containerRef.value) return
-      root = createRoot(containerRef.value)
-      root.render(React.createElement(props.component))
-    })
-  })
+    if (!containerRef.value || !props.component) return;
+    import('react-dom/client').then(({ createRoot }) => {
+        import('react').then((React) => {
+            if (!containerRef.value) return;
+            root = createRoot(containerRef.value);
+            root.render(React.createElement(props.component));
+        });
+    });
 }
 
 function unmountReact() {
-  if (root) {
-    root.unmount()
-    root = null
-  }
+    if (root) {
+        root.unmount();
+        root = null;
+    }
 }
 
 onMounted(() => {
-  mountReact()
-})
+    mountReact();
+});
 
 onBeforeUnmount(() => {
-  unmountReact()
-})
+    unmountReact();
+});
 
-watch(() => props.component, () => {
-  unmountReact()
-  mountReact()
-})
+watch(
+    () => props.component,
+    () => {
+        unmountReact();
+        mountReact();
+    },
+);
 
 function handleCopy() {
-  if (props.source) {
-    navigator.clipboard.writeText(props.source).then(() => {
-      copied.value = true
-      setTimeout(() => { copied.value = false }, 2000)
-    })
-  }
+    if (props.source) {
+        navigator.clipboard.writeText(props.source).then(() => {
+            copied.value = true;
+            setTimeout(() => {
+                copied.value = false;
+            }, 2000);
+        });
+    }
 }
 </script>
 

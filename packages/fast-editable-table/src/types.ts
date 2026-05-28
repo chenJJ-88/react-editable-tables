@@ -1,5 +1,5 @@
-import type { Form, Field as FormilyField, ArrayField as FormilyArrayField } from '@formily/core';
-import type { TableProps, ButtonProps, PaginationProps } from 'antd';
+import type { Form, ArrayField as FormilyArrayField, Field as FormilyField } from '@formily/core';
+import type { ButtonProps, PaginationProps, TableProps } from 'antd';
 
 /** Formily ArrayField 实例类型 */
 export type IArrayField = FormilyArrayField;

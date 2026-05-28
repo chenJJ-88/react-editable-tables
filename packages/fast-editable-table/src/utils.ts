@@ -12,10 +12,8 @@
  * });
  * ```
  */
-export function getRowPath(field: {
-  address: { toString(): string };
-}): string {
-  const path = field.address.toString();
-  const lastDot = path.lastIndexOf('.');
-  return lastDot === -1 ? path : path.slice(0, lastDot);
+export function getRowPath(field: { address: { toString(): string } }): string {
+    const path = field.address.toString();
+    const lastDot = path.lastIndexOf('.');
+    return lastDot === -1 ? path : path.slice(0, lastDot);
 }

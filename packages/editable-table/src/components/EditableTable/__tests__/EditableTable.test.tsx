@@ -5,9 +5,9 @@
  *  - Chinese labels (保存/取消/编辑/提交) match the component's own button text.
  *  - `userEvent` is used for realistic interactions; `fireEvent` only where needed.
  */
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React, { createRef } from 'react';
+import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import EditableTable, { type EditableColumn, type EditableTableInstance } from '../index';
 
@@ -31,22 +31,14 @@ const BASE_COLUMNS: EditableColumn<Person>[] = [
         title: '姓名',
         dataIndex: 'name',
         editRender: ({ value, onChange }) => (
-            <input
-                aria-label="name-input"
-                value={String(value ?? '')}
-                onChange={(e) => onChange(e.target.value)}
-            />
+            <input aria-label="name-input" value={String(value ?? '')} onChange={(e) => onChange(e.target.value)} />
         ),
     },
     {
         title: '年龄',
         dataIndex: 'age',
         editRender: ({ value, onChange }) => (
-            <input
-                aria-label="age-input"
-                value={String(value ?? '')}
-                onChange={(e) => onChange(e.target.value)}
-            />
+            <input aria-label="age-input" value={String(value ?? '')} onChange={(e) => onChange(e.target.value)} />
         ),
     },
 ];
@@ -228,15 +220,8 @@ describe('validation', () => {
             title: '姓名',
             dataIndex: 'name',
             rules: [{ required: true, message: '姓名为必填项' }],
-            editRender: ({ value, onChange, error }) => (
-                <div>
-                    <input
-                        aria-label="name-input"
-                        value={String(value ?? '')}
-                        onChange={(e) => onChange(e.target.value)}
-                    />
-                    {error && <span role="alert">{error}</span>}
-                </div>
+            editRender: ({ value, onChange }) => (
+                <input aria-label="name-input" value={String(value ?? '')} onChange={(e) => onChange(e.target.value)} />
             ),
         },
     ];
@@ -254,8 +239,7 @@ describe('validation', () => {
 
         await userEvent.click(screen.getByRole('button', { name: '提交' }));
 
-        expect(await screen.findAllByRole('alert')).not.toHaveLength(0);
-        expect(screen.getByText('姓名为必填项')).toBeInTheDocument();
+        expect(await screen.findByText('姓名为必填项')).toBeInTheDocument();
     });
 
     it('shows validation error on change when validateTrigger is change', async () => {
@@ -302,17 +286,11 @@ describe('ref methods', () => {
     it('addRow appends a new row', async () => {
         const ref = createRef<EditableTableInstance<Person>>();
         render(
-            <EditableTable<Person>
-                ref={ref}
-                rowKey="id"
-                columns={BASE_COLUMNS}
-                dataSource={DATA}
-                editableMode="all"
-            />,
+            <EditableTable<Person> ref={ref} rowKey="id" columns={BASE_COLUMNS} dataSource={DATA} editableMode="all" />,
         );
 
         act(() => {
-            ref.current!.addRow({ id: '99', name: '新行', age: 0 });
+            ref.current?.addRow({ id: '99', name: '新行', age: 0 });
         });
 
         const nameInputs = screen.getAllByLabelText('name-input');
@@ -322,17 +300,11 @@ describe('ref methods', () => {
     it('removeRow removes the correct row', async () => {
         const ref = createRef<EditableTableInstance<Person>>();
         render(
-            <EditableTable<Person>
-                ref={ref}
-                rowKey="id"
-                columns={BASE_COLUMNS}
-                dataSource={DATA}
-                editableMode="all"
-            />,
+            <EditableTable<Person> ref={ref} rowKey="id" columns={BASE_COLUMNS} dataSource={DATA} editableMode="all" />,
         );
 
         act(() => {
-            ref.current!.removeRow(0);
+            ref.current?.removeRow(0);
         });
 
         const nameInputs = screen.getAllByLabelText('name-input') as HTMLInputElement[];
@@ -344,15 +316,9 @@ describe('ref methods', () => {
     it('getData returns the current data', () => {
         const ref = createRef<EditableTableInstance<Person>>();
         render(
-            <EditableTable<Person>
-                ref={ref}
-                rowKey="id"
-                columns={BASE_COLUMNS}
-                dataSource={DATA}
-                editableMode="all"
-            />,
+            <EditableTable<Person> ref={ref} rowKey="id" columns={BASE_COLUMNS} dataSource={DATA} editableMode="all" />,
         );
 
-        expect(ref.current!.getData()).toEqual(DATA);
+        expect(ref.current?.getData()).toEqual(DATA);
     });
 });

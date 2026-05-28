@@ -6,9 +6,9 @@
  */
 import { createForm } from '@formily/core';
 import { FormProvider } from '@formily/react';
-import { act, render, screen, within } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import * as React from 'react';
+import type * as React from 'react';
 import { describe, expect, it } from 'vitest';
 import { FormilyEditableTable } from '../FormilyEditableTable';
 import type { IColumn } from '../types';
@@ -29,7 +29,7 @@ function makeColumns(): IColumn[] {
     return [
         {
             title: '姓名',
-            render: ({ index, field }) => (
+            render: ({ index, field: _field }) => (
                 <FormilyEditableTable.Field name="name">
                     <input aria-label={`name-${index}`} />
                 </FormilyEditableTable.Field>
@@ -42,7 +42,10 @@ function makeColumns(): IColumn[] {
     ];
 }
 
-function renderTable(form: ReturnType<typeof createForm>, overrides: Partial<React.ComponentProps<typeof FormilyEditableTable>> = {}) {
+function renderTable(
+    form: ReturnType<typeof createForm>,
+    overrides: Partial<React.ComponentProps<typeof FormilyEditableTable>> = {},
+) {
     return render(
         <FormProvider form={form}>
             <FormilyEditableTable
@@ -169,7 +172,7 @@ describe('remove row', () => {
             arrayField.remove(0);
         });
 
-        const remaining = await screen.findByLabelText('name-0') as HTMLInputElement;
+        const remaining = (await screen.findByLabelText('name-0')) as HTMLInputElement;
         expect(remaining.value).toBe('李四');
         expect(screen.queryByLabelText('name-1')).not.toBeInTheDocument();
     });

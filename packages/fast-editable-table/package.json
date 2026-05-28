@@ -11,7 +11,9 @@
             "types": "./dist/index.d.ts"
         }
     },
-    "files": ["dist"],
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "build": "tsup",
         "prepublishOnly": "pnpm run build",
@@ -19,7 +21,13 @@
         "test": "vitest",
         "coverage": "vitest run --coverage"
     },
-    "keywords": ["react", "editable-table", "formily", "antd", "table"],
+    "keywords": [
+        "react",
+        "editable-table",
+        "formily",
+        "antd",
+        "table"
+    ],
     "author": "chenJJ-88",
     "license": "MIT",
     "repository": {

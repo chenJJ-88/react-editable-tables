@@ -12,7 +12,9 @@
         },
         "./style.css": "./dist/EditableTable.css"
     },
-    "files": ["dist"],
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "build": "tsup",
         "prepublishOnly": "pnpm run build",
@@ -20,7 +22,13 @@
         "test": "vitest",
         "coverage": "vitest run --coverage"
     },
-    "keywords": ["react", "editable-table", "table", "virtual-scroll", "formily"],
+    "keywords": [
+        "react",
+        "editable-table",
+        "table",
+        "virtual-scroll",
+        "formily"
+    ],
     "author": "chenJJ-88",
     "license": "MIT",
     "repository": {

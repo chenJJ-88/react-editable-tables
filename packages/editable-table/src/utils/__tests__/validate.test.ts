@@ -173,9 +173,7 @@ describe('validateRow', () => {
     });
 
     it('ignores columns without rules', () => {
-        const noRuleColumns: EditableColumn<Row>[] = [
-            { title: '邮箱', dataIndex: 'email' },
-        ];
+        const noRuleColumns: EditableColumn<Row>[] = [{ title: '邮箱', dataIndex: 'email' }];
         const row: Row = { name: '', age: null, email: '' };
         expect(validateRow(row, noRuleColumns)).toEqual({});
     });

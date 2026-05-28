@@ -54,7 +54,7 @@
     "devDependencies": {
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "antd": "^5.22.0",
+        "antd": "^6.4.3",
         "@formily/core": "^2.3.1",
         "@formily/react": "^2.3.1",
         "@formily/reactive": "^2.3.1",

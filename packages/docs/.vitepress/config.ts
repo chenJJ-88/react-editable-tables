@@ -5,6 +5,7 @@ export default defineConfig({
     title: 'React Editable Tables',
     description: 'React 可编辑表格方案集 — 原生轻量版 & Formily 高性能版',
     lang: 'zh-CN',
+    base: '/react-editable-tables/',
     lastUpdated: true,
     appearance: false,
 

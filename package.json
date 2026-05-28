@@ -7,15 +7,27 @@
     "scripts": {
         "dev:docs": "pnpm --filter @react-editable-tables/docs dev",
         "build:docs": "pnpm --filter @react-editable-tables/docs build",
+        "build": "pnpm -r --filter './packages/*' run build",
         "test": "pnpm -r test",
         "format": "biome format --write .",
         "lint": "biome lint .",
         "check": "biome check --write .",
         "type-check": "pnpm -r type-check"
     },
+    "keywords": ["react", "editable-table", "formily", "antd", "virtual-scroll"],
+    "author": "chenJJ-88",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/chenJJ-88/react-editable-tables.git"
+    },
+    "homepage": "https://chenjj-88.github.io/react-editable-tables/",
+    "bugs": {
+        "url": "https://github.com/chenJJ-88/react-editable-tables/issues"
+    },
     "devDependencies": {
-        "@biomejs/biome": "^2.4.15"
+        "@biomejs/biome": "^2.4.15",
+        "tsup": "^8.5.1"
     },
     "dependencies": {
         "react-is": "^19.2.6"

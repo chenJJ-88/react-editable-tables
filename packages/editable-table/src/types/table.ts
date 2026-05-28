@@ -11,8 +11,9 @@ export interface Rule {
    * - 返回 string：使用返回的 string 作为错误信息
    */
   validator?: (
-    value: unknown,
-    row: Record<string, unknown>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any,
+    row: Record<string, any>,
   ) => boolean | string;
   /** 默认错误信息（validator 返回 false 时使用） */
   message: string;
@@ -21,9 +22,11 @@ export interface Rule {
 /** 编辑态渲染函数接收的 props */
 export interface EditRenderProps<T> {
   /** 当前字段值 */
-  value: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any;
   /** 值变化回调 */
-  onChange: (value: unknown) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChange: (value: any) => void;
   /** 当前行数据 */
   row: T;
   /** 行索引 */
@@ -52,12 +55,11 @@ export interface EditableColumn<T> {
   /** 校验规则 */
   rules?: Rule[];
   /** 字段联动：当该字段值变化时，返回需要同步更新的字段键值对，支持异步 */
-  onFieldChange?: (
-    value: unknown,
-    row: T,
-  ) => Partial<T> | undefined | Promise<Partial<T> | undefined>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onFieldChange?: (value: any, row: T) => Partial<T> | undefined | Promise<Partial<T> | undefined>;
   /** 自定义只读态渲染 */
-  render?: (value: unknown, row: T, rowIndex: number) => ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  render?: (value: any, row: T, rowIndex: number) => ReactNode;
 }
 
 /** 校验触发时机 */

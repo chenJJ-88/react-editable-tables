@@ -80,6 +80,31 @@ FastTable.Field 会自动检测 antd 的 `Switch` 和 `Checkbox` 组件，注入
 </FastTable.Field>
 ```
 
+
+## 工具函数
+
+### getRowPath
+
+从字段实例中获取行级路径，用于行级联动时定位具体行。
+
+```ts
+import { getRowPath } from '@react-editable-tables/formily';
+
+// field.address = "items.0.type"
+const rowPath = getRowPath(field); // "items.0"
+```
+
+在 effects 中配合 `form.setFieldState` 使用，只影响当前行：
+
+```tsx
+onFieldValueChange('items.*.type', (field) => {
+  const rowPath = getRowPath(field);
+  form.setFieldState(`${rowPath}.subType`, (state) => {
+    state.value = undefined;
+  });
+});
+```
+
 ## 样式
 
 样式已内联到 JS 中，导入 `@react-editable-tables/formily` 时自动注入，无需手动引入 CSS 文件。

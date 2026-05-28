@@ -637,10 +637,12 @@ function EditableTable<T extends object = Record<string, unknown>>(
   );
 }
 
-const ForwardedEditableTable = React.forwardRef(EditableTable) as unknown as <
-  T extends object = Record<string, unknown>,
->(
-  props: EditableTableProps<T> & { ref?: React.Ref<EditableTableInstance<T>> },
+type EditableTableComponent = <T extends object = Record<string, unknown>>(
+  props: EditableTableProps<T> & React.RefAttributes<EditableTableInstance<T>>,
 ) => React.ReactNode;
 
+const ForwardedEditableTable = React.forwardRef(EditableTable) as unknown as EditableTableComponent;
+
 export default ForwardedEditableTable;
+
+export type { EditableColumn, EditRenderProps, EditableTableInstance, EditableTableProps, Rule } from '../../types/table';

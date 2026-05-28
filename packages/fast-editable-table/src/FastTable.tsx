@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ArrayField, useField, useForm, Field} from '@formily/react';
 import {reaction} from '@formily/reactive';
-import {Table, Button, App} from 'antd';
+import {Table, Button} from 'antd';
 import type {IFastTableProps, IColumnRenderOpt, IArrayField} from './types';
 import {FastTableField} from './FastTableField';
 
@@ -10,10 +10,8 @@ import {FastTableField} from './FastTableField';
 const DefaultOperator: React.FC<{index: number; field: IArrayField; disabled: boolean}> = (
     {index, field, disabled},
 ) => {
-    const {message: messageApi} = App.useApp();
     const remove = () => {
         field.remove(index);
-        messageApi.success('删除成功');
     };
     return (
         <span
@@ -56,7 +54,7 @@ const FastTableInner: React.FC<Omit<IFastTableProps, 'name'>> = (props) => {
     const field = useField() as IArrayField;
     const form = useForm();
 
-    // 借鉴 icloud-ui 手动订阅模式：reaction() 直接追踪 Formily 响应式属性
+    // reaction() 直接追踪 Formily 响应式属性
     // 版本计数器仅在 reaction 触发时递增，强制 React 重渲染
     const [version, setVersion] = React.useState(0);
     React.useEffect(() => {

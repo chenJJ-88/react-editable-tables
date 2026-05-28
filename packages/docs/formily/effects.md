@@ -89,7 +89,7 @@ FastTable 完全兼容 Formily 2.x 的 effects API。以下是与表格场景最
 ## 监听单元格值变化
 
 ```tsx
-import { createForm, onFieldValueChange } from '@react-editable-tables/formily';
+import { createForm, onFieldValueChange, getRowPath } from '@react-editable-tables/formily';
 
 const form = createForm({
   effects() {
@@ -108,14 +108,13 @@ const form = createForm({
 const form = createForm({
   effects() {
     onFieldInit('items.*.type', (field) => {
-      const rowPath = field.address.toString().replace(/\.type$/, '');
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.subType`, (state) => {
         state.data = { ...state.data, options: getSubTypeOptions(field.value) };
       });
     });
     onFieldValueChange('items.*.type', (field) => {
-      // field.address = "items.0.type" → rowPath = "items.0"
-      const rowPath = field.address.toString().replace(/\.type$/, '');
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.subType`, (state) => {
         state.data = { ...state.data, options: getSubTypeOptions(field.value) };
         state.value = undefined;
@@ -126,7 +125,7 @@ const form = createForm({
 ```
 
 ::: warning 行级联动务必使用精确路径
-`form.setFieldState('items.*.subType', ...)` 会匹配所有行的 subType，导致修改类型时清空所有行的子类型值。使用 `field.address` 获取具体行路径（如 `items.0`），再拼接目标字段名，只影响当前行。
+`form.setFieldState('items.*.subType', ...)` 会匹配所有行的 subType，导致修改类型时清空所有行的子类型值。使用 `getRowPath(field)` 获取具体行路径（如 `items.0`），再拼接目标字段名，只影响当前行。
 :::
 
 ::: warning 联动传递 props 用 state.data，不要用 state.component
@@ -141,7 +140,7 @@ const form = createForm({
 const form = createForm({
   effects() {
     onFieldValueChange('items.*.type', (field) => {
-      const rowPath = field.address.toString().replace(/\.type$/, '');
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.subType`, (state) => {
         state.data = { ...state.data, options: getSubTypes(field.value) };
         state.value = undefined; // 清空旧值
@@ -163,7 +162,7 @@ const form = createForm({
 const form = createForm({
   effects() {
     onFieldValueChange('items.*.disabled', (field) => {
-      const rowPath = field.address.toString().replace(/\.disabled$/, '');
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.note`, (state) => {
         state.editable = !field.value;
       });
@@ -182,7 +181,7 @@ const form = createForm({
 const form = createForm({
   effects() {
     onFieldValueChange('items.*.type', (field) => {
-      const rowPath = field.address.toString().replace(/\.type$/, '');
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.detail`, (state) => {
         state.visible = field.value === 'other';
       });
@@ -200,7 +199,7 @@ const form = createForm({
   effects() {
     // 第一级变化 → 更新第二级选项，清空第二、三级值
     onFieldValueChange('items.*.category', (field) => {
-      const rowPath = field.address.toString().replace(/\.category$/, '');
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.subCategory`, (state) => {
         state.data = { ...state.data, options: getSubCategories(field.value) };
         state.value = undefined;
@@ -213,7 +212,7 @@ const form = createForm({
 
     // 第二级变化 → 更新第三级选项，清空第三级值
     onFieldValueChange('items.*.subCategory', (field) => {
-      const rowPath = field.address.toString().replace(/\.subCategory$/, '');
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.detail`, (state) => {
         state.data = { ...state.data, options: getDetails(field.value) };
         state.value = undefined;
@@ -231,8 +230,7 @@ const form = createForm({
 const form = createForm({
   effects() {
     onFieldValueChange('items.*.price', (field) => {
-      // field.address = "items.0.price" → rowPath = "items.0"
-      const rowPath = field.address.toString().replace(/\.price$/, '');
+      const rowPath = getRowPath(field);
       const match = rowPath.match(/items\.(\d+)/);
       if (!match) return;
       const rowIndex = Number(match[1]);
@@ -270,7 +268,7 @@ const form = createForm({
 });
 
 function updateTotal(field: any) {
-  const rowPath = field.address.toString().replace(/\.(\w+)$/, '');
+  const rowPath = getRowPath(field);
   const match = rowPath.match(/items\.(\d+)/);
   if (!match) return;
   const rowIndex = Number(match[1]);
@@ -292,7 +290,7 @@ const form = createForm({
   effects() {
     onFieldValueChange('items.*.country', async (field) => {
       const cities = await fetchCities(field.value);
-      const rowPath = field.address.toString().replace(/\.country$/, '');
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.city`, (state) => {
         state.data = { ...state.data, options: cities };
         state.value = undefined;
@@ -310,8 +308,7 @@ const form = createForm({
 const form = createForm({
   effects() {
     onFieldInit('items.*.type', (field) => {
-      // 字段初始化时设置默认选项
-      const rowPath = field.address.toString().replace(/\.type$/, '');
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.subType`, (state) => {
         state.data = { ...state.data, options: typeOptions };
       });
@@ -357,8 +354,8 @@ const form = createForm({
       // 读取整个表单的值
       const allValues = form.getFormState(state => state.values);
 
-      // 设置同行字段状态（使用 field.address 定位具体行）
-      const rowPath = field.address.toString().replace(/\.type$/, '');
+      // 设置同行字段状态（使用 getRowPath 定位具体行）
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.subType`, (state) => {
         state.value = undefined;
       });
@@ -386,7 +383,7 @@ const form = createForm({
 ## 注意事项
 
 - 通配符 `*` 匹配所有行，`onFieldValueChange` 对每一行的变化都会触发
-- **行级联动必须使用 `field.address` 获取精确路径**，避免 `form.setFieldState('items.*.xxx')` 影响其他行
+- **行级联动必须使用 `getRowPath(field)` 获取精确路径**，避免 `form.setFieldState('items.*.xxx')` 影响其他行
 - **联动传递动态 props 用 `state.data`，不要用 `state.component`**：`state.component` 会导致 Formily 替换整个子组件，丢失原始 JSX 属性
 - 级联联动时务必清空下游值，否则会出现选项已变但旧值仍保留的问题
 - `onFieldValueChange` 包含程序赋值触发的变化，`onFieldInputValueChange` 仅响应用户输入

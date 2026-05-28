@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import EditableTable from '@react-editable-tables/native';
-
+import EditableTable, { type EditableColumn } from '@react-editable-tables/native';
+import { Switch, Input } from 'antd';
 interface User {
   id: string;
   country: string;
   city: string;
+  hasIphone: boolean;
+  iphone: string;
 }
 
 interface CityOption {
@@ -46,8 +48,8 @@ const countryLabel: Record<string, string> = {
 };
 
 const data: User[] = [
-  { id: '1', country: 'china', city: 'beijing' },
-  { id: '2', country: '', city: '' },
+  { id: '1', country: 'china', city: 'beijing', hasIphone: true,iphone: '123' },
+  { id: '2', country: '', city: '', hasIphone: false ,iphone: ''},
 ];
 
 function CityEditor({
@@ -93,56 +95,76 @@ function CityEditor({
 
 export default function LinkageDemo() {
   const [dataSource, setDataSource] = useState(data);
+  const columns: EditableColumn<User>[] = [
+    {
+      title: '国家',
+      dataIndex: 'country',
+      width: 150,
+      onFieldChange: (_value, row) => {
+        const valid = (cityMap[row.country] || []).map((o) =>
+          String(o.value),
+        );
+        if (row.city && !valid.includes(row.city)) return { city: '' };
+      },
+      editRender: ({ value, onChange }) => (
+        <select
+          className="et-editor-select"
+          value={value as string}
+          onChange={(e) => onChange(e.target.value)}
+        >
+          <option value="">请选择</option>
+          {countryOptions.map((o) => (
+            <option key={String(o.value)} value={String(o.value)}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+      ),
+      render: (value) => countryLabel[value as string] ?? value,
+    },
+    {
+      title: '城市',
+      dataIndex: 'city',
+      width: 150,
+      editRender: ({ value, onChange, row }) => (
+        <CityEditor
+          value={value}
+          onChange={onChange}
+          country={row.country}
+        />
+      ),
+    },
+    {
+      title: '是否需要电话',
+      dataIndex: 'hasIphone',
+      editRender: ({ value, onChange }) => (
+        <Switch checked={value} onChange={onChange} />
+      ),
+    },
+    {
+      title: '电话',
+      dataIndex: 'iphone',
+      editRender: ({ value, onChange, row }) => {
+        console.log(row);
 
+        return (
+          <Input
+            disabled={!row.hasIphone}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+          />
+        )
+      },
+    },
+  ]
   return (
     <div>
-      <p style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>
-        选择国家后城市异步加载（模拟 800ms 接口延迟）
-      </p>
       <EditableTable<User>
+        bordered
         rowKey="id"
         dataSource={dataSource}
         onChange={setDataSource}
-        columns={[
-          {
-            title: '国家',
-            dataIndex: 'country',
-            width: 150,
-            onFieldChange: (_value, row) => {
-              const valid = (cityMap[row.country] || []).map((o) =>
-                String(o.value),
-              );
-              if (row.city && !valid.includes(row.city)) return { city: '' };
-            },
-            editRender: ({ value, onChange }) => (
-              <select
-                className="et-editor-select"
-                value={value as string}
-                onChange={(e) => onChange(e.target.value)}
-              >
-                <option value="">请选择</option>
-                {countryOptions.map((o) => (
-                  <option key={String(o.value)} value={String(o.value)}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-            ),
-            render: (value) => countryLabel[value as string] ?? value,
-          },
-          {
-            title: '城市',
-            dataIndex: 'city',
-            width: 150,
-            editRender: ({ value, onChange, row }) => (
-              <CityEditor
-                value={value}
-                onChange={onChange}
-                country={row.country}
-              />
-            ),
-          },
-        ]}
+        columns={columns}
         onSubmit={(d) => { console.log('提交数据：', d); alert(`提交成功！共${d.length}条`); }}
       />
     </div>

@@ -1,11 +1,13 @@
-import { 
-  createForm, 
-  onFieldValueChange, 
-  onFieldInit, 
-  FormProvider, 
-  FastTable 
+import {
+  createForm,
+  onFieldValueChange,
+  onFieldInit,
+  FormProvider,
+  FastTable,
+  getRowPath
 } from '@react-editable-tables/formily';
-import { Input, Select, Switch, Button, App as AntApp } from 'antd';
+import type { IColumn } from '@react-editable-tables/formily';
+import { Input, Select, Switch, Button } from 'antd';
 
 const typeOptions = [
   { label: '电子产品', value: 'electronic' },
@@ -39,34 +41,78 @@ const form = createForm({
     ],
   },
   effects() {
-    // 字段初始化时：为已有 type 值的行设置子类型选项
     onFieldInit('items.*.type', (field) => {
       const subTypes = subTypeMap[(field as any).value] || [];
-      const rowPath = field.address.toString().replace(/\.type$/, '');
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.subType`, (state) => {
         state.data = { ...state.data, options: subTypes };
       });
     });
 
-    // 类型变化 → 子类型选项联动 + 值清空（仅当前行）
     onFieldValueChange('items.*.type', (field) => {
       const subTypes = subTypeMap[(field as any).value] || [];
-      const rowPath = field.address.toString().replace(/\.type$/, '');
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.subType`, (state) => {
         state.data = { ...state.data, options: subTypes };
         state.value = undefined;
       });
     });
 
-    // 不可用开关 → 备注字段禁用联动（仅当前行）
     onFieldValueChange('items.*.disabled', (field) => {
-      const rowPath = field.address.toString().replace(/\.disabled$/, '');
+      const rowPath = getRowPath(field);
       form.setFieldState(`${rowPath}.note`, (state) => {
         state.editable = !(field as any).value;
       });
     });
   },
 });
+
+const columns: IColumn[] = [
+  {
+    title: '类型',
+    width: 150,
+    render: () => (
+      <FastTable.Field name="type">
+        <Select options={typeOptions} placeholder="请选择类型" style={{ width: '100%' }} />
+      </FastTable.Field>
+    ),
+  },
+  {
+    title: '子类型',
+    width: 150,
+    render: () => (
+      <FastTable.Field name="subType">
+        <Select placeholder="请先选择类型" style={{ width: '100%' }} />
+      </FastTable.Field>
+    ),
+  },
+  {
+    title: '备注',
+    render: () => (
+      <FastTable.Field name="note" parse={(e: any) => e?.target?.value ?? e}>
+        <Input placeholder="请输入备注" />
+      </FastTable.Field>
+    ),
+  },
+  {
+    title: '不可用',
+    width: 80,
+    render: () => (
+      <FastTable.Field name="disabled">
+        <Switch size="small" />
+      </FastTable.Field>
+    ),
+  },
+  {
+    title: '操作',
+    width: 80,
+    render: ({ index, field }) => (
+      <Button type="link" onClick={() => field.remove(index)}>
+        删除
+      </Button>
+    ),
+  },
+];
 
 export default function EffectsDemo() {
   const handleSubmit = async () => {
@@ -77,65 +123,18 @@ export default function EffectsDemo() {
   };
 
   return (
-    <AntApp>
-      <FormProvider form={form}>
-        <FastTable
-          name="items"
-          columns={[
-            {
-              title: '类型',
-              width: 150,
-              render: () => (
-                <FastTable.Field name="type">
-                  <Select options={typeOptions} placeholder="请选择类型" style={{ width: '100%' }} />
-                </FastTable.Field>
-              ),
-            },
-            {
-              title: '子类型',
-              width: 150,
-              render: () => (
-                <FastTable.Field name="subType">
-                  <Select   placeholder="请先选择类型" style={{ width: '100%' }} />
-                </FastTable.Field>
-              ),
-            },
-            {
-              title: '备注',
-              render: () => (
-                <FastTable.Field name="note" parse={(e: any) => e?.target?.value ?? e}>
-                  <Input placeholder="请输入备注" />
-                </FastTable.Field>
-              ),
-            },
-            {
-              title: '不可用',
-              width: 80,
-              render: () => (
-                <FastTable.Field name="disabled">
-                  <Switch size="small" />
-                </FastTable.Field>
-              ),
-            },
-            {
-              title: '操作',
-              width: 80,
-              render: ({ index, field }) => (
-                <Button type="link" onClick={() => field.remove(index)}>
-                  删除
-                </Button>
-              ),
-            },
-          ]}
-          addText="添加"
-          itemDefaultValue={{ type: undefined, subType: undefined, note: '', disabled: false }}
-          min={1}
-          pagination={false}
-        />
-        <Button type="primary" onClick={handleSubmit} style={{ marginTop: 16 }}>
-          提交
-        </Button>
-      </FormProvider>
-    </AntApp>
+    <FormProvider form={form}>
+      <FastTable
+        name="items"
+        columns={columns}
+        addText="添加"
+        itemDefaultValue={{ type: undefined, subType: undefined, note: '', disabled: false }}
+        min={1}
+        pagination={false}
+      />
+      <Button type="primary" onClick={handleSubmit} style={{ marginTop: 16 }}>
+        提交
+      </Button>
+    </FormProvider>
   );
 }

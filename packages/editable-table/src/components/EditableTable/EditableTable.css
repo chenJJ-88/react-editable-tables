@@ -142,8 +142,16 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 2px;
   min-width: 0;
+}
+
+.et-cell-editable input:not([type="checkbox"]):not([type="radio"]),
+.et-cell-editable select,
+.et-cell-editable textarea {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .et-cell-editable .et-editor-input,

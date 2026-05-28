@@ -1,6 +1,6 @@
 # API 参考
 
-## FastTable
+## FormilyEditableTable
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -42,7 +42,7 @@
 | `field.move(from, to)` | 移动行 |
 | `field.value` | 获取当前行数据 |
 
-## FastTable.Field
+## FormilyEditableTable.Field
 
 | Prop | Type | Description |
 |------|------|-------------|
@@ -60,24 +60,24 @@
 
 ```tsx
 // 示例：Select 的 value 是 string，但表单需要 number
-<FastTable.Field
+<FormilyEditableTable.Field
   name="count"
   format={(v) => String(v)}    // number → string，给 Select 显示
   parse={(v) => Number(v)}     // string → number，存入表单
 >
   <Select options={[{ label: '1', value: '1' }, { label: '2', value: '2' }]} />
-</FastTable.Field>
+</FormilyEditableTable.Field>
 ```
 
 ### Switch / Checkbox
 
-FastTable.Field 会自动检测 antd 的 `Switch` 和 `Checkbox` 组件，注入 `checked` 属性而非 `value`：
+FormilyEditableTable.Field 会自动检测 antd 的 `Switch` 和 `Checkbox` 组件，注入 `checked` 属性而非 `value`：
 
 ```tsx
 // 无需特殊处理，直接使用
-<FastTable.Field name="enabled">
+<FormilyEditableTable.Field name="enabled">
   <Switch />
-</FastTable.Field>
+</FormilyEditableTable.Field>
 ```
 
 

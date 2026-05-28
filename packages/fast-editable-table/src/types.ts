@@ -34,8 +34,8 @@ export interface IColumn {
     [key: string]: any;
 }
 
-/** FastTable 组件 Props */
-export interface IFastTableProps {
+/** FormilyEditableTable 组件 Props */
+export interface IFormilyEditableTableProps {
     /** 数组字段名（如 "items"），内部自动创建 ArrayField */
     name: string;
     /** 列定义 */
@@ -66,8 +66,8 @@ export interface IFastTableProps {
     tableProps?: Omit<TableProps, 'columns' | 'dataSource' | 'pagination'>;
 }
 
-/** FastTable.Field (CellBridge) 组件 Props */
-export interface IFastTableFieldProps {
+/** FormilyEditableTable.Field (CellBridge) 组件 Props */
+export interface IFormilyEditableTableFieldProps {
     /** 字段名 */
     name: string;
     /** 必填校验 */

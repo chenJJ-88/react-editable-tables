@@ -1,4 +1,4 @@
-import { createForm, FormProvider, FastTable } from '@react-editable-tables/formily';
+import { createForm, FormProvider, FormilyEditableTable } from '@react-editable-tables/formily';
 import type { IColumn } from '@react-editable-tables/formily';
 import { Input, Select, Button } from 'antd';
 
@@ -16,15 +16,15 @@ const columns: IColumn[] = [
   {
     title: '名称',
     render: () => (
-      <FastTable.Field name="name" required parse={(e: any) => e?.target?.value ?? e}>
+      <FormilyEditableTable.Field name="name" required parse={(e: any) => e?.target?.value ?? e}>
         <Input />
-      </FastTable.Field>
+      </FormilyEditableTable.Field>
     ),
   },
   {
     title: '类型',
     render: () => (
-      <FastTable.Field name="type">
+      <FormilyEditableTable.Field name="type">
         <Select
           options={[
             { label: 'A 类', value: 'a' },
@@ -32,7 +32,7 @@ const columns: IColumn[] = [
             { label: 'C 类', value: 'c' },
           ]}
         />
-      </FastTable.Field>
+      </FormilyEditableTable.Field>
     ),
   },
   {
@@ -55,7 +55,7 @@ export default function QuickStartDemo() {
 
   return (
     <FormProvider form={form}>
-      <FastTable
+      <FormilyEditableTable
         name="items"
         columns={columns}
         addText="添加"

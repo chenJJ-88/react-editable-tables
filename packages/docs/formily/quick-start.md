@@ -28,7 +28,7 @@ npm install react react-dom antd
 ## 核心概念
 
 ```tsx
-import { createForm, FormProvider, FastTable } from '@react-editable-tables/formily';
+import { createForm, FormProvider, FormilyEditableTable } from '@react-editable-tables/formily';
 import { Input, Select, Button } from 'antd';
 
 const form = createForm();
@@ -36,23 +36,23 @@ const form = createForm();
 function App() {
   return (
     <FormProvider form={form}>
-      <FastTable
+      <FormilyEditableTable
         name="items"
         columns={[
           {
             title: '名称',
             render: () => (
-              <FastTable.Field name="name" required parse={(e: any) => e?.target?.value ?? e}>
+              <FormilyEditableTable.Field name="name" required parse={(e: any) => e?.target?.value ?? e}>
                 <Input />
-              </FastTable.Field>
+              </FormilyEditableTable.Field>
             ),
           },
           {
             title: '类型',
             render: () => (
-              <FastTable.Field name="type">
+              <FormilyEditableTable.Field name="type">
                 <Select options={[{ label: 'A', value: 'a' }]} />
-              </FastTable.Field>
+              </FormilyEditableTable.Field>
             ),
           },
           {
@@ -75,12 +75,12 @@ function App() {
 
 ## 核心概念
 
-### FastTable — 表格容器
+### FormilyEditableTable — 表格容器
 
-`FastTable` 会自动创建一个 [Formily](https://formilyjs.org/zh-CN) `ArrayField`，你只需要指定 `name` 属性：
+`FormilyEditableTable` 会自动创建一个 [Formily](https://formilyjs.org/zh-CN) `ArrayField`，你只需要指定 `name` 属性：
 
 ```tsx
-<FastTable name="items" columns={columns} />
+<FormilyEditableTable name="items" columns={columns} />
 ```
 
 等价于手动写：
@@ -91,17 +91,17 @@ function App() {
 </Field>
 ```
 
-### FastTable.Field — 单元格字段
+### FormilyEditableTable.Field — 单元格字段
 
-每个可编辑的单元格用 `FastTable.Field` 包裹：
+每个可编辑的单元格用 `FormilyEditableTable.Field` 包裹：
 
 ```tsx
 {
   title: '名称',
   render: () => (
-    <FastTable.Field name="name" required>
+    <FormilyEditableTable.Field name="name" required>
       <Input />
-    </FastTable.Field>
+    </FormilyEditableTable.Field>
   ),
 }
 ```
@@ -116,9 +116,9 @@ function App() {
 antd 的 `Input.onChange` 传入的是 `SyntheticEvent` 而非值本身，必须使用 `parse` 提取值：
 
 ```tsx
-<FastTable.Field name="name" parse={(e) => e?.target?.value ?? e}>
+<FormilyEditableTable.Field name="name" parse={(e) => e?.target?.value ?? e}>
   <Input />
-</FastTable.Field>
+</FormilyEditableTable.Field>
 ```
 
 各组件 parse 规则：
@@ -137,7 +137,7 @@ antd 的 `Input.onChange` 传入的是 `SyntheticEvent` 而非值本身，必须
 新增行时的默认数据结构，必须包含所有字段的初始值：
 
 ```tsx
-<FastTable
+<FormilyEditableTable
   name="items"
   itemDefaultValue={{ name: '', type: undefined, count: 0, enabled: true }}
   columns={columns}
@@ -162,32 +162,32 @@ antd 的 `Input.onChange` 传入的是 `SyntheticEvent` 而非值本身，必须
 
 ## 添加/删除行
 
-FastTable 内置了添加和删除功能：
+FormilyEditableTable 内置了添加和删除功能：
 
 ### 添加按钮
 
 默认在底部显示「添加」按钮，可通过 `addText` 自定义文案：
 
 ```tsx
-<FastTable addText="新增一行" ... />
+<FormilyEditableTable addText="新增一行" ... />
 ```
 
 隐藏添加按钮：
 
 ```tsx
-<FastTable hideAdd ... />
+<FormilyEditableTable hideAdd ... />
 ```
 
 修改按钮位置：
 
 ```tsx
-<FastTable addButtonPosition="top" ... />
+<FormilyEditableTable addButtonPosition="top" ... />
 ```
 
 ### 行数限制
 
 ```tsx
-<FastTable
+<FormilyEditableTable
   min={1}         // 最少保留 1 行，不允许删除最后一行
   max={10}        // 最多 10 行，达到上限后隐藏添加按钮
   ...
@@ -199,12 +199,12 @@ FastTable 内置了添加和删除功能：
 默认在添加新行前会校验已有行，确保数据完整。可关闭此行为：
 
 ```tsx
-<FastTable validateBeforeAdd={false} ... />
+<FormilyEditableTable validateBeforeAdd={false} ... />
 ```
 
 ## 获取和提交数据
 
-FastTable 的数据存储在 [Formily](https://formilyjs.org/zh-CN) 表单中，通过 `form` 实例操作：
+FormilyEditableTable 的数据存储在 [Formily](https://formilyjs.org/zh-CN) 表单中，通过 `form` 实例操作：
 
 ### 提交数据
 
@@ -233,7 +233,7 @@ function App() {
   return (
     <div>
       <FormProvider form={form}>
-        <FastTable name="items" ... />
+        <FormilyEditableTable name="items" ... />
       </FormProvider>
       <Button onClick={handleSubmit}>提交</Button>
     </div>

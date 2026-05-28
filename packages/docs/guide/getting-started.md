@@ -88,7 +88,7 @@ function App() {
 ### Formily
 
 ```tsx
-import { createForm, FormProvider, FastTable } from '@react-editable-tables/formily';
+import { createForm, FormProvider, FormilyEditableTable } from '@react-editable-tables/formily';
 import { Input, Button } from 'antd';
 
 const form = createForm();
@@ -96,15 +96,15 @@ const form = createForm();
 function App() {
   return (
     <FormProvider form={form}>
-      <FastTable
+      <FormilyEditableTable
         name="items"
         columns={[
           {
             title: '名称',
             render: () => (
-              <FastTable.Field name="name" required>
+              <FormilyEditableTable.Field name="name" required>
                 <Input />
-              </FastTable.Field>
+              </FormilyEditableTable.Field>
             ),
           },
           {

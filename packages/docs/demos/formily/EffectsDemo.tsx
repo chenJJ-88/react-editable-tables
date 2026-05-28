@@ -3,7 +3,7 @@ import {
   onFieldValueChange,
   onFieldInit,
   FormProvider,
-  FastTable,
+  FormilyEditableTable,
   getRowPath
 } from '@react-editable-tables/formily';
 import type { IColumn } from '@react-editable-tables/formily';
@@ -72,35 +72,35 @@ const columns: IColumn[] = [
     title: '类型',
     width: 150,
     render: () => (
-      <FastTable.Field name="type">
+      <FormilyEditableTable.Field name="type">
         <Select options={typeOptions} placeholder="请选择类型" style={{ width: '100%' }} />
-      </FastTable.Field>
+      </FormilyEditableTable.Field>
     ),
   },
   {
     title: '子类型',
     width: 150,
     render: () => (
-      <FastTable.Field name="subType">
+      <FormilyEditableTable.Field name="subType">
         <Select placeholder="请先选择类型" style={{ width: '100%' }} />
-      </FastTable.Field>
+      </FormilyEditableTable.Field>
     ),
   },
   {
     title: '备注',
     render: () => (
-      <FastTable.Field name="note" parse={(e: any) => e?.target?.value ?? e}>
+      <FormilyEditableTable.Field name="note" parse={(e: any) => e?.target?.value ?? e}>
         <Input placeholder="请输入备注" />
-      </FastTable.Field>
+      </FormilyEditableTable.Field>
     ),
   },
   {
     title: '不可用',
     width: 80,
     render: () => (
-      <FastTable.Field name="disabled">
+      <FormilyEditableTable.Field name="disabled">
         <Switch size="small" />
-      </FastTable.Field>
+      </FormilyEditableTable.Field>
     ),
   },
   {
@@ -124,7 +124,7 @@ export default function EffectsDemo() {
 
   return (
     <FormProvider form={form}>
-      <FastTable
+      <FormilyEditableTable
         name="items"
         columns={columns}
         addText="添加"

@@ -22,7 +22,6 @@
 - 数据联动 via `onFieldChange`（同步 & 异步）
 - 自定义编辑器 via `editRender`
 - 行操作 via `ref`（addRow, removeRow, moveUp, moveDown）
-- CSS 变量主题 + 暗色模式
 
 ### @react-editable-tables/formily
 
@@ -71,7 +70,7 @@ npm install @react-editable-tables/formily
 ```
 
 ```tsx
-import { createForm, FormProvider, FastTable } from '@react-editable-tables/formily';
+import { createForm, FormProvider, FormilyEditableTable } from '@react-editable-tables/formily';
 import { Input, Button } from 'antd';
 
 const form = createForm();
@@ -79,12 +78,12 @@ const form = createForm();
 function App() {
   return (
     <FormProvider form={form}>
-      <FastTable
+      <FormilyEditableTable
         name="items"
         columns={[
           {
             title: '名称',
-            render: () => <FastTable.Field name="name" required parse={(e: any) => e?.target?.value ?? e}><Input /></FastTable.Field>,
+            render: () => <FormilyEditableTable.Field name="name" required parse={(e: any) => e?.target?.value ?? e}><Input /></FormilyEditableTable.Field>,
           },
           {
             title: '操作',
@@ -138,8 +137,8 @@ react-editable-tables/
 │   │       └── utils/               # 校验工具
 │   └── fast-editable-table/         # @react-editable-tables/formily
 │       └── src/
-│           ├── FastTable.tsx        # 主表格组件
-│           ├── FastTableField.tsx   # 单元格字段组件
+│           ├── FormilyEditableTable.tsx        # 主表格组件
+│           ├── FormilyEditableTableField.tsx   # 单元格字段组件
 │           ├── style.ts             # 自动注入的样式
 │           ├── types.ts             # TypeScript 类型定义
 │           └── index.ts             # 入口（re-export Formily API）

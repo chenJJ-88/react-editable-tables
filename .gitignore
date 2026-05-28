@@ -1,7 +1,6 @@
 node_modules/
 dist/
 dist-ssr/
-icloud-ui/
 *.local
 .DS_Store
 *.log

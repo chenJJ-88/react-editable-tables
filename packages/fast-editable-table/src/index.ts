@@ -1,7 +1,7 @@
 import './style';
 
-export { FastTable } from './FastTable';
-export { FastTableField } from './FastTableField';
+export { FormilyEditableTable } from './FormilyEditableTable';
+export { FormilyEditableTableField } from './FormilyEditableTableField';
 export { getRowPath } from './utils';
 
 // Re-export Formily API，用户无需单独安装 @formily/core 和 @formily/react
@@ -9,8 +9,8 @@ export { createForm, onFieldValueChange, onFieldInit, onFieldInputValueChange, o
 export { FormProvider } from '@formily/react';
 
 export type {
-    IFastTableProps,
-    IFastTableFieldProps,
+    IFormilyEditableTableProps,
+    IFormilyEditableTableFieldProps,
     IColumn,
     IColumnRenderOpt,
     IArrayField,

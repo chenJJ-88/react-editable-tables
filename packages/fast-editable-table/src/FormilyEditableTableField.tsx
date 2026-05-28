@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Field} from '@formily/react';
-import type {IFastTableFieldProps} from './types';
+import type {IFormilyEditableTableFieldProps} from './types';
 
 function isCheckedType(v: any): boolean {
     if (v == null || typeof v !== 'object') return false;
@@ -14,7 +14,7 @@ function isCheckedType(v: any): boolean {
  * effects 联动通过 form.setFieldState 设置 field.data 传递 props，
  * 而非 state.component（后者会导致 Formily 替换整个子组件渲染）。
  */
-export const FastTableField: React.FC<IFastTableFieldProps> = ({
+export const FormilyEditableTableField: React.FC<IFormilyEditableTableFieldProps> = ({
     name,
     required,
     rules,

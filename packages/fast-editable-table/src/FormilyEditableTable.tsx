@@ -2,8 +2,8 @@ import * as React from 'react';
 import {ArrayField, useField, useForm, Field} from '@formily/react';
 import {reaction} from '@formily/reactive';
 import {Table, Button} from 'antd';
-import type {IFastTableProps, IColumnRenderOpt, IArrayField} from './types';
-import {FastTableField} from './FastTableField';
+import type {IFormilyEditableTableProps, IColumnRenderOpt, IArrayField} from './types';
+import {FormilyEditableTableField} from './FormilyEditableTableField';
 
 // ========================= 默认操作列 =========================
 
@@ -32,9 +32,9 @@ function cloneDeep<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj));
 }
 
-// ========================= FastTableInner =========================
+// ========================= FormilyEditableTableInner =========================
 
-const FastTableInner: React.FC<Omit<IFastTableProps, 'name'>> = (props) => {
+const FormilyEditableTableInner: React.FC<Omit<IFormilyEditableTableProps, 'name'>> = (props) => {
     const {
         columns: columnsIn,
         addText = '添加',
@@ -110,7 +110,7 @@ const FastTableInner: React.FC<Omit<IFastTableProps, 'name'>> = (props) => {
                     ? col.render({index: fieldIndex, field} as IColumnRenderOpt)
                     : <DefaultOperator index={fieldIndex} field={field} disabled={disableRemove} />;
 
-                // 行级 Field 上下文：使 <FastTableField name="type"> 解析为 items.{fieldIndex}.type
+                // 行级 Field 上下文：使 <FormilyEditableTableField name="type"> 解析为 items.{fieldIndex}.type
                 return <Field name={String(fieldIndex)}>{content}</Field>;
             },
         }));
@@ -179,16 +179,16 @@ const FastTableInner: React.FC<Omit<IFastTableProps, 'name'>> = (props) => {
     );
 };
 
-// ========================= FastTable 主组件 =========================
+// ========================= FormilyEditableTable 主组件 =========================
 
-export const FastTable: React.FC<IFastTableProps> & { Field: typeof FastTableField } = props => {
+export const FormilyEditableTable: React.FC<IFormilyEditableTableProps> & { Field: typeof FormilyEditableTableField } = props => {
     const {name, ...rest} = props;
 
     return (
         <ArrayField name={name}>
-            <FastTableInner {...rest} />
+            <FormilyEditableTableInner {...rest} />
         </ArrayField>
     );
 };
 
-FastTable.Field = FastTableField;
+FormilyEditableTable.Field = FormilyEditableTableField;

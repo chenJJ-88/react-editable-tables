@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-    entry: ['src/components/EditableTable/index.tsx', 'src/components/EditableTable/EditableTable.css'],
+    entry: ['src/components/EditableTable/index.tsx'],
     format: ['esm'],
     dts: {
         compilerOptions: {

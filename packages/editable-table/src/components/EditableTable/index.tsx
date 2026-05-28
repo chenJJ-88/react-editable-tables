@@ -600,4 +600,5 @@ export type {
     EditableTableProps,
     EditRenderProps,
     Rule,
+    ValidateTrigger,
 } from '../../types/table';

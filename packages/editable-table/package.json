@@ -10,10 +10,13 @@
             "import": "./dist/index.js",
             "types": "./dist/index.d.ts"
         },
-        "./style.css": "./dist/EditableTable.css"
+        "./style.css": "./dist/index.css"
     },
     "files": [
         "dist"
+    ],
+    "sideEffects": [
+        "*.css"
     ],
     "scripts": {
         "build": "tsup",
@@ -36,12 +39,20 @@
         "url": "https://github.com/chenJJ-88/react-editable-tables.git",
         "directory": "packages/editable-table"
     },
+    "homepage": "https://chenjj-88.github.io/react-editable-tables/",
+    "bugs": {
+        "url": "https://github.com/chenJJ-88/react-editable-tables/issues"
+    },
+    "peerDependencies": {
+        "react": ">=18",
+        "react-dom": ">=18"
+    },
     "dependencies": {
-        "@tanstack/react-virtual": "^3.13.9",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1"
+        "@tanstack/react-virtual": "^3.13.9"
     },
     "devDependencies": {
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
         "@testing-library/dom": "^10.4.1",
         "@testing-library/jest-dom": "^6.9.1",
         "@testing-library/react": "^16.3.2",

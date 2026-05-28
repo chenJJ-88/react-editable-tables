@@ -14,6 +14,10 @@
     "files": [
         "dist"
     ],
+    "sideEffects": [
+        "src/style.ts",
+        "dist/*"
+    ],
     "scripts": {
         "build": "tsup",
         "prepublishOnly": "pnpm run build",
@@ -35,20 +39,25 @@
         "url": "https://github.com/chenJJ-88/react-editable-tables.git",
         "directory": "packages/fast-editable-table"
     },
-    "dependencies": {
-        "@formily/core": "^2.3.1",
-        "@formily/react": "^2.3.1",
-        "@formily/reactive": "^2.3.1"
+    "homepage": "https://chenjj-88.github.io/react-editable-tables/",
+    "bugs": {
+        "url": "https://github.com/chenJJ-88/react-editable-tables/issues"
     },
     "peerDependencies": {
         "react": ">=18",
         "react-dom": ">=18",
-        "antd": ">=5"
+        "antd": ">=5",
+        "@formily/core": ">=2",
+        "@formily/react": ">=2",
+        "@formily/reactive": ">=2"
     },
     "devDependencies": {
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "antd": "^5.22.0",
+        "@formily/core": "^2.3.1",
+        "@formily/react": "^2.3.1",
+        "@formily/reactive": "^2.3.1",
         "@types/react": "^18.3.0",
         "@types/react-dom": "^18.3.0",
         "typescript": "^5.6.0",

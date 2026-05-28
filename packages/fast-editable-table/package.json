@@ -1,6 +1,6 @@
 {
     "name": "@react-editable-tables/formily",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "高性能可编辑表格组件，基于 Formily 2.x + antd 5.x",
     "type": "module",
     "main": "./dist/index.js",
@@ -44,8 +44,8 @@
         "url": "https://github.com/chenJJ-88/react-editable-tables/issues"
     },
     "peerDependencies": {
-        "react": ">=18",
-        "react-dom": ">=18",
+        "react": ">=17",
+        "react-dom": ">=17",
         "antd": ">=5",
         "@formily/core": ">=2",
         "@formily/react": ">=2",

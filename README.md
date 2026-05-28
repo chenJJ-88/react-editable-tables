@@ -122,7 +122,9 @@ pnpm test
 
 ## Documentation
 
-运行 `pnpm dev:docs` 启动 VitePress 文档站，涵盖两个包的完整文档和交互式 Demo。
+在线文档：[https://chenjj-88.github.io/react-editable-tables/](https://chenjj-88.github.io/react-editable-tables/)
+
+本地运行：`pnpm dev:docs` 启动 VitePress 文档站，涵盖两个包的完整文档和交互式 Demo。
 
 ## Architecture
 

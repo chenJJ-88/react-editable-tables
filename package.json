@@ -12,7 +12,8 @@
         "format": "biome format --write .",
         "lint": "biome lint .",
         "check": "biome check --write .",
-        "type-check": "pnpm -r type-check"
+        "type-check": "pnpm -r type-check",
+        "release": "bash scripts/publish.sh"
     },
     "keywords": [
         "react",

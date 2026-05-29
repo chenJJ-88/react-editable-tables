@@ -77,19 +77,14 @@ const FormilyEditableTableInner: React.FC<Omit<IFormilyEditableTableProps, 'name
     const valueLenRef = React.useRef(valueLen);
     valueLenRef.current = valueLen;
 
-    // 分页状态
-    const defaultPagination = React.useMemo(() => {
-        if (paginationIn === false) {
-            return { current: 1, pageSize: 10 };
-        }
-        return {
-            current: paginationIn?.current ?? 1,
-            pageSize: paginationIn?.pageSize ?? 10,
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // 分页状态：只取初始值，后续由 tableState 管理
+    const defaultPaginationRef = React.useRef(
+        paginationIn === false
+            ? { current: 1, pageSize: 10 }
+            : { current: paginationIn?.current ?? 1, pageSize: paginationIn?.pageSize ?? 10 },
+    );
 
-    const [tableState, setTableState] = React.useState(defaultPagination);
+    const [tableState, setTableState] = React.useState(defaultPaginationRef.current);
     const { current, pageSize } = tableState;
 
     React.useEffect(() => {
@@ -162,12 +157,13 @@ const FormilyEditableTableInner: React.FC<Omit<IFormilyEditableTableProps, 'name
         );
     }, [hideAdd, disableAdd, add, addButtonPosition, addButtonProps, addText]);
 
-    // dataSource
+    // dataSource：field.value 是 Formily 响应式对象，引用不变，用 version 触发重算
+    const fieldRef = React.useRef(field);
+    fieldRef.current = field;
+    // biome-ignore lint/correctness/useExhaustiveDependencies: version is the intentional trigger; fieldRef.current is a ref read
     const dataSource = React.useMemo(() => {
-        const rows = field.value || [];
+        const rows = fieldRef.current.value || [];
         return rows.map((item: any, index: number) => ({ ...item, key: index }));
-        // version 变化时重新计算
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [version]);
 
     return (

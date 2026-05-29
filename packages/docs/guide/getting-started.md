@@ -21,6 +21,12 @@ npm install @react-editable-tables/native
 pnpm add @react-editable-tables/native
 ```
 
+> **注意**：Native 方案需要手动导入样式文件，否则表格没有样式：
+>
+> ```tsx
+> import '@react-editable-tables/native/style.css';
+> ```
+
 ### Formily 方案
 
 ```bash
@@ -40,6 +46,7 @@ npm install react react-dom antd
 ```tsx
 import { useState } from 'react';
 import EditableTable from '@react-editable-tables/native';
+import '@react-editable-tables/native/style.css';
 
 interface User {
   id: string;

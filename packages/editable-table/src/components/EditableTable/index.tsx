@@ -1,6 +1,6 @@
 import { useVirtualizer } from '@tanstack/react-virtual';
 import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import type { EditableTableInstance, EditableTableProps } from '../../types/table';
+import type { EditableColumn, EditableTableInstance, EditableTableProps, ValidateAllResult } from '../../types/table';
 import { validateRow, validateValue } from '../../utils/validate';
 import TableCell from './TableCell';
 import './EditableTable.css';
@@ -16,6 +16,8 @@ function EditableTable<T extends object = Record<string, unknown>>(
         validateTrigger = 'submit',
         scrollY,
         emptyText = '暂无数据',
+        rowClassName,
+        opsWidth: opsWidthProp,
         className,
         style,
         bordered = false,
@@ -26,13 +28,46 @@ function EditableTable<T extends object = Record<string, unknown>>(
     const [data, setData] = useState<T[]>([]);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [editingRows, setEditingRows] = useState<Set<string>>(new Set());
+    const [scrollShadow, setScrollShadow] = useState<{ left: boolean; right: boolean }>({ left: false, right: false });
     const originalDataRef = useRef<Map<string, T>>(new Map());
     const dataRef = useRef<T[]>([]);
     dataRef.current = data;
 
+    const getColKey = useCallback((col: EditableColumn<T>, idx: number) => {
+        if (col.key) return col.key;
+        if (col.dataIndex != null) return String(col.dataIndex);
+        return `__col_${idx}`;
+    }, []);
+
     useEffect(() => {
         setData(dataSource);
-    }, [dataSource]);
+        const currentIds = new Set(dataSource.map((r) => String(r[rowKey])));
+        for (const id of originalDataRef.current.keys()) {
+            if (!currentIds.has(id)) {
+                originalDataRef.current.delete(id);
+            }
+        }
+        setEditingRows((prev) => {
+            const next = new Set(prev);
+            for (const id of prev) {
+                if (!currentIds.has(id)) next.delete(id);
+            }
+            return next.size === prev.size ? prev : next;
+        });
+    }, [dataSource, rowKey]);
+
+    // ===== 校验 =====
+    const validateAll = useCallback((): ValidateAllResult => {
+        const allErrors: Record<string, string> = {};
+        data.forEach((row, rowIndex) => {
+            const rowErrors = validateRow(row, columns);
+            for (const [dataIndex, msg] of Object.entries(rowErrors)) {
+                allErrors[`${rowIndex}-${dataIndex}`] = msg;
+            }
+        });
+        setErrors(allErrors);
+        return { isValid: Object.keys(allErrors).length === 0, errors: allErrors };
+    }, [data, columns]);
 
     // ===== 通过 ref 暴露操作方法 =====
     useImperativeHandle(
@@ -108,8 +143,38 @@ function EditableTable<T extends object = Record<string, unknown>>(
                 });
             },
             getData: () => dataRef.current,
+            validateAll,
+            updateRow: (rowIndex, updates) => {
+                setData((prev) => {
+                    if (rowIndex < 0 || rowIndex >= prev.length) return prev;
+                    const next = [...prev];
+                    next[rowIndex] = { ...next[rowIndex], ...updates };
+                    onChange?.(next);
+                    return next;
+                });
+            },
+            insertRow: (rowIndex, defaults) => {
+                const newRow = { ...defaults } as T;
+                setData((prev) => {
+                    const next = [...prev];
+                    next.splice(rowIndex, 0, newRow);
+                    setErrors((errs) => {
+                        const nextErrs: Record<string, string> = {};
+                        for (const [k, v] of Object.entries(errs)) {
+                            const dashIdx = k.indexOf('-');
+                            const ri = Number(k.slice(0, dashIdx));
+                            const rest = k.slice(dashIdx);
+                            if (ri < rowIndex) nextErrs[k] = v;
+                            else nextErrs[`${ri + 1}${rest}`] = v;
+                        }
+                        return nextErrs;
+                    });
+                    onChange?.(next);
+                    return next;
+                });
+            },
         }),
-        [onChange],
+        [onChange, validateAll],
     );
 
     // ===== 更新单元格（含异步联动） =====
@@ -124,7 +189,7 @@ function EditableTable<T extends object = Record<string, unknown>>(
 
             const col = columns.find((c) => String(c.dataIndex) === dataIndex);
             if (col?.onFieldChange) {
-                const currentRow = data[rowIndex];
+                const currentRow = dataRef.current[rowIndex];
                 const updatedRow = { ...currentRow, [dataIndex]: value };
                 const linkedResult = col.onFieldChange(value, updatedRow);
                 if (linkedResult instanceof Promise) {
@@ -150,7 +215,7 @@ function EditableTable<T extends object = Record<string, unknown>>(
 
             if (validateTrigger === 'change') {
                 if (col?.rules?.length) {
-                    const row = data[rowIndex];
+                    const row = dataRef.current[rowIndex];
                     const updatedRow = { ...row, [dataIndex]: value };
                     const err = validateValue(value, updatedRow, col.rules);
                     const key = `${rowIndex}-${dataIndex}`;
@@ -163,24 +228,12 @@ function EditableTable<T extends object = Record<string, unknown>>(
                 }
             }
         },
-        [columns, data, onChange, validateTrigger],
+        [columns, onChange, validateTrigger],
     );
 
-    // ===== 校验 =====
-    const validateAll = useCallback((): boolean => {
-        const allErrors: Record<string, string> = {};
-        data.forEach((row, rowIndex) => {
-            const rowErrors = validateRow(row, columns);
-            for (const [dataIndex, msg] of Object.entries(rowErrors)) {
-                allErrors[`${rowIndex}-${dataIndex}`] = msg;
-            }
-        });
-        setErrors(allErrors);
-        return Object.keys(allErrors).length === 0;
-    }, [data, columns]);
-
     const handleSubmit = useCallback(() => {
-        if (validateAll()) onSubmit?.(data);
+        const result = validateAll();
+        if (result.isValid) onSubmit?.(data);
     }, [validateAll, onSubmit, data]);
 
     // ===== 行编辑 =====
@@ -267,12 +320,26 @@ function EditableTable<T extends object = Record<string, unknown>>(
     });
 
     // ===== 列宽 + 横向滚动 =====
-    const columnWidths = useMemo(() => {
-        return columns.map((col) => {
-            if (col.width) return typeof col.width === 'number' ? `${col.width}px` : col.width;
-            return '150px';
-        });
-    }, [columns]);
+    // 行编辑模式需要操作列
+    const opsWidth =
+        editableMode === 'row'
+            ? opsWidthProp != null
+                ? typeof opsWidthProp === 'number'
+                    ? `${opsWidthProp}px`
+                    : opsWidthProp
+                : '120px'
+            : undefined;
+
+    const gridTemplate = useMemo(() => {
+        const cols = columns.map((col) => {
+            if (col.width) {
+                const w = typeof col.width === 'number' ? col.width : parseInt(col.width as string, 10) || 150;
+                return `minmax(${w}px, ${w}fr)`;
+            }
+            return 'minmax(150px, 1fr)';
+        }).join(' ');
+        return opsWidth ? `${cols} ${opsWidth}` : cols;
+    }, [columns, opsWidth]);
 
     // ===== 列固定偏移量 =====
     const fixedOffsets = useMemo(() => {
@@ -300,31 +367,20 @@ function EditableTable<T extends object = Record<string, unknown>>(
         return offsets;
     }, [columns]);
 
-    // 行编辑模式需要操作列
-    const opsWidth = editableMode === 'row' ? '120px' : undefined;
-    const gridTemplate = useMemo(() => {
-        const cols = columnWidths.join(' ');
-        return opsWidth ? `${cols} ${opsWidth}` : cols;
-    }, [columnWidths, opsWidth]);
-
-    const tableMinWidth = useMemo(() => {
-        const colTotal = columns.reduce((sum, col) => {
-            if (!col.width) return sum + 150;
-            return sum + (typeof col.width === 'number' ? col.width : 0);
-        }, 0);
-        const ops = opsWidth ? 120 : 0;
-        return colTotal + ops;
-    }, [columns, opsWidth]);
-
     const headerScrollRef = useRef<HTMLDivElement>(null);
     const bodyScrollRef = useRef<HTMLDivElement | null>(null);
-    const syncScroll = useCallback((source: 'header' | 'body') => {
-        if (source === 'header' && headerScrollRef.current && bodyScrollRef.current) {
-            bodyScrollRef.current.scrollLeft = headerScrollRef.current.scrollLeft;
+    const syncHeaderScroll = useCallback((scrollLeft: number) => {
+        if (headerScrollRef.current) {
+            headerScrollRef.current.scrollLeft = scrollLeft;
         }
-        if (source === 'body' && headerScrollRef.current && bodyScrollRef.current) {
-            headerScrollRef.current.scrollLeft = bodyScrollRef.current.scrollLeft;
-        }
+    }, []);
+
+    const updateScrollShadow = useCallback((el: HTMLDivElement) => {
+        const { scrollLeft, scrollWidth, clientWidth } = el;
+        setScrollShadow({
+            left: scrollLeft > 0,
+            right: scrollLeft + clientWidth < scrollWidth - 1,
+        });
     }, []);
 
     return (
@@ -337,24 +393,26 @@ function EditableTable<T extends object = Record<string, unknown>>(
                 </div>
             )}
 
-            <div className={`et-table${bordered ? ' et-bordered' : ''}`}>
-                <div ref={headerScrollRef} className="et-scroll-x" onScroll={() => syncScroll('header')}>
-                    <div className="et-inner" style={{ minWidth: `${tableMinWidth}px` }}>
+            <div
+                className={`et-table${bordered ? ' et-bordered' : ''}${scrollShadow.left ? ' et-scroll-left' : ''}${scrollShadow.right ? ' et-scroll-right' : ''}`}
+            >
+                <div ref={headerScrollRef} className={`et-scroll-x${scrollY != null ? ' et-scroll-x-vscroll' : ''}`}>
+                    <div className="et-inner">
                         <div className="et-header" style={{ display: 'grid', gridTemplateColumns: gridTemplate }}>
                             {columns.map((col, colIndex) => {
                                 const offset = fixedOffsets[colIndex];
                                 const isFixed = col.fixed === 'left' || col.fixed === 'right';
                                 return (
                                     <div
-                                        key={String(col.dataIndex)}
+                                        key={getColKey(col, colIndex)}
                                         className={`et-header-cell${isFixed ? ` et-fixed et-fixed-${col.fixed}` : ''}`}
                                         style={{
                                             ...(isFixed
                                                 ? {
-                                                      position: 'sticky',
-                                                      ...(offset.left !== undefined ? { left: offset.left } : {}),
-                                                      ...(offset.right !== undefined ? { right: offset.right } : {}),
-                                                  }
+                                                    position: 'sticky',
+                                                    ...(offset.left !== undefined ? { left: offset.left } : {}),
+                                                    ...(offset.right !== undefined ? { right: offset.right } : {}),
+                                                }
                                                 : {}),
                                         }}
                                     >
@@ -373,18 +431,21 @@ function EditableTable<T extends object = Record<string, unknown>>(
                         bodyScrollRef.current = el;
                     }}
                     className="et-body"
-                    style={scrollY ? { height: scrollY, overflowY: 'auto', overflowX: 'auto' } : undefined}
-                    onScroll={() => syncScroll('body')}
+                    style={scrollY ? { height: scrollY, overflowY: 'scroll', overflowX: 'auto' } : undefined}
+                    onScroll={(e) => {
+                        syncHeaderScroll(e.currentTarget.scrollLeft);
+                        updateScrollShadow(e.currentTarget);
+                    }}
                 >
                     {data.length === 0 ? (
                         <div className="et-empty">{emptyText}</div>
                     ) : enableVirtual ? (
-                        <div style={{ minWidth: `${tableMinWidth}px` }}>
+                        <div style={{ minWidth: '100%' }}>
                             <div
                                 style={{
                                     height: `${rowVirtualizer.getTotalSize()}px`,
-                                    width: '100%',
                                     position: 'relative',
+                                    minWidth: '100%',
                                 }}
                             >
                                 {rowVirtualizer.getVirtualItems().map((virtualRow) => {
@@ -395,44 +456,49 @@ function EditableTable<T extends object = Record<string, unknown>>(
                                     return (
                                         <div
                                             key={id}
-                                            className="et-row"
+                                            className={`et-row${rowClassName ? ` ${rowClassName(row, virtualRow.index)}` : ''}`}
                                             style={{
                                                 display: 'grid',
                                                 gridTemplateColumns: gridTemplate,
                                                 position: 'absolute',
                                                 top: 0,
                                                 left: 0,
-                                                width: '100%',
+                                                width: 'fit-content',
+                                                minWidth: '100%',
                                                 transform: `translateY(${virtualRow.start}px)`,
                                                 height: `${virtualRow.size}px`,
                                             }}
                                         >
                                             {columns.map((col, colIndex) => {
-                                                const dataIndex = String(col.dataIndex);
-                                                const value = row[col.dataIndex as keyof T];
+                                                const colDataIndex =
+                                                    col.dataIndex != null ? String(col.dataIndex) : undefined;
+                                                const value =
+                                                    col.dataIndex != null ? row[col.dataIndex as keyof T] : undefined;
                                                 const editable =
                                                     editableMode === 'all'
                                                         ? col.editable !== false
                                                         : isEditing && col.editable !== false;
-                                                const errorKey = `${virtualRow.index}-${dataIndex}`;
+                                                const errorKey = colDataIndex
+                                                    ? `${virtualRow.index}-${colDataIndex}`
+                                                    : undefined;
                                                 const offset = fixedOffsets[colIndex];
                                                 const isFixed = col.fixed === 'left' || col.fixed === 'right';
 
                                                 return (
                                                     <div
-                                                        key={dataIndex}
+                                                        key={getColKey(col, colIndex)}
                                                         className={`et-cell${isFixed ? ` et-fixed et-fixed-${col.fixed}` : ''}`}
                                                         style={{
                                                             ...(isFixed
                                                                 ? {
-                                                                      position: 'sticky',
-                                                                      ...(offset.left !== undefined
-                                                                          ? { left: offset.left }
-                                                                          : {}),
-                                                                      ...(offset.right !== undefined
-                                                                          ? { right: offset.right }
-                                                                          : {}),
-                                                                  }
+                                                                    position: 'sticky',
+                                                                    ...(offset.left !== undefined
+                                                                        ? { left: offset.left }
+                                                                        : {}),
+                                                                    ...(offset.right !== undefined
+                                                                        ? { right: offset.right }
+                                                                        : {}),
+                                                                }
                                                                 : {}),
                                                         }}
                                                     >
@@ -440,10 +506,15 @@ function EditableTable<T extends object = Record<string, unknown>>(
                                                             value={value}
                                                             editable={editable}
                                                             column={col}
-                                                            error={errors[errorKey]}
+                                                            error={errorKey ? errors[errorKey] : undefined}
                                                             rowIndex={virtualRow.index}
                                                             row={row}
-                                                            onChange={(v) => updateCell(virtualRow.index, dataIndex, v)}
+                                                            onChange={
+                                                                colDataIndex
+                                                                    ? (v) =>
+                                                                        updateCell(virtualRow.index, colDataIndex, v)
+                                                                    : () => { }
+                                                            }
                                                         />
                                                     </div>
                                                 );
@@ -487,7 +558,7 @@ function EditableTable<T extends object = Record<string, unknown>>(
                             </div>
                         </div>
                     ) : (
-                        <div style={{ minWidth: `${tableMinWidth}px` }}>
+                        <div style={{ minWidth: '100%' }}>
                             {data.map((row, rowIndex) => {
                                 const id = String(row[rowKey]);
                                 const isEditing = editingRows.has(id);
@@ -495,38 +566,40 @@ function EditableTable<T extends object = Record<string, unknown>>(
                                 return (
                                     <div
                                         key={id}
-                                        className="et-row"
+                                        className={`et-row${rowClassName ? ` ${rowClassName(row, rowIndex)}` : ''}`}
                                         style={{
                                             display: 'grid',
                                             gridTemplateColumns: gridTemplate,
                                         }}
                                     >
                                         {columns.map((col, colIndex) => {
-                                            const dataIndex = String(col.dataIndex);
-                                            const value = row[col.dataIndex as keyof T];
+                                            const colDataIndex =
+                                                col.dataIndex != null ? String(col.dataIndex) : undefined;
+                                            const value =
+                                                col.dataIndex != null ? row[col.dataIndex as keyof T] : undefined;
                                             const editable =
                                                 editableMode === 'all'
                                                     ? col.editable !== false
                                                     : isEditing && col.editable !== false;
-                                            const errorKey = `${rowIndex}-${dataIndex}`;
+                                            const errorKey = colDataIndex ? `${rowIndex}-${colDataIndex}` : undefined;
                                             const offset = fixedOffsets[colIndex];
                                             const isFixed = col.fixed === 'left' || col.fixed === 'right';
 
                                             return (
                                                 <div
-                                                    key={dataIndex}
+                                                    key={getColKey(col, colIndex)}
                                                     className={`et-cell${isFixed ? ` et-fixed et-fixed-${col.fixed}` : ''}`}
                                                     style={{
                                                         ...(isFixed
                                                             ? {
-                                                                  position: 'sticky',
-                                                                  ...(offset.left !== undefined
-                                                                      ? { left: offset.left }
-                                                                      : {}),
-                                                                  ...(offset.right !== undefined
-                                                                      ? { right: offset.right }
-                                                                      : {}),
-                                                              }
+                                                                position: 'sticky',
+                                                                ...(offset.left !== undefined
+                                                                    ? { left: offset.left }
+                                                                    : {}),
+                                                                ...(offset.right !== undefined
+                                                                    ? { right: offset.right }
+                                                                    : {}),
+                                                            }
                                                             : {}),
                                                     }}
                                                 >
@@ -534,10 +607,14 @@ function EditableTable<T extends object = Record<string, unknown>>(
                                                         value={value}
                                                         editable={editable}
                                                         column={col}
-                                                        error={errors[errorKey]}
+                                                        error={errorKey ? errors[errorKey] : undefined}
                                                         rowIndex={rowIndex}
                                                         row={row}
-                                                        onChange={(v) => updateCell(rowIndex, dataIndex, v)}
+                                                        onChange={
+                                                            colDataIndex
+                                                                ? (v) => updateCell(rowIndex, colDataIndex, v)
+                                                                : () => { }
+                                                        }
                                                     />
                                                 </div>
                                             );
@@ -600,5 +677,6 @@ export type {
     EditableTableProps,
     EditRenderProps,
     Rule,
+    ValidateAllResult,
     ValidateTrigger,
 } from '../../types/table';

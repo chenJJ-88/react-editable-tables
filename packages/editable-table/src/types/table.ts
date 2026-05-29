@@ -38,9 +38,11 @@ export interface EditRenderProps<T> {
 /** 列定义 */
 export interface EditableColumn<T> {
     /** 列标题 */
-    title: string;
-    /** 数据字段名 */
-    dataIndex: keyof T & string;
+    title: ReactNode;
+    /** 唯一标识，用于 React key，优先级高于 dataIndex */
+    key?: string;
+    /** 数据字段名。数据列必填；纯操作列可省略 */
+    dataIndex?: keyof T & string;
     /** 列宽 */
     width?: number | string;
     /** 列固定方向 */
@@ -65,6 +67,14 @@ export interface EditableColumn<T> {
 /** 校验触发时机 */
 export type ValidateTrigger = 'submit' | 'change';
 
+/** 全量校验结果 */
+export interface ValidateAllResult {
+    /** 是否全部通过 */
+    isValid: boolean;
+    /** 错误信息映射，key 格式为 `${rowIndex}-${dataIndex}` */
+    errors: Record<string, string>;
+}
+
 /** 通过 ref 暴露的表格操作方法 */
 export interface EditableTableInstance<T> {
     /** 在末尾新增一行 */
@@ -77,6 +87,12 @@ export interface EditableTableInstance<T> {
     moveDown: (rowIndex: number) => void;
     /** 获取当前数据 */
     getData: () => T[];
+    /** 全量校验，返回校验结果 */
+    validateAll: () => ValidateAllResult;
+    /** 部分更新指定行数据 */
+    updateRow: (rowIndex: number, updates: Partial<T>) => void;
+    /** 在指定位置插入一行 */
+    insertRow: (rowIndex: number, defaults?: Partial<T>) => void;
 }
 
 /** EditableTable 组件 props */
@@ -97,8 +113,12 @@ export interface EditableTableProps<T> {
     validateTrigger?: ValidateTrigger;
     /** 虚拟滚动容器高度（px），传入时启用虚拟滚动 */
     scrollY?: number;
-    /** 空数据提示文案，默认 '暂无数据' */
-    emptyText?: string;
+    /** 空数据提示，默认 '暂无数据' */
+    emptyText?: ReactNode;
+    /** 自定义行类名 */
+    rowClassName?: (record: T, index: number) => string;
+    /** 行编辑模式下操作列宽度，默认 120px */
+    opsWidth?: number | string;
     /** 容器类名 */
     className?: string;
     /** 容器样式 */

@@ -37,26 +37,29 @@
     border-radius: var(--et-radius);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: hidden; /* 截断内部溢出，避免外层滚动 */
+    width: 100%; /* 确保表格宽度铺满父容器 */
 }
 
-/* ===== 横向滚动容器：表头和表体共享横向滚动 ===== */
+/* ===== 表头容器：不产生滚动条，由 JS 通过 translate 同步偏移 ===== */
 .et-scroll-x {
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: hidden;
+    width: 100%;
 }
 
-.et-scroll-x::-webkit-scrollbar {
-    height: 6px;
+/* 有竖向滚动条时，表头保留等宽的不可见滚动条，使内容区宽度与表体一致 */
+.et-scroll-x-vscroll {
+    overflow-y: scroll;
+    scrollbar-color: transparent transparent;
+}
+.et-scroll-x-vscroll::-webkit-scrollbar {
+    background: transparent;
 }
 
-.et-scroll-x::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 3px;
-}
-
-/* ===== 表格内容区：设置最小宽度使列不被压缩 ===== */
+/* ===== 表格内容区：列少时撑满容器，列多时允许溢出 ===== */
 .et-inner {
+    width: fit-content;
     min-width: 100%;
 }
 
@@ -86,7 +89,7 @@
 /* ===== 表体滚动区 ===== */
 .et-body {
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 .et-body::-webkit-scrollbar {
@@ -341,4 +344,15 @@
 
 .et-bordered .et-row:last-child .et-cell {
     border-bottom: none;
+}
+
+/* ===== 固定列滚动阴影 ===== */
+.et-scroll-left .et-fixed-left,
+.et-scroll-left .et-header-cell.et-fixed-left {
+    box-shadow: 6px 0 6px -4px rgba(0, 0, 0, 0.08);
+}
+
+.et-scroll-right .et-fixed-right,
+.et-scroll-right .et-header-cell.et-fixed-right {
+    box-shadow: -6px 0 6px -4px rgba(0, 0, 0, 0.08);
 }

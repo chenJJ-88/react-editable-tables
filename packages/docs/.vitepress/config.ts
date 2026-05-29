@@ -1,5 +1,8 @@
 import react from '@vitejs/plugin-react';
+import path from 'path';
 import { defineConfig } from 'vitepress';
+
+const workspaceRoot = path.resolve(__dirname, '../../');
 
 export default defineConfig({
     title: 'React Editable Tables',
@@ -11,6 +14,13 @@ export default defineConfig({
 
     vite: {
         plugins: [react()],
+        resolve: {
+            alias: [
+                { find: '@react-editable-tables/native/style.css', replacement: path.join(workspaceRoot, 'editable-table/src/components/EditableTable/EditableTable.css') },
+                { find: '@react-editable-tables/native', replacement: path.join(workspaceRoot, 'editable-table/src/components/EditableTable/index.tsx') },
+                { find: '@react-editable-tables/formily', replacement: path.join(workspaceRoot, 'fast-editable-table/src/index.ts') },
+            ],
+        },
     },
 
     head: [

@@ -10,6 +10,7 @@ export function validateRow<T extends object>(row: T, columns: EditableColumn<T>
     for (const column of columns) {
         const rules = column.rules;
         if (!rules?.length) continue;
+        if (column.dataIndex == null) continue;
 
         const value = row[column.dataIndex];
         const error = validateValue(value, row, rules);

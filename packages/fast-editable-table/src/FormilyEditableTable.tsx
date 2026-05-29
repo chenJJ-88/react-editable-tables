@@ -135,10 +135,11 @@ const FormilyEditableTableInner: React.FC<Omit<IFormilyEditableTableProps, 'name
     // 添加行
     const add = React.useCallback(async () => {
         if (validateBeforeAdd && form) {
+            const arrayPath = field.address.toString();
             try {
-                const arrayPath = field.address.toString();
                 await form.validate(`${arrayPath}.*`);
             } catch {
+                // 校验未通过，阻止添加；错误已由 Formily 渲染到各字段
                 return;
             }
         }

@@ -193,15 +193,18 @@ function EditableTable<T extends object = Record<string, unknown>>(
                 const updatedRow = { ...currentRow, [dataIndex]: value };
                 const linkedResult = col.onFieldChange(value, updatedRow);
                 if (linkedResult instanceof Promise) {
+                    // 捕获当前行的 rowKey，避免异步期间行增删导致 rowIndex 错位
+                    const rowId = String(currentRow[rowKey]);
                     linkedResult.then((updates) => {
-                        if (updates) {
-                            setData((prev) => {
-                                const next = [...prev];
-                                next[rowIndex] = { ...next[rowIndex], ...updates };
-                                onChange?.(next);
-                                return next;
-                            });
-                        }
+                        if (!updates) return;
+                        setData((prev) => {
+                            const idx = prev.findIndex((r) => String(r[rowKey]) === rowId);
+                            if (idx === -1) return prev;
+                            const next = [...prev];
+                            next[idx] = { ...next[idx], ...updates };
+                            onChange?.(next);
+                            return next;
+                        });
                     });
                 } else if (linkedResult) {
                     setData((prev) => {
@@ -228,7 +231,7 @@ function EditableTable<T extends object = Record<string, unknown>>(
                 }
             }
         },
-        [columns, onChange, validateTrigger],
+        [columns, onChange, validateTrigger, rowKey],
     );
 
     const handleSubmit = useCallback(() => {
@@ -277,19 +280,16 @@ function EditableTable<T extends object = Record<string, unknown>>(
 
     const handleCancelEdit = useCallback(
         (id: string) => {
-            const original = originalDataRef.current.get(id);
-            if (original) {
-                const rowIndex = data.findIndex((r) => String(r[rowKey]) === id);
-                if (rowIndex !== -1) {
-                    setData((prev) => {
-                        const n = [...prev];
-                        n[rowIndex] = original;
-                        return n;
-                    });
-                }
-                originalDataRef.current.delete(id);
-            }
             const rowIndex = data.findIndex((r) => String(r[rowKey]) === id);
+            const original = originalDataRef.current.get(id);
+            if (original && rowIndex !== -1) {
+                setData((prev) => {
+                    const n = [...prev];
+                    n[rowIndex] = original;
+                    return n;
+                });
+            }
+            originalDataRef.current.delete(id);
             if (rowIndex !== -1) {
                 setErrors((prev) => {
                     const n: Record<string, string> = {};
@@ -326,7 +326,9 @@ function EditableTable<T extends object = Record<string, unknown>>(
             ? opsWidthProp != null
                 ? typeof opsWidthProp === 'number'
                     ? `${opsWidthProp}px`
-                    : opsWidthProp
+                    : /^\d+$/.test(opsWidthProp)
+                        ? `${opsWidthProp}px`
+                        : opsWidthProp
                 : '120px'
             : undefined;
 
@@ -343,7 +345,7 @@ function EditableTable<T extends object = Record<string, unknown>>(
 
     // ===== 列固定偏移量 =====
     const fixedOffsets = useMemo(() => {
-        const offsets: { left?: number; right?: number }[] = new Array(columns.length).fill({});
+        const offsets: { left?: number; right?: number }[] = Array.from({ length: columns.length }, () => ({}));
         const widths = columns.map((col) => (typeof col.width === 'number' ? col.width : 150));
 
         // 从左往右累计 left fixed

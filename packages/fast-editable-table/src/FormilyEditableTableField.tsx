@@ -2,9 +2,12 @@ import { Field } from '@formily/react';
 import * as React from 'react';
 import type { IFormilyEditableTableFieldProps } from './types';
 
+const CHECKED_DISPLAY_NAMES = new Set(['Switch', 'InternalSwitch', 'Checkbox', 'InternalCheckbox']);
+
 function isCheckedType(v: any): boolean {
-    if (v == null || typeof v !== 'object') return false;
-    return !!v.__ANT_SWITCH || !!v.__ANT_CHECKBOX;
+    if (v == null || typeof v !== 'function') return false;
+    const name: string = v.displayName || v.name || '';
+    return CHECKED_DISPLAY_NAMES.has(name);
 }
 
 /**
@@ -42,7 +45,12 @@ export const FormilyEditableTableField: React.FC<IFormilyEditableTableFieldProps
                 }
 
                 if (children == null || !React.isValidElement(children)) {
-                    return <>{children}</>;
+                    return (
+                        <div className="fet-field" data-has-error={!!error || undefined}>
+                            {children}
+                            {error && <div className="fet-error">{error}</div>}
+                        </div>
+                    );
                 }
 
                 const injectProps: Record<string, any> = {

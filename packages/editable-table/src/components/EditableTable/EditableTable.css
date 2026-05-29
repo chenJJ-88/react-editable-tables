@@ -283,6 +283,11 @@
     opacity: 0.75;
 }
 
+.et-btn:focus-visible {
+    outline: 2px solid var(--et-btn-primary-bg);
+    outline-offset: 2px;
+}
+
 .et-btn-link + .et-btn-link {
     margin-left: 4px;
 }
@@ -355,4 +360,41 @@
 .et-scroll-right .et-fixed-right,
 .et-scroll-right .et-header-cell.et-fixed-right {
     box-shadow: -6px 0 6px -4px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== 暗色模式 ===== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --et-border-color: #3a3a3a;
+        --et-header-bg: #1f1f1f;
+        --et-header-color: #e0e0e0;
+        --et-row-hover-bg: #2a2a2a;
+        --et-row-stripe-bg: #1a1a1a;
+        --et-error-color: #ff6b6b;
+        --et-btn-primary-bg: #4096ff;
+        --et-btn-primary-color: #fff;
+        --et-btn-default-bg: #1f1f1f;
+        --et-btn-default-color: #e0e0e0;
+        --et-btn-default-border: #3a3a3a;
+    }
+
+    .et-wrapper {
+        color: #e0e0e0;
+    }
+
+    .et-cell.et-fixed {
+        background: #141414;
+    }
+
+    .et-row:nth-child(even) .et-cell.et-fixed {
+        background: var(--et-row-stripe-bg);
+    }
+
+    .et-row:hover .et-cell.et-fixed {
+        background: var(--et-row-hover-bg);
+    }
+
+    .et-empty {
+        color: #666;
+    }
 }

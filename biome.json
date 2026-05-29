@@ -24,8 +24,7 @@
         "rules": {
             "recommended": true,
             "correctness": {
-                "useHookAtTopLevel": "off",
-                "useExhaustiveDependencies": "off"
+                "useHookAtTopLevel": "off"
             },
             "suspicious": {
                 "noExplicitAny": "off"

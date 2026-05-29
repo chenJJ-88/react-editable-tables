@@ -31,7 +31,15 @@ function cloneDeep<T>(obj: T): T {
     if (typeof structuredClone === 'function') {
         return structuredClone(obj);
     }
-    return JSON.parse(JSON.stringify(obj));
+    // structuredClone 不可用时的递归兜底，保留 Date/Array/plain object
+    if (obj === null || typeof obj !== 'object') return obj;
+    if (obj instanceof Date) return new Date(obj.getTime()) as unknown as T;
+    if (Array.isArray(obj)) return obj.map(cloneDeep) as unknown as T;
+    const result = {} as Record<string, unknown>;
+    for (const key of Object.keys(obj)) {
+        result[key] = cloneDeep((obj as Record<string, unknown>)[key]);
+    }
+    return result as T;
 }
 
 // ========================= FormilyEditableTableInner =========================

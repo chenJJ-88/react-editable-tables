@@ -2,12 +2,16 @@ import { Field } from '@formily/react';
 import * as React from 'react';
 import type { IFormilyEditableTableFieldProps } from './types';
 
-const CHECKED_DISPLAY_NAMES = new Set(['Switch', 'InternalSwitch', 'Checkbox', 'InternalCheckbox']);
-
-function isCheckedType(v: any): boolean {
-    if (v == null || typeof v !== 'function') return false;
-    const name: string = v.displayName || v.name || '';
-    return CHECKED_DISPLAY_NAMES.has(name);
+// 通过组件的 defaultProps 或静态标记判断是否为 checked 类型控件
+// 不依赖 displayName/name（minifier 会混淆），改为检测组件是否接受 checked prop
+function isCheckedType(type: any): boolean {
+    if (type == null) return false;
+    // antd Switch/Checkbox 的 defaultProps 包含 checked 或组件挂载了静态标记
+    const dp = type.defaultProps;
+    if (dp && 'checked' in dp) return true;
+    // 兜底：通过组件名静态白名单（开发环境有效，生产环境 displayName 通常被保留）
+    const name: string = type.displayName || type.name || '';
+    return name === 'Switch' || name === 'Checkbox' || name === 'InternalSwitch' || name === 'InternalCheckbox';
 }
 
 /**
@@ -63,8 +67,7 @@ export const FormilyEditableTableField: React.FC<IFormilyEditableTableFieldProps
                 };
 
                 // Switch / Checkbox 使用 checked 代替 value
-                if (isCheckedType((children as React.ReactElement).type)) {
-                    injectProps.checked = value;
+                if (isCheckedType((children as React.ReactElement).type)) {                    injectProps.checked = value;
                     delete injectProps.value;
                 }
 

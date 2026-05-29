@@ -180,6 +180,10 @@ function EditableTable<T extends object = Record<string, unknown>>(
     // ===== 更新单元格（含异步联动） =====
     const updateCell = useCallback(
         (rowIndex: number, dataIndex: string, value: unknown) => {
+            const currentRow = dataRef.current[rowIndex];
+            if (currentRow && currentRow[dataIndex as keyof T] === value && !columns.find((c) => String(c.dataIndex) === dataIndex)?.onFieldChange) {
+                return;
+            }
             setData((prev) => {
                 const next = [...prev];
                 next[rowIndex] = { ...next[rowIndex], [dataIndex]: value };
@@ -242,11 +246,13 @@ function EditableTable<T extends object = Record<string, unknown>>(
     // ===== 行编辑 =====
     const handleEdit = useCallback(
         (id: string) => {
+            // 已在编辑中则不覆盖快照，保留最初的原始数据
+            if (editingRows.has(id)) return;
             const row = data.find((r) => String(r[rowKey]) === id);
             if (row) originalDataRef.current.set(id, { ...row });
             setEditingRows((prev) => new Set(prev).add(id));
         },
-        [data, rowKey],
+        [data, rowKey, editingRows],
     );
 
     const handleSaveRow = useCallback(
@@ -286,6 +292,7 @@ function EditableTable<T extends object = Record<string, unknown>>(
                 setData((prev) => {
                     const n = [...prev];
                     n[rowIndex] = original;
+                    onChange?.(n);
                     return n;
                 });
             }
@@ -305,7 +312,7 @@ function EditableTable<T extends object = Record<string, unknown>>(
                 return n;
             });
         },
-        [data, rowKey],
+        [data, rowKey, onChange],
     );
 
     // ===== 虚拟滚动 =====
@@ -346,7 +353,11 @@ function EditableTable<T extends object = Record<string, unknown>>(
     // ===== 列固定偏移量 =====
     const fixedOffsets = useMemo(() => {
         const offsets: { left?: number; right?: number }[] = Array.from({ length: columns.length }, () => ({}));
-        const widths = columns.map((col) => (typeof col.width === 'number' ? col.width : 150));
+        const widths = columns.map((col) => {
+            if (typeof col.width === 'number') return col.width;
+            if (typeof col.width === 'string') return parseInt(col.width, 10) || 150;
+            return 150;
+        });
 
         // 从左往右累计 left fixed
         let leftAcc = 0;

@@ -24,7 +24,11 @@ function App() {
         columns={[
           {
             title: '名称',
-            render: () => <FormilyEditableTable.Field name="name" required parse={(e: any) => e?.target?.value ?? e}><Input /></FormilyEditableTable.Field>,
+            render: () => (
+              <FormilyEditableTable.Field name="name" required parse={(e: any) => e?.target?.value ?? e}>
+                <Input />
+              </FormilyEditableTable.Field>
+            ),
           },
           {
             title: '操作',
@@ -47,8 +51,10 @@ function App() {
 - 开箱即用：安装一个包即可，Formily API 已内置 re-export
 - 完整 Formily effects 兼容（onFieldValueChange, form.setFieldState）
 - 内置分页、新增/删除行、min/max 约束
-- antd Table/Select/Input/Switch 集成
-- columns 稳定化（ref-based valueLen）
+- `validateBeforeAdd`：添加前校验已有行，校验失败阻止添加
+- antd Table/Input/Select/Switch/Checkbox 集成（Switch/Checkbox 自动注入 `checked`）
+- columns 稳定化（ref-based valueLen，行增删不重建列定义）
+- `itemDefaultValue` 支持 Date 等复杂对象（structuredClone 优先，递归兜底）
 
 ## 文档
 

@@ -19,7 +19,11 @@ const columns = [
     <input value={value ?? ''} onChange={e => onChange(e.target.value)} />
   )},
   { title: '年龄', dataIndex: 'age', editRender: ({ value, onChange }) => (
-    <input type="number" value={value ?? ''} onChange={e => onChange(Number(e.target.value))} />
+    <input
+      type="number"
+      value={value ?? ''}
+      onChange={e => onChange(e.target.value === '' ? undefined : Number(e.target.value))}
+    />
   )},
 ];
 
@@ -36,13 +40,14 @@ function App() {
 ## 特性
 
 - 两种编辑模式：全量编辑（`all`）和行编辑（`row`）
+- 行编辑模式：取消时自动回滚并通知 `onChange`，重复点击编辑不覆盖原始快照
 - 虚拟滚动（1000+ 行）基于 @tanstack/react-virtual
-- 列固定（左/右）+ 横向滚动同步
-- 内置校验系统（必填、自定义规则）
-- 数据联动 via `onFieldChange`（同步 & 异步）
+- 列固定（左/右）+ 横向滚动同步，支持字符串宽度（如 `"200px"`）
+- 内置校验系统（必填自动过滤空白字符串、自定义规则）
+- 数据联动 via `onFieldChange`（同步 & 异步，异步竞态安全）
 - 自定义编辑器 via `editRender`
-- 行操作 via `ref`（addRow, removeRow, moveUp, moveDown）
-- CSS 变量主题，支持暗色模式
+- 行操作 via `ref`（addRow, removeRow, moveUp, moveDown, updateRow, insertRow）
+- CSS 变量主题，支持暗色模式（`@media prefers-color-scheme: dark`）
 
 ## 文档
 

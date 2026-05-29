@@ -27,7 +27,7 @@ export function validateRow<T extends object>(row: T, columns: EditableColumn<T>
  */
 export function validateValue<T extends object>(value: unknown, row: T, rules: Rule[]): string | undefined {
     for (const rule of rules) {
-        if (rule.required && (value === undefined || value === null || value === '')) {
+        if (rule.required && (value === undefined || value === null || value === '' || (typeof value === 'string' && value.trim() === ''))) {
             return rule.message;
         }
 

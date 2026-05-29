@@ -20,7 +20,7 @@
 
 | 属性 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `title` | `string` | — | 列标题（**必填**） |
+| `title` | `ReactNode` | — | 列标题（**必填**） |
 | `dataIndex` | `keyof T & string` | — | 数据字段名（**必填**） |
 | `width` | `number \| string` | `150` | 列宽 |
 | `fixed` | `'left' \| 'right'` | — | 列固定方向 |

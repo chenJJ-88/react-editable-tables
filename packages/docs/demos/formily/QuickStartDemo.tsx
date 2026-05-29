@@ -50,7 +50,7 @@ export default function QuickStartDemo() {
         try {
             await form.validate();
             console.log('提交数据：', JSON.stringify(form.values, null, 2));
-        } catch {}
+        } catch { }
     };
 
     return (

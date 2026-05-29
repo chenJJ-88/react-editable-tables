@@ -36,6 +36,9 @@ export default memo(TableCell, (prev, next) => {
         prev.error === next.error &&
         prev.rowIndex === next.rowIndex &&
         prev.row === next.row &&
-        prev.column.dataIndex === next.column.dataIndex
+        prev.column.dataIndex === next.column.dataIndex &&
+        prev.column.editRender === next.column.editRender &&
+        prev.column.render === next.column.render &&
+        prev.onChange === next.onChange
     );
 }) as typeof TableCell;

@@ -19,8 +19,8 @@ echo ">>> 构建..."
 pnpm build
 
 echo ">>> 升版本号 ($BUMP)..."
-pnpm --filter @react-editable-tables/native version "$BUMP"
-pnpm --filter @react-editable-tables/formily version "$BUMP"
+(cd packages/editable-table && npm version "$BUMP" --no-git-tag-version)
+(cd packages/fast-editable-table && npm version "$BUMP" --no-git-tag-version)
 
 echo ">>> 发布到 npm..."
 pnpm --filter @react-editable-tables/native publish --access public --no-git-checks

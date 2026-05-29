@@ -1,6 +1,6 @@
 {
     "name": "@react-editable-tables/formily",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "description": "高性能可编辑表格组件，基于 Formily 2.x + antd 5.x",
     "type": "module",
     "main": "./dist/index.js",

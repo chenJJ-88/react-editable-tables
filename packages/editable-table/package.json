@@ -1,6 +1,6 @@
 {
     "name": "@react-editable-tables/native",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "轻量、零依赖的 React 可编辑表格，内置虚拟滚动、校验、数据联动和 CSS 变量主题",
     "type": "module",
     "main": "./dist/index.js",

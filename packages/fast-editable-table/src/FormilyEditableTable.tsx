@@ -111,13 +111,12 @@ const FormilyEditableTableInner: React.FC<Omit<IFormilyEditableTableProps, 'name
                 const fieldIndex = (current - 1) * pageSize + index;
                 if (fieldIndex >= valueLenRef.current) return null;
 
-                const content = col.render ? (
-                    col.render({ index: fieldIndex, field } as IColumnRenderOpt)
-                ) : (
-                    <DefaultOperator index={fieldIndex} field={field} disabled={disableRemove} />
-                );
+                if (!col.render) {
+                    return <DefaultOperator index={fieldIndex} field={field} disabled={disableRemove} />;
+                }
 
-                // 行级 Field 上下文：使 <FormilyEditableTableField name="type"> 解析为 items.{fieldIndex}.type
+                const content = col.render?.({ index: fieldIndex, field } as IColumnRenderOpt);
+
                 return <Field name={String(fieldIndex)}>{content}</Field>;
             },
         }));
